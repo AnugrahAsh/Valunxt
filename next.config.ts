@@ -93,6 +93,14 @@ const nextConfig: NextConfig = {
         source: '/assets/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
+      // The real estate module's artwork, showreel and self-hosted faces. Listed
+      // by subfolder rather than as /real-estate/:path*, which would also match
+      // the bare /real-estate/ inbound URL — that one is a redirect to the
+      // visitor's edition and must not be cached for a year.
+      ...['img', 'video', 'fonts'].map((dir) => ({
+        source: `/real-estate/${dir}/:path*`,
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      })),
     ];
   },
 };

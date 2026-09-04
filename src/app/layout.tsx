@@ -21,8 +21,9 @@ import { headers } from 'next/headers';
 import { vxnSeoOrigin } from '@/lib/seo';
 import { vxnRegionData } from '@/lib/region';
 import { pageConfig, resolveRequest } from '@/lib/pages';
-import HeadAssets from '@/components/layout/HeadAssets';
+import HeadAssets, { SiteFavicons } from '@/components/layout/HeadAssets';
 import { PRELOADER_GATE_SCRIPT } from '@/components/layout/Preloader';
+import { realEstateRequest } from '@/real-estate/lib/routes';
 import type { PageConfig } from '@/lib/page-config';
 
 export const metadata: Metadata = {
@@ -72,6 +73,18 @@ const CMS_BODY_CLASS =
  * neither — so every 404 rendered the subscribe form unstyled. The literal below
  * is only a floor, so the layout can never throw on a missing registry entry.
  */
+/**
+ * The document reset the real estate section needs and nothing more.
+ *
+ * That section renders inside `.re-root`, and every rule in real-estate.css is
+ * scoped under it — which is exactly why `body` itself is not covered. On the
+ * rest of the site the Elementor cascade zeroes the body margin; here nothing
+ * does, so the browser's default 8px would show as a white gutter down both
+ * sides of every full-bleed section. The background matches `--re-page` so the
+ * ground behind the module is the module's own, not white.
+ */
+const RE_DOCUMENT_CSS = `html,body{margin:0;padding:0;}body{background:#FCFBF8;}`;
+
 const FALLBACK: PageConfig = pageConfig('/404/') ?? {
   title: 'VALUNXT Capital',
   body: '',
@@ -96,6 +109,38 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         </head>
         <body>{children}</body>
+      </html>
+    );
+  }
+
+  /* The real estate section, for the same reason and with one difference.
+     It renders its own header and footer inside `.re-root`, and real-estate.css
+     is self-contained — it needs none of the 53 Elementor stylesheets, the
+     inline theme blocks or the WordPress body classes, and loading them only
+     gives the host cascade something to reach in with. So it gets a lean head:
+     the site's favicons, a body reset, and nothing else.
+
+     Unlike /admin it IS a public page, so analytics still runs and the icons are
+     still the site's — this is the same company, on the same domain.
+
+     realEstateRequest() answers only for the pillar page and the eight published
+     service slugs. An unknown slug under /real-estate/ therefore falls through
+     to the branch below and 404s in the site's own chrome, styled. */
+  const realEstate = realEstateRequest(path);
+  if (realEstate) {
+    return (
+      <html lang={vxnRegionData(realEstate.region).lang}>
+        <head>
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <SiteFavicons />
+          <style dangerouslySetInnerHTML={{ __html: RE_DOCUMENT_CSS }} />
+        </head>
+        <body>
+          {children}
+          {/* Google tag (gtag.js) — the same one the rest of the site runs. */}
+          <Script src="https://www.googletagmanager.com/gtag/js?id=G-3LN0QDVS2F" strategy="afterInteractive" />
+          <Script id="gtag-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: GTAG_INLINE }} />
+        </body>
       </html>
     );
   }

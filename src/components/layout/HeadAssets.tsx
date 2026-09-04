@@ -573,7 +573,15 @@ function InlineCss({ css }: { css?: string }) {
   return <style {...(idMatch ? { id: idMatch[1] } : {})} dangerouslySetInnerHTML={{ __html: body }} />;
 }
 
-export default function HeadAssets({ page }: { page: PageConfig }) {
+/**
+ * The site's icons and theme colour.
+ *
+ * Split out of HeadAssets so the real estate section can carry the same tab icon
+ * without also taking the Elementor cascade below it — that section renders its
+ * own chrome and needs none of it. Rendered in the same position and the same
+ * order it always was, so the head it emits for every other page is unchanged.
+ */
+export function SiteFavicons() {
   return (
     <>
       {/* The SVG is the icon proper; the PNGs are for Safari and the iOS home
@@ -600,6 +608,14 @@ export default function HeadAssets({ page }: { page: PageConfig }) {
       />
       <link rel="apple-touch-icon" href={`${BASE}/assets/content/uploads/logo/apple-touch-icon.png`} />
       <meta name="theme-color" content="#0053B7" />
+    </>
+  );
+}
+
+export default function HeadAssets({ page }: { page: PageConfig }) {
+  return (
+    <>
+      <SiteFavicons />
 
       {STYLESHEETS.map((href) => (
         <link key={href} rel="stylesheet" href={BASE + href} media="all" />

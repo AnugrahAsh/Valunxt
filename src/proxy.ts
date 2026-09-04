@@ -87,7 +87,13 @@ export const config = {
     /*
      * Everything except Next's own build output, the API route and the static
      * files served straight out of /public.
+     *
+     * The real estate module's assets are listed by subfolder, not as a bare
+     * `real-estate/`: the section's own URLs live under a market prefix
+     * (/en-ae/real-estate/), so an unprefixed /real-estate/ is an inbound link
+     * with no market on it and must still reach the gateway above — which
+     * forwards it to the visitor's edition, exactly as it does for /about/.
      */
-    '/((?!_next/static|_next/image|api/|assets/|LOGO/|icons/|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!_next/static|_next/image|api/|assets/|LOGO/|icons/|real-estate/img/|real-estate/video/|real-estate/fonts/|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };

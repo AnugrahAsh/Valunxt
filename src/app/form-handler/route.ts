@@ -22,6 +22,10 @@ const SOURCE_MAP: Record<string, string> = {
   e67e0ee: 'Free Consultation',
   '5099fe1': 'Enquiry',
   partnership: 'Partnership',
+  /* The real estate practice's consultation form. Named rather than numbered
+     because that section is not Elementor markup and has no widget id — see
+     src/real-estate/components/sections/ContactForm.tsx. */
+  'real-estate': 'Real Estate',
 };
 
 function fail(message: string, status: number) {
