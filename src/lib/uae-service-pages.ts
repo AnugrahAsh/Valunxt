@@ -1,0 +1,115 @@
+/**
+ * PageConfigs for the UAE services section.
+ *
+ * Every other page has a hand-transcribed entry in data/page-configs.json,
+ * because every other page was a real WordPress page with a real `$PAGE`
+ * declaration behind it. These are not: the six UAE services and the twenty-nine
+ * pages beneath them are new, they all render the same three sections, and the
+ * only thing that differs between them is a name and a URL. Thirty-five
+ * near-identical JSON blocks would be thirty-five places for one of them to
+ * drift, so they are derived from vxnServices('en-ae') instead — the same
+ * registry the header menu and the UAE home page already read.
+ *
+ * The shape is copied from the /community/ entry, which is the other
+ * "hero image, coming soon, subscribe" page in the registry: header 3837,
+ * footer 2094, and the 3752 (single page) + 4557 (subscribe) stylesheets that
+ * PageHeroSection and SubscribeSection need.
+ */
+import type { PageConfig } from './page-config';
+import { vxnServiceName, type Service, type SubService } from './region';
+
+/** Elementor template ids these pages' sections were captured from. */
+const POST_CSS = ['5', '3837', '2094', '3752', '4557'];
+
+/**
+ * A stable post id per path. WordPress ids identify the captured stylesheets a
+ * page loads; these pages have no captured CSS of their own, but the id still
+ * lands in the `<body>` class and the Elementor config, so it has to be stable
+ * across renders and distinct between pages. Same derivation as the CMS
+ * catch-all, in the same 9000+ band that is reserved for pages with no WordPress
+ * row behind them.
+ */
+function postId(path: string): number {
+  let h = 0;
+  for (let i = 0; i < path.length; i += 1) h = (h * 31 + path.charCodeAt(i)) | 0;
+  return 9000 + (Math.abs(h) % 900);
+}
+
+function bodyClass(id: number): string {
+  return (
+    `wp-singular page-template-default page page-id-${id} wp-custom-logo wp-embed-responsive ` +
+    'wp-theme-execor full header-layout-logo-menu has-page-header no-middle-header responsive-layout ' +
+    'vamtam-is-elementor elementor-active elementor-pro-active vamtam-font-smoothing layout-full ' +
+    `elementor-default elementor-kit-5 elementor-page elementor-page-${id} elementor-page-3752`
+  );
+}
+
+function config({
+  name,
+  path,
+  heroImage,
+  desc,
+  written = false,
+}: {
+  name: string;
+  path: string;
+  heroImage: string;
+  desc: string;
+  /** True once the page has a body of its own rather than the coming-soon one. */
+  written?: boolean;
+}): PageConfig {
+  const id = postId(path);
+  const title = `${name} | VALUNXT Capital`;
+  return {
+    title,
+    desc,
+    og_image: '/assets/content/uploads/2025/03/valunxt-og.png',
+    body: bodyClass(id),
+    post_css: POST_CSS,
+    header: '3837',
+    footer: '2094',
+    canvas: false,
+    post_id: id,
+    post_title: encodeURIComponent(title),
+    post_excerpt: desc,
+    /* Marks "Services" on the bar, so a visitor deep in the section still sees
+       where they are. The sub-pages point at the same parent for the same
+       reason — there is no menu item of their own to light up. */
+    active_nav: ['/services/'],
+    inline_css: '',
+    hero_title: name,
+    hero_image: heroImage,
+    path,
+    /* Nothing to index while the page says "coming soon": the URLs are live so
+       they can be linked and reviewed, not so they can be ranked. A written page
+       has something to say, so it indexes like any other. */
+    robots: written ? undefined : 'noindex, follow',
+  };
+}
+
+/** The page at /services/<service>/. */
+export function uaeServiceConfig(service: Service, written = false): PageConfig {
+  const name = vxnServiceName(service);
+  return config({
+    name,
+    path: `/services/${service.slug}/`,
+    heroImage: service.img,
+    desc: written
+      ? `${name} in the UAE from VALUNXT Capital.`
+      : `${name} in the UAE from VALUNXT Capital — coming soon.`,
+    written,
+  });
+}
+
+/** The page at /services/<service>/<sub>/. */
+export function uaeSubServiceConfig(service: Service, sub: SubService): PageConfig {
+  return config({
+    name: sub.name,
+    path: `/services/${service.slug}/${sub.slug}/`,
+    /* The sub-pages borrow the parent's image: they are the same discipline,
+       and a placeholder per page would be thirty more images to art-direct
+       before any of them has copy. */
+    heroImage: service.img,
+    desc: `${sub.name} — part of ${vxnServiceName(service)} at VALUNXT Capital. Coming soon.`,
+  });
+}
