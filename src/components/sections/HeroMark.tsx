@@ -315,7 +315,7 @@ export default function HeroMark() {
         const worldH = 2 * Math.tan(((camera.fov / 2) * Math.PI) / 180) * camera.position.z;
         const perPx = worldH / r.height;
 
-        const art = (run ?? host!).querySelector('.vxh-stage__art');
+        const art = (run ?? host!).querySelector('.vxh-hero__art');
         const ar = art ? art.getBoundingClientRect() : r;
         /* Well over the band on both axes. It is the ground, not a picture hung
            on it, so it is meant to run past the band and off the sides — the

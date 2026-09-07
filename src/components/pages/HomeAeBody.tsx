@@ -455,14 +455,14 @@ export default function HomeAeBody({ page, region }: { page: PageConfig; region:
                       </div>
                     </div>
 
-                    <div className="vxh-stage" data-vxh-rise>
-                      <p className="vxh-stage__fig vxh-stage__fig--l">
+                    <div className="vxh-hero__stage" data-vxh-rise>
+                      <p className="vxh-hero__fig vxh-hero__fig--l">
                         Six connected practices
                       </p>
                       {/* Left clear: the strip runs through here, behind
                           everything, and the two figures read off it. */}
-                      <div className="vxh-stage__art" aria-hidden="true" />
-                      <p className="vxh-stage__fig vxh-stage__fig--r">
+                      <div className="vxh-hero__art" aria-hidden="true" />
+                      <p className="vxh-hero__fig vxh-hero__fig--r">
                         A reply within one business day
                       </p>
                     </div>

@@ -25,6 +25,7 @@
 import type { CSSProperties } from 'react';
 
 import { BASE, rurl, vxnRegionData, vxnRegionPhone, vxnServices } from '@/lib/region';
+import { rimg } from '@/lib/region-assets';
 import { plainText } from '@/lib/html-text';
 import { expertiseTiles } from '@/lib/service-overview';
 import BLOG_CATALOG, { type BlogCatalogEntry } from '@/data/blog-catalog';
@@ -43,6 +44,7 @@ import {
 } from '@/data/uae-service-extras';
 import { Abs, Ico, Visual, vxhKind, type AbsVariant } from '@/components/vxh/kit';
 import Html from '@/components/Html';
+import { bespokeFor } from './bespoke';
 
 /** Section artwork, shared across the pages; a practice may override a key. */
 const ART: Record<string, string> = {
@@ -434,6 +436,10 @@ export default function ServiceDetailBody({
 
   const art = { ...ART, ...(service.art ?? {}) };
 
+  /* The two sections this practice owns. A page with none keeps the
+     template's own — see components/pages/uae-services/bespoke. */
+  const own = bespokeFor(slug);
+
   const tiles = expertiseTiles(detail.expertise);
   const tilesOk = tiles.length >= 2 && tiles[0].t !== '';
 
@@ -486,7 +492,6 @@ export default function ServiceDetailBody({
   if (tool) rail.push(['#vxd-tool', 'Try it']);
   if (deliverables.length) rail.push(['#vxd-del', 'What you receive']);
   rail.push(['#vxd-process', 'Our process']);
-  rail.push(['#vxd-exp', 'Expertise']);
   rail.push(['#vxd-faq', 'FAQ']);
   rail.push(['#vxd-contact', 'Get in touch']);
 
@@ -527,136 +532,61 @@ export default function ServiceDetailBody({
 
   return (
     <div className="vxh vxd">
-      {/* The stage */}
-      <section className="vxh-stage" aria-label={titlePlain}>
-        <Abs variant={absHero} flip={!!child} />
-        <div className="vxh__in">
-          <div className="vxh-stage__grid">
-            <div>
-              <nav className="vxh-crumb" aria-label="Breadcrumb">
-                <a href={rurl(region, '/')}>Home</a>
-                <i />
-                <a href={rurl(region, '/services/')}>Services</a>
-                <i />
-                {child ? (
-                  <>
-                    <Html as="a" href={rurl(region, uaeServicePath(slug))} html={service.title} />
-                    <i />
-                  </>
-                ) : null}
-                <Html as="b" html={page.title} />
-              </nav>
-              <Html as="h1" className="vxh-h1" html={page.title} />
-              <Html as="p" className="vxh-lede" html={page.lede} />
-              <div className="vxh-stage__cta">
-                <a className="vxh-btn vxh-btn--primary" href={rurl(region, '/free-consultation/')}>
-                  Free Consultation <Ico name="ne" size={18} />
-                </a>
-                <a className="vxh-btn vxh-btn--ghost" href="#vxd-offer">
-                  What&rsquo;s included <Ico name="arrow" size={18} />
-                </a>
-                <a className="vxh-stage__tel" href={`tel:${tel}`}>
-                  <Ico name="phone" size={16} /> {phone}
-                </a>
-              </div>
-              <ul className="vxh-trust">
-                <li>
-                  <Ico name="doc" size={17} /> Fixed fee, agreed in writing
-                </li>
-                <li>
-                  <Ico name="users" size={17} /> A senior adviser on every engagement
-                </li>
-                <li>
-                  <Ico name="clock" size={17} /> Reply within one business day
-                </li>
-              </ul>
-            </div>
-            <div className="vxh-stagevis" aria-hidden="true">
-              <div className="vxh-frame">
-                <div className="vxh-frame__card">
-                  <div className="vxh-card__hd">
-                    <div>
-                      <span className="vxh-card__title">
-                        <Ico name={icon} size={16} /> <Html as="span" html={service.short} />
-                      </span>
-                      <span className="vxh-card__sub">
-                        {child ? <Html as="span" html={page.title} /> : <span>VALUNXT &middot; UAE</span>}{' '}
-                        &middot; illustrative
-                      </span>
-                    </div>
-                    <span className="vxh-pill">Live</span>
-                  </div>
-                  <div className="vxh-card__bd">
-                    <Visual kind={kind} id="h" />
-                  </div>
-                </div>
-                <span className="vxh-frame__chip">
-                  <i>
-                    <Ico name="check" size={12} />
-                  </i>{' '}
-                  {CHIPS[kind] ?? 'Documented'}
-                </span>
-              </div>
-              <div className="vxh-float vxh-float--a">
-                <span className="vxh-float__ic">
-                  <Ico name="doc" size={18} />
-                </span>
-                <span>
-                  <b>Engagement letter</b>
-                  <small>Scope and fixed fee, in writing</small>
-                </span>
-                <span className="vxh-pill vxh-pill--blue">Signed</span>
-              </div>
-              <div className="vxh-float vxh-float--b">
-                <span className="vxh-float__ic">
-                  <Ico name="users" size={18} />
-                </span>
-                <span>
-                  <b>Your named partner</b>
-                  <small>Replies within one business day</small>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ==========================================================
+          The stage
 
-      {/* At a glance */}
-      <div className="vxd-glance">
+          A breadcrumb, the name, one sentence, one action — and the
+          practice's own photograph beside it. What was here before: a
+          second ghost button, a phone number, three trust bullets with
+          icons, a mocked-up product card with a "Live" pill and a mini UI
+          in it, a chip on its corner, two floating cards, and then four
+          counters immediately underneath. Eleven things competing on the
+          first screen of a page whose job is to say what the practice is.
+
+          Each page draws a different abstract behind the photograph —
+          the variant is indexed off the practice's position in the
+          registry, so no two of the six open the same way.
+          ========================================================== */}
+      <section className={`vxd-hero vxd-hero--a${absIndex % 6}`} aria-label={titlePlain}>
+        <Abs variant={absHero} mod="light" flip={!!child} />
         <div className="vxh__in">
-          <div className="vxd-glance__row">
-            <div className="vxd-glance__cell" data-vxn-in="up">
-              <span className="vxd-glance__n">
-                <span data-vxh-count={Object.keys(service.children).length}>0</span>
-              </span>
-              <span className="vxd-glance__l">
-                Services under <Html as="span" html={service.short} />, one accountable team
-              </span>
-            </div>
-            <div className="vxd-glance__cell" data-vxn-in="up">
-              <span className="vxd-glance__n">
-                <span data-vxh-count="1">0</span>
-              </span>
-              <span className="vxd-glance__l">
-                Named partner on the engagement, start to finish
-              </span>
-            </div>
-            <div className="vxd-glance__cell" data-vxn-in="up">
-              <span className="vxd-glance__n">
-                <span data-vxh-count="1">0</span>
-                <sup>day</sup>
-              </span>
-              <span className="vxd-glance__l">Reply within one business day, every time</span>
-            </div>
-            <div className="vxd-glance__cell" data-vxn-in="up">
-              <span className="vxd-glance__n">
-                <span data-vxh-count="0">0</span>
-              </span>
-              <span className="vxd-glance__l">Hourly meters, commissions or hidden charges</span>
-            </div>
+          <nav className="vxh-crumb vxd-hero__crumb" aria-label="Breadcrumb">
+            <a href={rurl(region, '/')}>Home</a>
+            <i />
+            <a href={rurl(region, '/services/')}>Services</a>
+            <i />
+            {child ? (
+              <>
+                <Html as="a" href={rurl(region, uaeServicePath(slug))} html={service.title} />
+                <i />
+              </>
+            ) : null}
+            <Html as="b" html={page.title} />
+          </nav>
+
+          <Html as="h1" className="vxd-hero__h" html={page.title} />
+
+          <div className="vxd-hero__foot">
+            <Html as="p" className="vxd-hero__lede" html={page.lede} />
+            <a className="vxh-btn vxh-btn--blue vxd-hero__cta" href={rurl(region, '/free-consultation/')}>
+              Book a free consultation <Ico name="ne" size={16} />
+            </a>
           </div>
         </div>
-      </div>
+
+        {/* Full width, and the only picture on the page. Each practice carries
+            its own, so no two of the six open on the same image. */}
+        <figure className="vxd-hero__band">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={rimg(region, service.img.replace('/assets/content/uploads/', ''))}
+            alt=""
+            width={2400}
+            height={1000}
+            fetchPriority="high"
+          />
+        </figure>
+      </section>
 
       <div className="vxd-body">
         <nav className="vxh-snav" aria-label="On this page">
@@ -677,227 +607,70 @@ export default function ServiceDetailBody({
         </nav>
 
         {/* 01 Overview */}
+        {/* ==========================================================
+            What we do — the statement, and who it is for.
+
+            It had a photograph with three floating pills on it beside the
+            copy. The hero now carries the one picture on the page, so this
+            is type: the claim at heading size, the case for it beneath at a
+            readable measure, and the audience on one hairline.
+            ========================================================== */}
         <section className="vxd-what vxd-sec" id="vxd-what" aria-labelledby="vxd-what-h">
           <div className="vxh__in">
-            <div className="vxd-what__grid">
-              <div>
-                <span className="vxh-eyebrow">What We Do</span>
-                <Html as="h2" className="vxh-h2" id="vxd-what-h" html={detail.what.title} />
-                {detail.what.p.map((p, i) => (
-                  <Html key={i} as="p" className="vxh-lede" html={p} />
+            <span className="vxh-eyebrow">What We Do</span>
+            <Html as="h2" className="vxd-what__h" id="vxd-what-h" html={detail.what.title} />
+            <div className="vxd-what__body">
+              {detail.what.p.slice(0, 2).map((p, i) => (
+                <Html key={i} as="p" html={p} />
+              ))}
+            </div>
+            {extras.audience?.length ? (
+              <p className="vxd-what__aud">
+                <span>For</span>
+                {extras.audience.map((aud, i) => (
+                  <Html key={aud} as="span" className="vxd-what__a" html={(i ? '· ' : '') + aud} />
                 ))}
-                {extras.audience?.length ? (
-                  <div className="vxd-aud">
-                    <span className="vxd-aud__k">Who this is for</span>
-                    {extras.audience.map((a) => (
-                      <Html key={a} as="span" html={a} />
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-              <figure className="vxd-media" data-vxn-in="up">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  className="vxd-media__img"
-                  src={BASE + art.what}
-                  alt={`${titlePlain} at VALUNXT Capital`}
-                  loading="lazy"
-                  width={880}
-                  height={660}
-                />
-                <span className="vxd-media__pills">
-                  <span>
-                    <Ico name="doc" size={14} /> Fixed fee
-                  </span>
-                  <span>
-                    <Ico name="users" size={14} /> Senior adviser
-                  </span>
-                  <span>
-                    <Ico name="shield" size={14} /> Documented to hold up
-                  </span>
-                </span>
-              </figure>
-            </div>
-          </div>
-        </section>
-
-        {/* 02 Services offered */}
-        <section className="vxd-offer vxd-sec" id="vxd-offer" aria-labelledby="vxd-offer-h">
-          <div className="vxh__in">
-            <div className="vxh-head vxh-head--split">
-              <div>
-                <span className="vxh-eyebrow">{child ? 'Related Services' : 'Services Offered'}</span>
-                <Html as="h2" className="vxh-h2" id="vxd-offer-h" html={detail.offer.title} />
-              </div>
-              <Html as="p" className="vxh-lede" html={detail.offer.text} />
-            </div>
-            <div className="vxd-x" data-vxd-explorer>
-              <div className="vxd-x__tabs" role="tablist" aria-label={`${practicePlain} services`}>
-                <button
-                  className="vxd-x__tab"
-                  role="tab"
-                  id="vxd-x-tab-0"
-                  aria-selected="true"
-                  aria-controls="vxd-x-pane-0"
-                  type="button"
-                >
-                  <span className="vxd-x__n">
-                    <Ico name="grid" size={15} />
-                  </span>
-                  <span>
-                    <Html
-                      as="span"
-                      className="vxd-x__t"
-                      html={child ? `About ${service.short}` : 'The whole practice'}
-                    />
-                    <Html as="span" className="vxd-x__d" html={detail.offer.card} />
-                  </span>
-                  <span className="vxd-x__prog" aria-hidden="true" />
-                </button>
-                {explorer.map((x, i) => (
-                  <button
-                    key={x.slug}
-                    className="vxd-x__tab"
-                    role="tab"
-                    id={`vxd-x-tab-${i + 1}`}
-                    aria-selected="false"
-                    aria-controls={`vxd-x-pane-${i + 1}`}
-                    type="button"
-                    tabIndex={-1}
-                  >
-                    <span className="vxd-x__n">{pad2(i + 1)}</span>
-                    <span>
-                      <Html as="span" className="vxd-x__t" html={x.t} />
-                      <Html as="span" className="vxd-x__d" html={x.d} />
-                    </span>
-                    <span className="vxd-x__prog" aria-hidden="true" />
-                  </button>
-                ))}
-              </div>
-              <div className="vxd-x__screen">
-                <Abs variant={absAlt2} mod="soft" flip />
-                <div
-                  className="vxd-x__pane is-active"
-                  role="tabpanel"
-                  id="vxd-x-pane-0"
-                  aria-labelledby="vxd-x-tab-0"
-                >
-                  <div className="vxd-x__copy">
-                    <Html as="span" className="vxd-x__k" html={`${service.short} &middot; the standard`} />
-                    <Html as="h3" className="vxd-x__h" html={detail.offer.title} />
-                    <Html as="p" className="vxd-x__lede" html={detail.offer.card} />
-                    <ul className="vxd-x__pts">
-                      <li style={cssVars({ '--i': 0 })}>
-                        <b>
-                          <Ico name="check" size={11} />
-                        </b>
-                        <span>Fixed fee agreed in writing before work begins</span>
-                      </li>
-                      <li style={cssVars({ '--i': 1 })}>
-                        <b>
-                          <Ico name="check" size={11} />
-                        </b>
-                        <span>A senior adviser on the engagement, who answers when you call</span>
-                      </li>
-                      <li style={cssVars({ '--i': 2 })}>
-                        <b>
-                          <Ico name="check" size={11} />
-                        </b>
-                        <span>Every position documented to withstand scrutiny</span>
-                      </li>
-                    </ul>
-                    <a
-                      className="vxh-btn vxh-btn--primary"
-                      href={rurl(region, '/free-consultation/')}
-                    >
-                      Free Consultation <Ico name="ne" size={16} />
-                    </a>
-                  </div>
-                  <div className="vxd-x__media is-in">
-                    <div className="vxh-card__bd">
-                      <Visual kind={kind} id="x0" />
-                    </div>
-                  </div>
-                </div>
-                {explorer.map((x, i) => {
-                  const img = gallery[i % Math.max(1, gallery.length)];
-                  return (
-                    <div
-                      key={x.slug}
-                      className="vxd-x__pane"
-                      role="tabpanel"
-                      id={`vxd-x-pane-${i + 1}`}
-                      aria-labelledby={`vxd-x-tab-${i + 1}`}
-                      hidden
-                    >
-                      <div className="vxd-x__copy">
-                        <Html
-                          as="span"
-                          className="vxd-x__k"
-                          html={`${pad2(i + 1)} &middot; ${service.short}`}
-                        />
-                        <Html as="h3" className="vxd-x__h" html={x.t} />
-                        <Html as="p" className="vxd-x__lede" html={x.lede} />
-                        <ul className="vxd-x__pts">
-                          {x.points.map((pt, pi) => (
-                            <li key={pt} style={cssVars({ '--i': pi })}>
-                              <b>
-                                <Ico name="check" size={11} />
-                              </b>
-                              <Html as="span" html={pt} />
-                            </li>
-                          ))}
-                        </ul>
-                        <a className="vxh-btn vxh-btn--primary" href={rurl(region, x.href)}>
-                          <Html as="span" html={`Explore ${x.t} `} />
-                          <Ico name="arrow" size={16} />
-                        </a>
-                      </div>
-                      <div className="vxd-x__media">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={BASE + img} alt="" loading="lazy" width={600} height={380} />
-                        <div className="vxh-card__bd">
-                          <div className="vxh-ledger">
-                            <div
-                              className="vxh-ledger__row"
-                              data-i="0"
-                              style={{ opacity: 1, transform: 'none' }}
-                            >
-                              <span className="vxh-ledger__k">
-                                <Html as="span" html={x.t} /> <small>Scoped, priced, delivered</small>
-                              </span>
-                              <span className="vxh-ledger__v">Fixed fee</span>
-                              <span className="vxh-ledger__ok" style={{ transform: 'scale(1)' }}>
-                                <Ico name="check" size={12} />
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-                <div className="vxd-x__dots" aria-hidden="true">
-                  <i className="is-on" />
-                  {explorer.map((x) => (
-                    <i key={x.slug} />
-                  ))}
-                </div>
-              </div>
-            </div>
-            {child ? (
-              <p style={{ marginTop: 18 }}>
-                <a className="vxh-link" href={rurl(region, uaeServicePath(slug))}>
-                  <Html as="span" html={`All ${service.short} services `} />
-                  <Ico name="arrow" size={15} />
-                </a>
               </p>
             ) : null}
           </div>
         </section>
 
-        {/* 03 Try it */}
-        {tool ? (
+        {/* ==========================================================
+            Services offered — the list, as a list.
+
+            It was a tabbed explorer: a rail of buttons with progress bars
+            down one side, a screen with panes and an abstract behind them,
+            and a script to drive all of it — to show what is really a table
+            of contents. These are rows, each one a link to the page it names.
+            ========================================================== */}
+        <section className="vxd-offer vxd-sec" id="vxd-offer" aria-labelledby="vxd-offer-h">
+          <div className="vxh__in">
+            <div className="vxd-offer__head">
+              <div>
+                <span className="vxh-eyebrow">{child ? 'Related Services' : 'Services Offered'}</span>
+                <Html as="h2" className="vxd-offer__h" id="vxd-offer-h" html={detail.offer.title} />
+              </div>
+              <Html as="p" className="vxd-offer__lede" html={detail.offer.text} />
+            </div>
+
+            <ol className="vxd-offer__list">
+              {explorer.map((x, i) => (
+                <li data-vxn-in="up" key={x.slug}>
+                  <a href={x.href}>
+                    <span className="vxd-offer__n">{pad2(i + 1)}</span>
+                    <Html as="span" className="vxd-offer__t" html={x.t} />
+                    <Html as="span" className="vxd-offer__d" html={x.d} />
+                    <Ico name="ne" size={16} />
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* This practice's own first section, where the shared tool used to
+            be. A practice with none yet keeps the tool. */}
+        {own.A ?? (tool ? (
           <section className="vxd-tool vxd-sec" id="vxd-tool" aria-labelledby="vxd-tool-h">
             <Abs variant={absAlt} mod="light" flip />
             <div className="vxh__in">
@@ -928,7 +701,8 @@ export default function ServiceDetailBody({
               </div>
             </div>
           </section>
-        ) : null}
+        ) : null)}
+
 
         {/* What you receive */}
         {deliverables.length ? (
@@ -998,103 +772,32 @@ export default function ServiceDetailBody({
         ) : null}
 
         {/* Process */}
+        {/* ==========================================================
+            Our process — four rules.
+
+            It was a navy panel with an abstract behind it, a split heading,
+            four steps joined by a drawn line and a row of three more claims
+            under them. The page already has one dark band; this is the
+            sequence, on white, in the fewest marks that can carry it.
+            ========================================================== */}
         <section className="vxd-process vxd-sec" id="vxd-process" aria-labelledby="vxd-process-h">
-          <Abs variant={absAlt} mod="soft" />
           <div className="vxh__in">
-            <div className="vxh-head vxh-head--split">
-              <div>
-                <span className="vxh-eyebrow">Our Process</span>
-                <Html
-                  as="h2"
-                  className="vxh-h2"
-                  id="vxd-process-h"
-                  style={{ color: '#fff' }}
-                  html={detail.process.title}
-                />
-              </div>
-              <Html as="p" className="vxh-lede" html={detail.process.text} />
-            </div>
-            <ol className="vxd-steps">
-              <span className="vxd-steps__line" aria-hidden="true" />
+            <span className="vxh-eyebrow">Our Process</span>
+            <Html as="h2" className="vxd-process__h" id="vxd-process-h" html={detail.process.title} />
+            <ol className="vxd-process__steps">
               {detail.process.steps.map((st, i) => (
-                <li className="vxd-step" key={st[0]}>
-                  <span className="vxd-step__n">{pad2(i + 1)}</span>
-                  <Html as="h3" className="vxd-step__t" html={st[0]} />
-                  <Html as="p" className="vxd-step__d" html={st[1]} />
+                <li data-vxn-in="up" key={st[0]}>
+                  <span className="vxd-process__n">{pad2(i + 1)}</span>
+                  <Html as="span" className="vxd-process__t" html={st[0]} />
+                  <Html as="span" className="vxd-process__d" html={st[1]} />
                 </li>
               ))}
             </ol>
-            <div className="vxd-process__foot">
-              <span>
-                <Ico name="check" size={15} /> Scoped by a senior adviser
-              </span>
-              <span>
-                <Ico name="check" size={15} /> Priced as a fixed fee before work begins
-              </span>
-              <span>
-                <Ico name="check" size={15} /> Delivered by the team that answers when you call
-              </span>
-            </div>
           </div>
         </section>
 
-        {/* Expertise */}
-        <section className="vxd-exp vxd-sec" id="vxd-exp" aria-labelledby="vxd-exp-h">
-          <div className="vxh__in">
-            <div className="vxh-head vxh-head--split">
-              <div>
-                <span className="vxh-eyebrow">Expertise</span>
-                <h2 className="vxh-h2" id="vxd-exp-h">
-                  Why this work holds up.
-                </h2>
-              </div>
-              <p className="vxh-lede">
-                The standards behind every <Html as="span" html={service.short} /> engagement &mdash;
-                the reasons a bank, an auditor or a court can rely on what we sign.
-              </p>
-            </div>
-            {tilesOk ? (
-              <div className="vxd-exp__grid">
-                {tiles.map((t, i) => (
-                  <div className="vxd-tile" data-vxn-in="up" key={t.t + i}>
-                    <span className="vxd-tile__ic">
-                      <Ico name={TILE_ICONS[i % TILE_ICONS.length]} size={20} />
-                    </span>
-                    <h3 className="vxd-tile__t">{t.t}</h3>
-                    <p className="vxd-tile__d">{t.d}</p>
-                  </div>
-                ))}
-                <a className="vxh-link vxd-exp__more" href={rurl(region, '/about/')}>
-                  About the team <Ico name="arrow" size={16} />
-                </a>
-              </div>
-            ) : (
-              <div className="vxd-tile" data-vxn-in="up">
-                <Html as="p" className="vxd-tile__d" html={detail.expertise} />
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* In practice: the gallery */}
-        {extras.gallery?.length ? (
-          <section className="vxd-gal" aria-label="In practice">
-            <div className="vxh__in">
-              <div className="vxd-gal__grid" data-vxd-gallery>
-                {extras.gallery.map((g, i) => (
-                  <figure className="vxd-gal__item" data-vxn-in="up" key={g + i}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={BASE + g} alt="" loading="lazy" width={900} height={600} />
-                    <figcaption className="vxd-gal__cap">
-                      <i />
-                      {galleryCaptions[i] ?? ''}
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
-            </div>
-          </section>
-        ) : null}
+        {/* And its own second, closing the body. */}
+        {own.B}
 
         {/* FAQ */}
         {extras.faq?.length ? (
@@ -1137,87 +840,25 @@ export default function ServiceDetailBody({
           </section>
         ) : null}
 
-        {/* Related insights */}
-        {relatedTop.length ? (
-          <section className="vxd-ins" aria-labelledby="vxd-ins-h">
-            <div className="vxh__in">
-              <div className="vxh-head vxh-head--split">
-                <div>
-                  <span className="vxh-eyebrow">Insights</span>
-                  <h2 className="vxh-h2" id="vxd-ins-h">
-                    Reading for the decision ahead.
-                  </h2>
-                </div>
-                <div>
-                  <a className="vxh-link" href={rurl(region, '/blogs/')}>
-                    All insights <Ico name="arrow" size={16} />
-                  </a>
-                </div>
-              </div>
-              <div className="vxh-posts">
-                {relatedTop.map(([pslug, p]) => (
-                  <a
-                    className="vxh-post"
-                    href={rurl(region, `/blogs/${pslug}/`)}
-                    data-vxn-in="up"
-                    key={pslug}
-                  >
-                    <span className="vxh-post__img">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={BASE + p.img} alt="" loading="lazy" width={750} height={560} />
-                    </span>
-                    <span className="vxh-post__b">
-                      <span className="vxh-post__m">
-                        <span>{p.category}</span>
-                        <time dateTime={p.date_iso}>{p.date}</time>
-                      </span>
-                      <span className="vxh-post__t">{p.title}</span>
-                      <span className="vxh-link">
-                        Read <Ico name="arrow" size={15} />
-                      </span>
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </section>
-        ) : null}
-
-        {/* Other practices */}
-        <section className="vxd-more vxd-sec" id="vxd-more" aria-labelledby="vxd-more-h">
+        {/* What the "other practices" grid was for, in one line: the six are a
+            family, and any of them is one click away. */}
+        <nav className="vxd-fam" aria-label="Our practices">
           <div className="vxh__in">
-            <div className="vxh-head vxh-head--split">
-              <div>
-                <span className="vxh-eyebrow">Integrated Capabilities</span>
-                <h2 className="vxh-h2" id="vxd-more-h">
-                  One team behind every decision.
-                </h2>
-              </div>
-              <Html as="p" className="vxh-lede" html={detail.integrated} />
-            </div>
-            <div className="vxd-more__row">
-              {Object.entries(UAE_SERVICES)
-                .filter(([oslug]) => oslug !== slug)
-                .map(([oslug, o]) => (
+            <span className="vxd-fam__k">Six connected practices, one accountable team</span>
+            <ul>
+              {Object.entries(UAE_SERVICES).map(([oslug, o]) => (
+                <li key={oslug}>
                   <a
-                    className="vxh-cell"
-                    href={rurl(region, uaeServicePath(oslug))}
-                    data-vxn-in="up"
-                    key={oslug}
+                    href={uaeServicePath(oslug)}
+                    aria-current={oslug === slug ? 'page' : undefined}
                   >
-                    <span className="vxd-more__ic">
-                      <Ico name={icons[`services/${oslug}`] ?? 'doc'} size={18} />
-                    </span>
-                    <Html as="h3" className="vxd-more__t" html={o.title} />
-                    <Html as="p" className="vxd-more__d" html={o.lede} />
-                    <span className="vxh-link">
-                      Explore <Ico name="arrow" size={14} />
-                    </span>
+                    <Html as="span" html={o.short} />
                   </a>
-                ))}
-            </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        </section>
+        </nav>
       </div>
     </div>
   );

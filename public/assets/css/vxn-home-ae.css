@@ -416,7 +416,11 @@
 
 /* --- the stage ------------------------------------------------------------ */
 
-.vxh-stage {
+/* The home hero's band. It was called `.vxh-stage` until that turned out to be
+   the name every other page's hero section already used — About, Industries,
+   the services index and all six service pages — and this sheet loads on four
+   of them. It was laying their heroes out as a three-column grid. */
+.vxh-hero__stage {
 	position: relative;
 	display: grid;
 	grid-template-columns: minmax(0, .82fr) minmax(0, 2.4fr) minmax(0, .82fr);
@@ -427,7 +431,7 @@
 	min-height: min(46svh, 380px);
 }
 
-.vxh-stage__fig {
+.vxh-hero__fig {
 	margin: 0;
 	position: relative;
 	z-index: 2;
@@ -438,9 +442,9 @@
 	color: var(--vxh-blue);
 	text-wrap: balance;
 }
-.vxh-stage__fig--r { text-align: right; margin-left: auto; }
+.vxh-hero__fig--r { text-align: right; margin-left: auto; }
 
-.vxh-stage__art { min-height: min(46svh, 380px); }
+.vxh-hero__art { min-height: min(46svh, 380px); }
 
 /* What fills the band until three arrives — and instead of it where WebGL is
    unavailable or motion is reduced. */
@@ -480,20 +484,20 @@
 	.vxh-hero__head { grid-template-columns: minmax(0, 1fr); gap: clamp(18px, 3vw, 28px); }
 	.vxh-hero .vxh-h1 { font-size: clamp(34px, 6vw, 52px); max-width: 18ch; }
 	.vxh-hero__note { max-width: 60ch; }
-	.vxh-stage__fig { max-width: 22ch; }
+	.vxh-hero__fig { max-width: 22ch; }
 }
 @media (max-width: 820px) {
 	/* Below this the section stops trying to be exactly one screen, and the two
 	   figures move under the loop rather than squeezing it between them. */
 	.vxh-hero { min-height: 0; padding-bottom: clamp(28px, 5vw, 44px); }
-	.vxh-stage { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 32px; min-height: 0; }
-	.vxh-stage__art { grid-column: 1 / -1; order: -1; min-height: min(46svh, 320px); }
-	.vxh-stage__fig--r { text-align: left; }
+	.vxh-hero__stage { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 32px; min-height: 0; }
+	.vxh-hero__art { grid-column: 1 / -1; order: -1; min-height: min(46svh, 320px); }
+	.vxh-hero__fig--r { text-align: left; }
 }
 @media (max-width: 560px) {
 	.vxh-hero .vxh-h1 { font-size: clamp(32px, 9vw, 42px); max-width: none; }
 	.vxh-hero .vxh-btn--blue { justify-content: center; }
-	.vxh-stage { grid-template-columns: minmax(0, 1fr); }
+	.vxh-hero__stage { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* --------------------------------------------------------------------------

@@ -67,7 +67,7 @@ const STYLESHEETS: string[] = [
  * PHP derived it from filemtime(); a constant is the same idea without a stat
  * per request. Same convention as valunxt-brand.css?v=175.
  */
-const VXN_CSS_V = 54;
+const VXN_CSS_V = 63;
 
 const VAMTAM_THEME_OPTIONS = `
         body {

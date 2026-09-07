@@ -299,6 +299,83 @@ the Elementor block — which is where the PHP's `<script defer>` tags executed.
   keeps one design on every page; changing the markup would have changed one
   page in forty.
 
+### The service page stage
+
+Four things and a photograph: where you are, what this is, one sentence, one
+action — then the practice's own picture, full width, as the only image on the
+page. Each of the six draws a different abstract behind the type and carries its own
+photograph, so no two open the same way. Six variants was not enough on its
+own — at one opacity, one scale and one position they all read as the same pale
+wash in the same corner — so each page also gets its own composition: where the
+artwork sits, how big it is, which way up.
+
+| | abstract | composition | photograph |
+|---|---|---|---|
+| Accounting & Tax | ribbons | up and right | accounting-and-tax-services |
+| Real Estate | helix | large, tilted left | real-estate-transactions |
+| Mortgages | waves | inverted | mortgage-services |
+| Valuation | arcs | small, pulled left | valuation-and-advisory |
+| Research | planes | very large, tilted right | research-and-intelligences |
+| Technology | orbs | mirrored | technology-data-ai |
+
+It took three passes. The original carried eleven things on the first screen —
+two buttons, a phone number, three trust bullets, a mocked-up product card with
+a "Live" pill and a mini UI in it, a chip, two floating cards, and four counters
+under all of that. The second put the picture beside the type in two columns,
+which is what every services page on the internet does and left the headline
+half a screen to live in. Setting the type across the full measure and running
+the photograph edge to edge underneath gives the name room to be the largest
+thing on the page and the image width enough to be worth including.
+
+### What we do · Services offered · Our process
+
+All three rebuilt to one rule: one idea, on a measure, on hairlines.
+
+- **What we do** had a photograph with three floating pills on it beside the
+  copy. The hero carries the one picture on the page now, so this is type: the
+  claim at heading size, the case for it in two columns below, the audience on
+  one line.
+- **Services offered** was a tabbed explorer — a rail of buttons with progress
+  bars, a screen with panes and an abstract behind them, and a script to drive
+  it — to show what is really a table of contents. It is rows now, each one a
+  link to the page it names.
+- **Our process** was a navy panel with an abstract, a drawn connector between
+  the steps and a row of three more claims underneath. The page already has one
+  dark band; this is four hairline rows on white, the step number set large
+  enough to carry the sequence on its own.
+
+### A practice page's own two sections
+
+The six practice pages share one template —
+[`ServiceDetailBody`](src/components/pages/uae-services/ServiceDetailBody.tsx) —
+so they read as one family. Two slots in it belong to the page rather than the
+template: `A` sits where the shared tool used to, between the services offered
+and what you receive; `B` closes the body before the FAQ. They are looked up by
+slug in [`bespoke/`](src/components/pages/uae-services/bespoke); a practice with
+none yet keeps the template's own sections, so no page is ever a hole.
+
+One idea per section, and no more. The first pass answered "make each page
+unique" by adding furniture — a twelve-button strip over a thirty-six-cell
+matrix, five glass cards each carrying a paragraph — and the pages came out
+longer and denser rather than better. Unique is not the same as more. All
+twelve are now one question or one list, set large, on a lot of air; three
+carry a live ground from the ogl field, so a page has one dark band at most.
+
+| Practice | A | B |
+|---|---|---|
+| Accounting & Tax | "Our year ends in _[month]_" — one control, three dates | "Here are the five days" — the close as five rules |
+| Real Estate | "On a _[price]_ purchase, this is what transfers" — a ledger that totals | "Ten working days" — the transaction as four marks on a rule |
+| Mortgages | "As _[who]_, you can borrow up to **80%**" — one enormous number | "These are what move your rate" — four rules |
+| Valuation | "This is what a valuation contains" — drawn as a signed document | "Banks · Auditors · Courts · Boards" — four words, headline size |
+| Research | "Walked back to where it came from" — the provenance chain | "Four things we will not publish" — struck through |
+| Technology | "Four steps between data and a decision" — the pipeline | "What the model is never allowed to do" — the refusals |
+
+The template was cut from twelve sections to eight at the same time. The
+gallery (three stock photographs saying nothing the copy did not), the related
+insights (the same three posts on all six pages) and the other-practices grid
+all went; expertise folded into the overview, and the grid became one line of
+links at the foot.
+
 ### The UAE service tree
 
 The six practices and the pages beneath them are a registry, not thirty-six
