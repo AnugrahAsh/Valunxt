@@ -135,3 +135,51 @@ export interface PriceRow {
   villa: string;
   yield: string;
 }
+
+/* --------------------------------------------------------------------------
+   Property browsing
+   --------------------------------------------------------------------------
+   The three shapes behind the sections that make the pillar page read as a
+   property practice rather than an advisory one: somewhere to live, something
+   to buy, and what is launching. See data/property.ts.
+   -------------------------------------------------------------------------- */
+
+/** A Dubai community, as a browsing entry point. */
+export interface Community {
+  name: string;
+  /** What the place actually is — not a sales line. */
+  blurb: string;
+  /** The stock found there, e.g. 'Apartments & townhouses'. */
+  stock: string;
+  img: string;
+  /** Where the tile goes; locale-relative, as everywhere else in the module. */
+  href: string;
+}
+
+/** A kind of property, as a browsing entry point. */
+export interface PropertyType {
+  name: string;
+  /** One line on who it suits. */
+  note: string;
+  img: string;
+  href: string;
+}
+
+/**
+ * An off-plan launch.
+ *
+ * Unlike the illustrative figures in data/market.ts, every value here is one
+ * the developer has published — see the sourcing note in data/property.ts.
+ */
+export interface OffPlanProject {
+  name: string;
+  developer: string;
+  location: string;
+  /** Published starting price, verbatim. */
+  priceFrom: string;
+  /** Payment split, e.g. '30/70'. */
+  plan: string;
+  /** Expected handover, e.g. 'Q4 2026'. */
+  handover: string;
+  img: string;
+}

@@ -234,9 +234,9 @@ export const INSIGHTS = {
 /* Contact */
 
 export const CONTACT = {
-  eyebrow: 'Get in Touch',
-  title: 'Your Next Property Journey Starts Here',
-  lede: "Whether you're buying, investing, or seeking expert advice, our team is ready to guide you every step of the way.",
+  eyebrow: 'Contact',
+  title: 'Tell us what you’re looking for.',
+  lede: 'Budget, area and timing. We come back with what is available and what it costs to own.',
   img: '/real-estate/img/cta.webp',
   whyTitle: 'Why Choose VALUNXT?',
   why: [

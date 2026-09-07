@@ -32,6 +32,18 @@ export interface PageConfig {
   active_nav?: string[];
   /** Extra <style> the page carried inline; {{BASE}} is substituted. */
   inline_css?: string;
+  /**
+   * Page-owned stylesheets, as $PAGE['css'] held them: paths under the mount
+   * point, loaded after valunxt-brand.css and the two site-wide skins so they
+   * build on those tokens rather than fight them.
+   */
+  css?: string[];
+  /**
+   * Page-owned scripts, as the redesigned templates emitted them at the end of
+   * the body (`<script src="/assets/js/vxn-home-ae.js" defer>`). Loaded after
+   * hydration, like every other script on this site — see SiteScripts.
+   */
+  js?: string[];
   /** Shared page-hero partial inputs. */
   hero_title?: string;
   hero_subtitle?: string;
@@ -40,4 +52,10 @@ export interface PageConfig {
   path: string;
   /** Only pages outside the CMS set this (the 404 template). */
   robots?: string;
+  /**
+   * True on a page that shares a path with a different page in another market
+   * and must therefore answer for its own metadata rather than inherit the
+   * shared CMS row underneath it. See vxnSeoResolveRow().
+   */
+  seo_own?: boolean;
 }

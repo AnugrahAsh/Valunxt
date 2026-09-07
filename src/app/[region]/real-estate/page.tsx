@@ -2,13 +2,15 @@
  * /{region}/real-estate/ — the real estate pillar page.
  *
  * A static segment inside the market tree, so it beats the CMS catch-all at
- * [region]/[...slug]/ and reaches the same page in either edition:
+ * [region]/[...slug]/ and reaches the same page in either edition.
  *
- *   /en-ae/real-estate/    /en-in/real-estate/
+ * The section renders its own navigation and footer inside Shell, and the root
+ * layout gives these URLs a lean head — the two brand typefaces and the
+ * section's own stylesheet, none of the site's Elementor cascade. See the
+ * realEstateRequest() branch in src/app/layout.tsx.
  *
- * The section is published but not advertised — there is no navigation item and
- * no sitemap entry for it. Reaching it means typing the URL, which is what was
- * asked for while the practice is still being finished.
+ * Published but not advertised: no navigation item on the main site, no sitemap
+ * entry. Reaching it means typing the URL.
  */
 import type { Metadata } from 'next';
 
@@ -31,8 +33,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function RealEstatePage({ params }: Params) {
   const region = toLocale((await params).region);
   return (
-    <Shell locale={region}>
-      <HomeBody locale={region} />
+    <Shell region={region}>
+      <HomeBody region={region} />
     </Shell>
   );
 }

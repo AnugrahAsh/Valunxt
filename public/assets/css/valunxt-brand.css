@@ -1367,8 +1367,7 @@ body {
   background-position: center center, center center;
   background-size: cover, cover;
   background-repeat: no-repeat, no-repeat;
-  padding: 30px 50px;
-  margin: 10px 0;
+  padding: 100px 50px;
 }
 
 .elementor-3752 .elementor-element.elementor-element-c739b5b .elementor-heading-title,
@@ -4964,6 +4963,7 @@ form.elementor-form button[type="submit"],
 .vxn-com__btn,
 .vxn-faq__btn,
 .vxn-side-cta,
+.vxn-soon__cta,
 .vxn-coming__cta {
   position: relative;
   overflow: hidden;
@@ -4987,6 +4987,7 @@ form.elementor-form button[type="submit"]::before,
 .vxn-com__btn::before,
 .vxn-faq__btn::before,
 .vxn-side-cta::before,
+.vxn-soon__cta::before,
 .vxn-coming__cta::before {
   content: "";
   position: absolute;
@@ -5021,6 +5022,7 @@ form.elementor-form button[type="submit"]:hover::before,
 .vxn-com__btn:hover::before,
 .vxn-faq__btn:hover::before,
 .vxn-side-cta:hover::before,
+.vxn-soon__cta:hover::before,
 .vxn-coming__cta:hover::before {
   width: 250%;
 }
@@ -5038,6 +5040,7 @@ form.elementor-form button[type="submit"]:hover,
 .vxn-com__btn:hover,
 .vxn-faq__btn:hover,
 .vxn-side-cta:hover,
+.vxn-soon__cta:hover,
 .vxn-coming__cta:hover {
   transform: scale(1.03);
   box-shadow: 0 10px 24px -8px rgba(0, 64, 140, .55);
@@ -5074,7 +5077,8 @@ form.elementor-form button[type="submit"]:hover,
   .vxn-com__btn::before,
   .vxn-faq__btn::before,
   .vxn-side-cta::before,
-  .vxn-coming__cta::before {
+  .vxn-soon__cta::before,
+.vxn-coming__cta::before {
     transition: none;
   }
 
@@ -5085,40 +5089,28 @@ form.elementor-form button[type="submit"]:hover,
   .vxn-com__btn:hover,
   .vxn-faq__btn:hover,
   .vxn-side-cta:hover,
-  .vxn-coming__cta:hover {
+  .vxn-soon__cta:hover,
+.vxn-coming__cta:hover {
     transform: none;
   }
 }
 
 /* ==========================================================================
-   ACTIVE NAV ITEM — a marker rule, not a filled chip (2026-09-04)
+   ACTIVE NAV ITEM — a chip, not a rule (2026-09-02)
 
-   The chip read as a control. The bar already carries two filled, rounded
-   shapes — the country switcher and the Free Consultation pill — and both are
-   things you press, so the current page looked like a third one that did
-   nothing. The marker says the same thing without borrowing that shape: a 2px
-   accent rule under the item, in the brand purple, which is on the bar nowhere
-   else and so cannot be read as anything but "you are here".
-
-   The rule is drawn with an inset box-shadow rather than a pseudo-element:
-   Elementor's e--pointer-underline already owns ::before and ::after on
-   .elementor-item, and background-image is taken by the dropdown chevron.
-
-   Weight and size are deliberately left alone. The bar renders the same list on
-   every page, so bolding the current item would re-measure the row and shift
-   its neighbours a page at a time.
-
-   Hover is untouched and keeps its own thin underline; that underline stays
-   suppressed on the active item, so "where I am" and "where the pointer is"
-   remain two different marks.
+   The active item was a 1px underline: the same mark the hover state draws, so
+   "where I am" and "where the pointer is" said the same thing, and neither said
+   it with any weight. It is a filled chip now, which borrows a shape already on
+   the bar twice over — the country switcher and the Free Consultation pill. The
+   underline is suppressed on the active item only; every other item keeps its
+   hover rule exactly as before.
    ========================================================================== */
 
 .elementor-location-header nav.elementor-nav-menu--main ul.elementor-nav-menu>li>a.elementor-item.elementor-item-active {
-  background-color: transparent !important;
-  border-radius: 0 !important;
+  background-color: rgba(255, 255, 255, .16) !important;
+  border-radius: 999px !important;
   color: #FFFFFF !important;
-  box-shadow: inset 0 -2px 0 0 #9C00DD !important;
-  transition: color .3s ease, box-shadow .3s ease;
+  transition: background-color .3s ease, color .3s ease;
 }
 
 .elementor-location-header nav.elementor-nav-menu--main .elementor-item.elementor-item-active::after,
@@ -5128,385 +5120,2464 @@ form.elementor-form button[type="submit"]:hover,
 }
 
 /* On any white bar — the inner-page headers, the pinned state, and while a mega
-   panel is open — the label takes the brand blue. The rule under it stays
-   purple in both, so the mark itself never changes between states. */
+   panel is open — the chip is a blue tint carrying a blue label. */
 .elementor-3837 nav.elementor-nav-menu--main ul.elementor-nav-menu>li>a.elementor-item.elementor-item-active,
 .elementor-3134 nav.elementor-nav-menu--main ul.elementor-nav-menu>li>a.elementor-item.elementor-item-active,
 html.vxn-nav-stuck .elementor-location-header nav.elementor-nav-menu--main ul.elementor-nav-menu>li>a.elementor-item.elementor-item-active,
 html.vxn-nav-open .elementor-location-header nav.elementor-nav-menu--main ul.elementor-nav-menu>li>a.elementor-item.elementor-item-active {
-  background-color: transparent !important;
+  background-color: rgba(0, 83, 183, .10) !important;
   color: #0053B7 !important;
 }
 
-/* ==========================================================================
-   SUBSCRIBE BUTTON — keep the label inside the button (2026-09-04)
-
-   post-4557.css sets `gap:3em; justify-content:space-between` on every <span>
-   inside this button — the selector is `.elementor-button span`, so it lands on
-   the content wrapper. At the button's 14px type that is a 42px gap, and the
-   wrapper is 106px wide for a 67px label plus a 14px icon: 123px of content in
-   a 106px box. The captured rule also sets `flex-direction:row-reverse`, so the
-   17px of overflow left the box by its *left* edge and "Subscribe" was drawn
-   outside the button it belongs to.
-
-   Brought down to an ordinary icon gap and centred, which fits the pair with
-   room to spare. Scoped to the content wrapper, so the captured rule still
-   governs any other span in the button.
-   ========================================================================== */
-
-.elementor-4557 .elementor-button .elementor-button-content-wrapper {
-  gap: 10px !important;
-  justify-content: center !important;
-}
 
 /* ==========================================================================
-   FOOTER — breathing room under the striped band (2026-09-04)
+   MOTION SYSTEM (2026-09-02)
 
-   The subscribe section carries a repeating line pattern as its background,
-   anchored to its own bottom edge (background-position: 50% 100%). The footer
-   opened with no top padding at all — the wordmark measured 0px from the footer's
-   top edge — so the navy block started on the last line of that pattern and the
-   logo sat directly against it.
+   One vocabulary for every entrance and transition on the site. Three rules
+   govern it:
 
-   The room has to be made inside the footer: padding on the subscribe section
-   would carry the pattern down with it, since the pattern is anchored to that
-   section's bottom and would still meet the footer flush.
+     1. Only `opacity` and `transform` are animated. Both are composited, so
+        nothing here triggers layout or paint on the main thread.
+     2. One easing and one small set of durations, used everywhere. Motion that
+        varies from section to section reads as an accident.
+     3. Nothing moves far. The distance is ~26px regardless of element size —
+        the point is to arrive, not to travel.
+
+   It REPLACES rather than adds: the build already ships Elementor's reveal
+   (`.elementor-invisible` cleared by the IntersectionObserver in
+   includes/scripts.php, on 75 templates). Those reveals used Elementor's own
+   keyframes, which translate from `100%` of the ELEMENT'S OWN HEIGHT over
+   1.25s — so a 400px section slid 400px, and a small one barely moved. That
+   inconsistency, not the absence of animation, was what made the site feel
+   unfinished. Redefining those keyframes below retunes every existing reveal
+   on every page at once, without touching a single template.
    ========================================================================== */
 
-.elementor-location-footer.elementor-2094 {
-  padding-top: 56px;
+:root {
+  /* Ease-out. Fast to leave, slow to settle — the shape almost every premium
+     corporate site uses, and the one in the reference recording. */
+  --vxn-ease: cubic-bezier(.22, .61, .36, 1);
+  /* For states that go both ways (hover on, hover off) a symmetric curve reads
+     better than an ease-out played backwards. */
+  --vxn-ease-inout: cubic-bezier(.4, 0, .2, 1);
+
+  --vxn-dur-xs: .18s;
+  --vxn-dur-sm: .28s;
+  --vxn-dur-md: .42s;
+  --vxn-dur-lg: .66s;
+
+  /* The one travel distance, and the one gap between staggered siblings. */
+  --vxn-rise: 26px;
+  --vxn-stagger: 70ms;
 }
 
-@media (max-width: 767px) {
-  .elementor-location-footer.elementor-2094 {
-    padding-top: 36px;
+/* --------------------------------------------------------------------------
+   1. Retuning the reveals the build already ships
+
+   Same animation NAMES Elementor's markup asks for, so every
+   `data-settings='{"_animation":"slideInUp"}'` in the templates keeps working
+   — only the movement changes. These come after Elementor's own sheets in
+   head.php, so they win.
+   -------------------------------------------------------------------------- */
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--vxn-rise), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-/* ==========================================================================
-   TRIO, STANDING ALONE (2026-09-04)
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--vxn-rise), 0);
+  }
 
-   The three feature cards used to close the UAE home page's "Who We Are"
-   section and took their width from it (.vxn-plat__inner — 1200px, 28px of
-   gutter). That section has been removed from this edition and the cards kept,
-   so they need the container back: .vxn-trio is a bare `grid-template-columns:
-   repeat(3, 1fr)` with no width of its own, and left loose it would run the full
-   width of the page.
-
-   Bottom spacing only — the grid already carries `margin: 46px 0 0` for its top.
-   India is untouched: there the cards are still inside their own section.
-   ========================================================================== */
-
-.vxn-trio-solo {
-  display: block;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 28px 88px;
-}
-
-@media (max-width: 767px) {
-  .vxn-trio-solo {
-    padding: 0 20px 56px;
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-/* ==========================================================================
-   SECTION IMAGE CARDS — one radius (2026-09-04)
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
 
-   Every card in a page section that carries a photograph now rounds to 20px.
-   They had drifted to six different values: 2px on the capability tiles, 5px on
-   the related-article thumbs, 8px on the location media, 12px on the team,
-   research and blog-hero images, 18px on the trio and proof cards, and 0 on the
-   home industries row, which had been flattened on purpose back when those
-   cards sat edge to edge — they are separated by a 16px gap now, so the corners
-   can come back.
-
-   `!important` throughout, for two reasons: most of these are declared in
-   component <style> blocks that render in the body, so they come after this
-   file and would otherwise win on source order; and the industries row carries
-   its own `border-radius: 0 !important`, which needs matching specificity to
-   unseat.
-
-   Deliberately not in this list: the mega-menu cards, the cookie and region
-   panels, pills, dots and avatars. Those are nav and UI chrome, not section
-   cards, and they keep the radii their own shapes were drawn for.
-   ========================================================================== */
-
-.vxn-cap__tile,
-.vxn-svc-card,
-.vxn-svc-card__media,
-.vxn-trio__card,
-.vxn-trio__media,
-.vxn-proof__card,
-.vxn-com__card,
-.vxn-com__car-fig,
-.vxn-team__card,
-.vxn-rr__card,
-.vxn-rel__thumb,
-.vxn-loc__media,
-.elementor img.vxn-blog-hero,
-img.vxn-blog-hero {
-  border-radius: 20px !important;
+  to {
+    opacity: 1;
+  }
 }
 
-.vxn-home-svc-section .vxn-svc-card,
-.vxn-home-svc-section .vxn-svc-card__media,
-.vxn-home-svc-section .vxn-svc-card__media img {
-  border-radius: 20px !important;
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(calc(var(--vxn-rise) * -1.4), 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-/* A radius only shows on the photograph if the box holding it clips. Most of
-   these already do; the rest are named here so none is left square-cornered
-   with a rounded frame around it. */
-.vxn-cap__tile,
-.vxn-svc-card,
-.vxn-trio__media,
-.vxn-com__car-fig,
-.vxn-rel__thumb,
-.vxn-loc__media,
-.vxn-team__card,
-.vxn-rr__card {
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(calc(var(--vxn-rise) * 1.4), 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Deliberately de-bounced. A bounce on a corporate page reads as a toy; the
+   name is kept only because the markup asks for it. */
+@keyframes bounceInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, calc(var(--vxn-rise) * -1), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animated {
+  animation-duration: var(--vxn-dur-lg);
+  animation-timing-function: var(--vxn-ease);
+  animation-fill-mode: both;
+}
+
+.animated.animated-fast {
+  animation-duration: var(--vxn-dur-md);
+}
+
+.animated.animated-slow {
+  animation-duration: .82s;
+}
+
+/* --------------------------------------------------------------------------
+   2. The reveal primitive
+
+   For everything Elementor's markup does not already cover — the hand-built
+   `.vxn-*` sections, the footer, the mega menu content. Add `data-vxn-in` and
+   the observer in includes/scripts.php adds `.is-in` when it enters view.
+
+   `--vxn-i` on a child is its position in a stagger; the observer sets it from
+   the DOM order so no template has to hard-code delays.
+   -------------------------------------------------------------------------- */
+
+[data-vxn-in] {
+  opacity: 0;
+  transition:
+    opacity var(--vxn-dur-lg) var(--vxn-ease),
+    transform var(--vxn-dur-lg) var(--vxn-ease);
+  transition-delay: calc(var(--vxn-i, 0) * var(--vxn-stagger));
+}
+
+[data-vxn-in="up"],
+[data-vxn-in=""] {
+  transform: translate3d(0, var(--vxn-rise), 0);
+}
+
+[data-vxn-in="down"] {
+  transform: translate3d(0, calc(var(--vxn-rise) * -1), 0);
+}
+
+[data-vxn-in="left"] {
+  transform: translate3d(calc(var(--vxn-rise) * -1), 0, 0);
+}
+
+[data-vxn-in="right"] {
+  transform: translate3d(var(--vxn-rise), 0, 0);
+}
+
+[data-vxn-in="zoom"] {
+  transform: scale(.97);
+}
+
+[data-vxn-in="fade"] {
+  transform: none;
+}
+
+[data-vxn-in].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Same guarantee the Elementor reveal already carries: with no scripting there
+   is nothing to add `.is-in`, so the content must simply be visible. */
+html:not(.vxn-js) [data-vxn-in] {
+  opacity: 1;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. Mega menu
+
+   Open: the sheet wipes down from the bar while it fades and settles the last
+   few pixels — the movement in the reference recording. `clip-path` does the
+   wipe, so nothing reflows and the panel never appears at half height.
+
+   Close: the panel is `display:none` when not hovered, and `display` cannot be
+   transitioned. Rather than keep 24 card images rendered on every page to win
+   an out-animation, includes/scripts.php holds the item open for 180ms with
+   `.is-closing` and the panel fades out under that class.
+   -------------------------------------------------------------------------- */
+
+@keyframes vxn-mega-open {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0);
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes vxn-mega-close {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+/* The children ride in behind the sheet. Because the panel goes from
+   `display:none` to `display:block`, every animation inside it restarts on
+   open — no JS needed to re-trigger the stagger. */
+@keyframes vxn-mega-child {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 1025px) {
+
+  .elementor-nav-menu--main .vxn-mega:hover>.vxn-mega__panel,
+  .elementor-nav-menu--main .vxn-mega:focus-within>.vxn-mega__panel {
+    animation: vxn-mega-open .34s var(--vxn-ease) both;
+    will-change: opacity, transform, clip-path;
+  }
+
+  .elementor-nav-menu--main .vxn-mega.is-closing>.vxn-mega__panel {
+    display: block !important;
+    animation: vxn-mega-close .18s var(--vxn-ease-inout) both;
+    pointer-events: none;
+  }
+
+  /* Intro block, then the link index, then the cards — the left-to-right
+     cascade of the reference. Delays are additive on top of the sheet's own
+     wipe so nothing arrives before the surface it sits on. */
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__intro>*,
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__viewall,
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__item,
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__card {
+    animation: vxn-mega-child .44s var(--vxn-ease) both;
+  }
+
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__intro>:nth-child(1) { animation-delay: .10s; }
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__intro>:nth-child(2) { animation-delay: .15s; }
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__intro>:nth-child(3) { animation-delay: .20s; }
+
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__item:nth-child(1) { animation-delay: .16s; }
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__item:nth-child(2) { animation-delay: .21s; }
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__item:nth-child(3) { animation-delay: .26s; }
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__item:nth-child(4) { animation-delay: .31s; }
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__item:nth-child(5) { animation-delay: .36s; }
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__item:nth-child(6) { animation-delay: .41s; }
+
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__viewall { animation-delay: .44s; }
+
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__card:nth-child(1) { animation-delay: .26s; }
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__card:nth-child(2) { animation-delay: .34s; }
+}
+
+/* The plain dropdown (About) gets the same open, at the smaller scale its size
+   deserves. */
+@media (min-width: 1025px) {
+
+  .elementor-nav-menu--main>ul>li.menu-item-has-children:not(.vxn-mega):hover>.sub-menu,
+  .elementor-nav-menu--main>ul>li.menu-item-has-children:not(.vxn-mega):focus-within>.sub-menu {
+    animation: vxn-mega-open .26s var(--vxn-ease) both;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. The bar itself, on first paint
+
+   The header is fixed and above the hero, so it is the first thing seen. It
+   settles once, quickly, and never again — a page-load flourish that repeats
+   on every navigation becomes a tax on the visitor.
+   -------------------------------------------------------------------------- */
+
+@keyframes vxn-bar-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -12px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+html.vxn-js .elementor-location-header .vamtam-sticky-header:not(.vamtam-sticky-header--spacer) {
+  animation: vxn-bar-in .5s var(--vxn-ease) both;
+}
+
+/* --------------------------------------------------------------------------
+   5. Breadcrumb and page title (34 inner pages)
+
+   Every inner page shares one captured hero — `elementor-3752`, container
+   `c4d353f` — so the whole set is reachable from here without touching a
+   template. Above the fold, so it runs on load rather than on scroll: an
+   observer that fires immediately is just a slower way to do the same thing.
+
+   The photograph settles out of a slight scale at the same time, which is what
+   stops the title from looking like it is sliding over a static plate.
+   -------------------------------------------------------------------------- */
+
+/* The photograph "develops": it arrives washed out and settles into full
+   contrast while easing down from a slight scale. Two layers do it, both
+   pseudo-elements of the hero container itself, so no template gains an
+   element.
+
+   `background: inherit` on ::before copies the container's whole background
+   shorthand — the tinted gradient AND the photograph, wherever each page set
+   them inline — which is what lets the picture scale while the type above it
+   stays perfectly still. It only ever scales DOWN to 1, so no edge can ever be
+   exposed. ::after is the wash that fades off it.
+
+   `isolation: isolate` plus negative z-indices puts both above the container's
+   own background and below its content, so `.e-con-inner` needs no z-index of
+   its own. */
+
+/* The wash and the settle are one animation on one layer now. `filter` is how
+   the picture actually develops — over-bright and desaturated, easing back to
+   its true values — which is nearer what the reference does than laying a flat
+   white sheet over it, and it leaves ::after free for the glass. Both `filter`
+   and `transform` are composited, so this costs no paint. */
+@keyframes vxn-hero-settle {
+  from {
+    transform: scale(1.07);
+    filter: brightness(1.75) saturate(.3) contrast(.85);
+  }
+
+  to {
+    transform: none;
+    filter: none;
+  }
+}
+
+/* The glass: a wide, soft, slightly raked band that travels across the header
+   and keeps going. Nothing but `transform` moves, so it composites on the GPU
+   and never repaints the photograph underneath.
+
+   The pause is built into the keyframes rather than into a delay — it holds off
+   screen for the first two thirds of the cycle, crosses, and waits again. A
+   band that swept continuously would read as a loading shimmer. */
+@keyframes vxn-hero-sheen {
+  0%,
+  62% {
+    transform: translate3d(-160%, 0, 0) skewX(-14deg);
+  }
+
+  100% {
+    transform: translate3d(430%, 0, 0) skewX(-14deg);
+  }
+}
+
+/* The same glint passing through the title. On white type a brighter band is
+   invisible, so the band dips instead — the way a reflection crosses glass. */
+/* Both ends of this range MUST stay within 0%-100%. The gradient is wider than
+   the text and set `no-repeat`, so a position outside that range slides it off
+   the box entirely — and with `-webkit-text-fill-color: transparent` under it,
+   no background means no visible type at all. At 100% the window sits in the
+   gradient's solid tail, at 0% in its solid head, and the dip crosses between:
+   the type is white at every point of the cycle except while the glint is
+   passing through it. */
+@keyframes vxn-text-sheen {
+  0%,
+  55% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* Each line rises out from behind the edge of its own widget box. The widget
+   is the mask (`overflow: hidden`), the container inside it is what moves —
+   which is why this needs no wrapper element in any template. 105% rather than
+   100% so descenders clear the mask instead of grazing it. */
+@keyframes vxn-mask-rise {
+  from {
+    transform: translate3d(0, 105%, 0);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes vxn-rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Two families of page header, one treatment:
+     A  .elementor-3752 .elementor-element-c4d353f  — the shared hero, 34 pages
+     B  .elementor-element-d726ecf                  — the four service pages */
+html.vxn-js .elementor-3752 .elementor-element-c4d353f,
+html.vxn-js .elementor-element-d726ecf {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+html.vxn-js .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js .elementor-element-d726ecf::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: inherit;
+  animation: vxn-hero-settle 1.7s var(--vxn-ease) both;
+}
+
+html.vxn-js .elementor-3752 .elementor-element-c4d353f::after,
+html.vxn-js .elementor-element-d726ecf::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  /* Taller than the box and raked, so the leading edge enters and leaves
+     cleanly instead of showing a corner. */
+  top: -30%;
+  bottom: -30%;
+  left: 0;
+  width: 26%;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, .13) 45%,
+      rgba(255, 255, 255, .17) 50%,
+      rgba(255, 255, 255, .13) 55%,
+      rgba(255, 255, 255, 0) 100%);
+  animation: vxn-hero-sheen 9s cubic-bezier(.5, 0, .3, 1) 1.6s infinite;
+  will-change: transform;
+}
+
+/* --- the masked lines ---
+   Matched by widget TYPE rather than by id, so a page whose hero was captured
+   with different element ids still gets the reveal. The ids below only order
+   them. */
+html.vxn-js .elementor-3752 .elementor-element-c4d353f .elementor-widget-heading,
+html.vxn-js .elementor-3752 .elementor-element-c4d353f .elementor-widget-theme-post-title,
+html.vxn-js .elementor-element-d726ecf .elementor-widget-heading,
+html.vxn-js .elementor-element-d726ecf .elementor-widget-theme-post-title,
+html.vxn-js .elementor-element-d726ecf .elementor-widget-theme-post-excerpt {
   overflow: hidden;
 }
 
+html.vxn-js .elementor-3752 .elementor-element-c4d353f .elementor-widget-heading>.elementor-widget-container,
+html.vxn-js .elementor-3752 .elementor-element-c4d353f .elementor-widget-theme-post-title>.elementor-widget-container,
+html.vxn-js .elementor-element-d726ecf .elementor-widget-heading>.elementor-widget-container,
+html.vxn-js .elementor-element-d726ecf .elementor-widget-theme-post-title>.elementor-widget-container,
+html.vxn-js .elementor-element-d726ecf .elementor-widget-theme-post-excerpt>.elementor-widget-container {
+  animation: vxn-mask-rise .78s var(--vxn-ease) both;
+}
+
+/* Crumbs first, then the rule draws across, then the title, then the standfirst
+   — the order the eye reads them in. */
+html.vxn-js .elementor-3752 .elementor-element-c739b5b>.elementor-widget-container,
+html.vxn-js .elementor-element-88d6b57>.elementor-widget-container {
+  animation-delay: .12s;
+}
+
+html.vxn-js .elementor-3752 .elementor-element-1707a75>.elementor-widget-container,
+html.vxn-js .elementor-element-236cbfe>.elementor-widget-container {
+  animation-delay: .18s;
+}
+
+html.vxn-js .elementor-3752 .elementor-element-16f0cb0>.elementor-widget-container,
+html.vxn-js .elementor-element-bc5a61e>.elementor-widget-container {
+  animation-delay: .34s;
+}
+
+html.vxn-js .elementor-element-564ba7d>.elementor-widget-container {
+  animation-delay: .46s;
+}
+
+/* The hairline draws from the left rather than fading. */
+html.vxn-js .elementor-3752 .elementor-element-3f5733d .elementor-divider-separator,
+html.vxn-js .elementor-element-110cfac .elementor-divider-separator {
+  transform-origin: left center;
+  animation: vxn-rule-draw .8s var(--vxn-ease) .26s both;
+}
+
+/* The service pages ship their own Elementor reveal on the title and the
+   standfirst. Left in, each would slide up while the mask underneath it also
+   rose — the same movement twice. The mask owns them now. */
+html.vxn-js .elementor-element-bc5a61e.elementor-invisible,
+html.vxn-js .elementor-element-564ba7d.elementor-invisible {
+  visibility: visible;
+}
+
+html.vxn-js .elementor-element-bc5a61e.animated,
+html.vxn-js .elementor-element-564ba7d.animated {
+  animation: none;
+}
+
+/* The glint on the page title.
+
+   Guarded by @supports, and the plain `color` is set first: if a browser takes
+   the background-clip but not `-webkit-text-fill-color`, the type is still
+   white rather than invisible. The gradient dips to 62% white at its centre and
+   is otherwise solid, so at every moment of the cycle the title reads as white
+   type with a reflection moving through it. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+
+  html.vxn-js .elementor-3752 .elementor-element-c4d353f h1.elementor-heading-title,
+  html.vxn-js .elementor-element-d726ecf h1.elementor-heading-title {
+    color: #ffffff;
+    background-image: linear-gradient(100deg,
+        #ffffff 0%,
+        #ffffff 38%,
+        rgba(255, 255, 255, .62) 50%,
+        #ffffff 62%,
+        #ffffff 100%);
+    background-size: 260% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: vxn-text-sheen 9s cubic-bezier(.5, 0, .3, 1) 1.9s infinite;
+  }
+}
+
+/* The heading itself carries only the glint; the rise belongs to the widget
+   box that masks it. Every title widget is matched by type above, so there is
+   no page left needing a fallback rise here. */
+
+/* --------------------------------------------------------------------------
+   6. Micro-interactions
+
+   Cards lift a little and their shadow deepens; that is the whole vocabulary.
+   Kept to pointer devices, because on a touch screen `:hover` sticks after a
+   tap and the card is left raised with nothing to lower it.
+   -------------------------------------------------------------------------- */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .vxn-svc-card,
+  .vxn-plat__card,
+  .vxn-stat-card {
+    transition:
+      transform var(--vxn-dur-md) var(--vxn-ease),
+      box-shadow var(--vxn-dur-md) var(--vxn-ease);
+  }
+
+  .vxn-svc-card:hover,
+  .vxn-plat__card:hover {
+    transform: translate3d(0, -6px, 0);
+    box-shadow: 0 18px 36px -18px rgba(11, 26, 38, .32);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Reduced motion
+
+   Everything above is decoration, so all of it goes. What must NOT go is the
+   end state: several of these rules are the only thing making their element
+   visible, so each one is pinned to its finished value rather than simply
+   having its animation removed.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .animated,
+  html.vxn-js .elementor-location-header .vamtam-sticky-header:not(.vamtam-sticky-header--spacer),
+  html.vxn-js .elementor-3752 .elementor-element-c4d353f::before,
+  html.vxn-js .elementor-element-d726ecf::before,
+  html.vxn-js .elementor-3752 .elementor-element-c4d353f .elementor-widget-container,
+  html.vxn-js .elementor-element-d726ecf .elementor-widget-container,
+  html.vxn-js .elementor-3752 .elementor-element-3f5733d .elementor-divider-separator,
+  html.vxn-js .elementor-element-110cfac .elementor-divider-separator,
+  html.vxn-js .elementor-3752 .elementor-element-c4d353f h1.elementor-heading-title,
+  html.vxn-js .elementor-element-d726ecf h1.elementor-heading-title,
+  .elementor-nav-menu--main .vxn-mega:hover>.vxn-mega__panel,
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__intro>*,
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__viewall,
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__item,
+  .elementor-nav-menu--main .vxn-mega:hover .vxn-mega__card,
+  .elementor-nav-menu--main>ul>li.menu-item-has-children:not(.vxn-mega):hover>.sub-menu {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  /* The develop is a filter, not a movement: with the animation simply removed
+     it would sit at its `from` value and leave every page header bleached. It
+     has to be pinned to its finished state, not stopped. */
+  html.vxn-js .elementor-3752 .elementor-element-c4d353f::before,
+  html.vxn-js .elementor-element-d726ecf::before {
+    animation: none !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  /* The glass is decoration end to end — it goes entirely. */
+  html.vxn-js .elementor-3752 .elementor-element-c4d353f::after,
+  html.vxn-js .elementor-element-d726ecf::after {
+    display: none !important;
+  }
+
+  /* Without the sweep the clipped gradient would freeze mid-dip across the
+     title, so the type goes back to being painted plainly. */
+  html.vxn-js .elementor-3752 .elementor-element-c4d353f h1.elementor-heading-title,
+  html.vxn-js .elementor-element-d726ecf h1.elementor-heading-title {
+    background-image: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    color: #ffffff !important;
+  }
+
+  [data-vxn-in] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .vxn-svc-card:hover,
+  .vxn-plat__card:hover {
+    transform: none;
+  }
+}
+
 /* ==========================================================================
-   MEGA MENU — shorter, quieter, and it opens rather than appears (2026-09-04)
+   DRIFTING TEXTURE (2026-09-02)
 
-   Four things were wrong with the sheet. It was tall enough to cover most of
-   the viewport; the promo cards were a gradient with two blurred radial fields
-   drifting across them on 19s and 26s loops, which is a lot of motion for a
-   menu; each card carried a photograph that set its height; and the panel was
-   toggled with `display`, so it appeared in one frame with no transition.
+   A raked stripe texture that pans slowly and continuously across the brand's
+   coloured surfaces — the movement in the reference recording, where the
+   diagonal streaks on the contact strip travel steadily sideways rather than
+   sitting still. It lifts and quickens when the pointer is over the surface.
 
-   This block overrides the rules above rather than editing them in place —
-   sixty scattered declarations across a thousand lines, several of them at
-   0-4-0 with !important to beat the theme. Appended here it wins on order at
-   equal specificity, and the original intent stays readable above.
+   How it loops seamlessly. The stripes are built as a VERTICAL repeating
+   gradient and then raked over with `skewX`. That is deliberate: a gradient
+   drawn at an angle has a horizontal period of `period / sin(angle)`, an
+   irrational number in practice, so translating by anything other than exactly
+   that distance makes the pattern jump on every cycle. Drawn vertically the
+   horizontal period is exactly the gradient period — 104px here — and `skewX`
+   shifts x by y·tan without changing it. Translating by exactly 104px
+   therefore returns the pattern to itself, invisibly, forever.
 
-   Everything is scoped to nav.elementor-nav-menu--main: the burger drawer
-   renders the same markup through .elementor-nav-menu--dropdown and is left
-   exactly as it was.
+   Only `transform` animates, so it composites on the GPU and never repaints the
+   surface under it. `isolation: isolate` plus `z-index: -1` keeps the texture
+   above that surface's own background and below every word on it, so no child
+   needs a z-index of its own.
+
+   WHERE IT GOES. The footer panel is on every page, which is what makes this
+   read as a property of the brand rather than of one section; the rest are the
+   coloured bands — "What Sets Us Apart" on both homes, the statement band, the
+   consultation band, the services band on the four service pages, and the
+   community CTA. Page headers are deliberately excluded: they already carry the
+   glass sweep, and two textures on one surface is one too many. Light content
+   sections are left alone — texture belongs on the coloured slabs, not behind
+   body copy.
    ========================================================================== */
 
-/* ---- Opening ------------------------------------------------------------
-   `display` cannot be transitioned, so the panel is always laid out (it is
-   position:fixed, so this costs no space) and shown by visibility, opacity and
-   a short rise. visibility is what keeps it out of the tab order while closed;
-   it is delayed on the way out so the fade can finish first. */
-.elementor-nav-menu--main .vxn-mega > .vxn-mega__panel {
-  display: block !important;
-  visibility: hidden;
-  opacity: 0;
-  transform: translateY(-10px);
+:root {
+  /* The loop distance and the gradient period must stay equal — see above. */
+  --vxn-tex-period: 104px;
+  --vxn-tex-rake: -16deg;
+}
+
+@keyframes vxn-texture-drift {
+  from {
+    transform: skewX(var(--vxn-tex-rake)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: skewX(var(--vxn-tex-rake)) translate3d(var(--vxn-tex-period), 0, 0);
+  }
+}
+
+.elementor-element-06c1139,
+.elementor-element-410572a,
+.vxn-offer,
+.vxn-com__cta,
+.elementor-17 .elementor-element-611b40a {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+html.vxn-js .elementor-element-06c1139::after,
+html.vxn-js .elementor-element-410572a::after,
+html.vxn-js .vxn-offer::after,
+html.vxn-js .vxn-com__cta::after,
+html.vxn-js .elementor-17 .elementor-element-611b40a::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
   pointer-events: none;
-  transition:
-    opacity .3s ease,
-    transform .34s cubic-bezier(.22, .61, .36, 1),
-    visibility 0s linear .34s;
+  /* Overhang on every side: the rake pushes the pattern diagonally out of the
+     box, and the parent's `overflow: hidden` trims it back to a clean edge. */
+  top: -20%;
+  bottom: -20%;
+  left: -30%;
+  right: -30%;
+  /* Soft-edged rather than hard-ruled: the stops ramp in and out so the stripes
+     read as light falling across the surface instead of as lines drawn on it.
+     At .085 over .75 opacity the effective contrast is about 6% — enough to see
+     on the deep blues, low enough that nothing set on top of it loses
+     legibility. */
+  background: repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0) 34px,
+      rgba(255, 255, 255, .085) 52px,
+      rgba(255, 255, 255, .085) 60px,
+      rgba(255, 255, 255, 0) 78px,
+      rgba(255, 255, 255, 0) 104px);
+  transform: skewX(var(--vxn-tex-rake));
+  animation: vxn-texture-drift 24s linear infinite;
+  will-change: transform;
+  /* Held back at rest; the hover below takes it to full. */
+  opacity: .75;
+  transition: opacity .5s var(--vxn-ease);
 }
 
-.elementor-nav-menu--main .vxn-mega:hover > .vxn-mega__panel,
-.elementor-nav-menu--main .vxn-mega:focus-within > .vxn-mega__panel {
-  visibility: visible;
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-  transition-delay: 0s;
-}
+/* Pointer devices only: on a touch screen `:hover` sticks after a tap and would
+   leave one band permanently brighter than its neighbours. */
+@media (hover: hover) and (pointer: fine) {
 
-/* ---- Height -------------------------------------------------------------
-   The sheet was 46px/44px of padding around 40px type and 52px rows. Every one
-   of those is trimmed; the photographs coming out of the cards does the rest. */
-.elementor-nav-menu--main .vxn-mega__panel {
-  padding: 26px 0 24px !important;
-  box-shadow: 0 26px 50px -28px rgba(6, 18, 32, .34);
-}
-
-.elementor-nav-menu--main .vxn-mega__intro {
-  margin-bottom: 12px;
-}
-
-.elementor-nav-menu--main .vxn-mega__head {
-  font-size: 28px !important;
-  line-height: 1.12 !important;
-  margin: 0 0 8px !important;
-}
-
-.elementor-nav-menu--main .vxn-mega__lede {
-  font-size: 13px;
-  line-height: 1.55;
-  max-width: 42ch;
-}
-
-/* ---- Index rows ---------------------------------------------------------
-   Half the height they were, and the row itself now answers the pointer: a
-   wash of brand blue and a small step to the right, instead of the title
-   colour changing on its own. */
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__item {
-  padding: 13px 10px 13px 10px !important;
-  transition: background-color .28s ease, transform .3s cubic-bezier(.22, .61, .36, 1);
-}
-
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__item:hover {
-  background: rgba(0, 83, 183, .055) !important;
-  transform: translateX(3px);
-}
-
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__itemdesc {
-  margin-top: 2px;
-  font-size: 12px;
-}
-
-.elementor-nav-menu--main .vxn-mega__ico svg {
-  width: 19px;
-  height: 19px;
-}
-
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__viewall {
-  padding-top: 16px !important;
-  margin-top: 4px !important;
-}
-
-/* ---- Promo cards --------------------------------------------------------
-   Flat brand blue with a woven texture over it — no gradient, no drifting
-   fields, no photograph. The same SVG texture the UAE service heroes use, so
-   the two read as one idea; it is drawn rather than fetched, which costs no
-   request and keeps its edges at any size.
-
-   Selector depth matches the 0-4-0 rules above (the theme tints menu anchors
-   at 0-3-1, which is what forced that depth originally). */
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__wrap .vxn-mega__card {
-  background-color: #0053B7 !important;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.08' stroke-width='1'%3E%3Cpath d='M0 40 L40 0 M-10 10 L10 -10 M30 50 L50 30'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='.06'%3E%3Ccircle cx='10' cy='30' r='1'/%3E%3Ccircle cx='30' cy='10' r='1'/%3E%3C/g%3E%3C/svg%3E") !important;
-  background-repeat: repeat !important;
-  background-size: 40px 40px !important;
-  background-position: 0 0 !important;
-  border: 1px solid rgba(255, 255, 255, .18) !important;
-  border-radius: 16px !important;
-  padding: 20px 20px 18px !important;
-  box-shadow: none;
-  transition:
-    background-color .35s ease,
-    border-color .35s ease,
-    transform .35s cubic-bezier(.22, .61, .36, 1),
-    box-shadow .35s ease;
-}
-
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__wrap .vxn-mega__card:hover {
-  background-color: #0E355F !important;
-  border-color: rgba(255, 255, 255, .34) !important;
-  transform: translateY(-3px);
-  box-shadow: 0 16px 34px -16px rgba(0, 45, 100, .6);
-}
-
-/* The two blurred fields that drifted across the cards. */
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__card::before,
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__card::after {
-  display: none !important;
-}
-
-/* The photograph. The text sits on the texture now, which is most of the
-   height that has come out of the sheet. */
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__cardmedia {
-  display: none !important;
-}
-
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__cards {
-  gap: 14px;
-}
-
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__cardtitle {
-  font-size: 20px !important;
-  line-height: 1.25 !important;
-  margin-top: 10px !important;
-  /* Both cards stay the same height whatever their titles run to. */
-  min-height: 2.5em;
-}
-
-/* margin-top:auto, not a fixed gap. The photograph used to be the flex child
-   that grew and pushed this to the foot of the card; with it hidden, a fixed
-   margin left the CTA stranded just under the title with 250px of empty card
-   below it. auto restores the push now that the card is full height. */
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__cardcta {
-  margin-top: auto !important;
-  padding-top: 18px;
-}
-
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__wrap .vxn-mega__circ {
-  width: 32px !important;
-  height: 32px !important;
+  html.vxn-js .elementor-element-06c1139:hover::after,
+  html.vxn-js .elementor-element-410572a:hover::after,
+  html.vxn-js .vxn-offer:hover::after,
+  html.vxn-js .vxn-com__cta:hover::after,
+  html.vxn-js .elementor-17 .elementor-element-611b40a:hover::after {
+    animation-duration: 11s;
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .elementor-nav-menu--main .vxn-mega > .vxn-mega__panel,
-  .elementor-nav-menu--main .vxn-mega__panel .vxn-mega__item,
-  .elementor-nav-menu--main .vxn-mega__panel .vxn-mega__wrap .vxn-mega__card {
+
+  html.vxn-js .elementor-element-06c1139::after,
+  html.vxn-js .elementor-element-410572a::after,
+  html.vxn-js .vxn-offer::after,
+  html.vxn-js .vxn-com__cta::after,
+  html.vxn-js .elementor-17 .elementor-element-611b40a::after {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   UAE SERVICES INDEX (.vxn-svcidx) and the placeholder page (.vxn-soon)
+   /en-ae/services/ and the 36 pages beneath it. Markup in
+   en-ae/services/index.php and includes/partials/service-soon.php; the content
+   itself is in data/services-uae.php.
+
+   The index is a ruled list rather than a grid of cards: six practices with up
+   to six sub-services each is 36 links, and as cards that reads as a wall. Two
+   rails — the practice on the left, its sub-services on the right — lets the
+   eye take one practice at a time.
+   ========================================================================== */
+
+.vxn-svcidx {
+  padding: 92px 0 96px;
+  background: #ffffff;
+}
+
+.vxn-svcidx__inner {
+  max-width: min(100%, 1280px);
+  margin-inline: auto;
+  padding-inline: 34px;
+}
+
+.vxn-svcidx__lede {
+  max-width: 720px;
+  margin-bottom: 56px;
+}
+
+.vxn-svcidx__kicker {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-svcidx__head {
+  margin: 0 0 14px;
+  font-family: "Forum", serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.12;
+  color: var(--e-global-color-vamtam_text, #0E355F);
+}
+
+.vxn-svcidx__text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--vxn-text, #35415A);
+}
+
+/* ---- one practice ---- */
+
+.vxn-svcidx__row {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 30px 56px;
+  padding: 40px 0;
+  border-top: 1px solid rgba(14, 53, 95, .12);
+}
+
+.vxn-svcidx__row:last-child {
+  border-bottom: 1px solid rgba(14, 53, 95, .12);
+}
+
+.vxn-svcidx__num {
+  display: block;
+  margin-bottom: 10px;
+  font-family: "Forum", serif;
+  font-size: 15px;
+  letter-spacing: .12em;
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-svcidx__title {
+  margin: 0 0 12px;
+  font-family: "Forum", serif;
+  font-weight: 400;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.15;
+}
+
+.vxn-svcidx__title a {
+  color: var(--e-global-color-vamtam_text, #0E355F);
+  text-decoration: none;
+  transition: color .25s var(--vxn-ease, ease);
+}
+
+.vxn-svcidx__title a:hover {
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-svcidx__desc {
+  margin: 0 0 18px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--vxn-muted, #6A7590);
+}
+
+.vxn-svcidx__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(0, 83, 183, .3);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--vxn-blue, #0053B7);
+  transition: border-color .25s var(--vxn-ease, ease);
+}
+
+.vxn-svcidx__more:hover {
+  border-bottom-color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-svcidx__more span {
+  transition: transform .25s var(--vxn-ease, ease);
+}
+
+.vxn-svcidx__more:hover span {
+  transform: translateX(4px);
+}
+
+/* ---- its sub-services ---- */
+
+.vxn-svcidx__subs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-content: start;
+}
+
+.vxn-svcidx__sub a {
+  display: block;
+  padding: 14px 16px 14px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color .25s var(--vxn-ease, ease);
+}
+
+.vxn-svcidx__sub a:hover {
+  background-color: rgba(0, 83, 183, .055);
+}
+
+.vxn-svcidx__subname {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--e-global-color-vamtam_text, #0E355F);
+  transition: color .22s var(--vxn-ease, ease);
+}
+
+.vxn-svcidx__sub a:hover .vxn-svcidx__subname {
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-svcidx__subdesc {
+  display: block;
+  margin-top: 3px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--vxn-muted, #6A7590);
+}
+
+@media (max-width: 1024px) {
+
+  .vxn-svcidx {
+    padding: 64px 0 68px;
+  }
+
+  .vxn-svcidx__inner {
+    padding-inline: 18px;
+  }
+
+  .vxn-svcidx__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    padding: 32px 0;
+  }
+}
+
+@media (max-width: 620px) {
+
+  .vxn-svcidx__subs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vxn-svcidx__sub a {
+    padding-inline: 12px;
+  }
+}
+
+/* ==========================================================================
+   The placeholder panel
+
+   Deliberately quiet. A page that says "coming soon" has nothing to sell, so
+   its job is to say so plainly and hand the visitor somewhere useful — the
+   consultation form, or back to the index — rather than dress the absence up.
+   ========================================================================== */
+
+.vxn-soon {
+  padding: 110px 0 130px;
+  background: #ffffff;
+}
+
+.vxn-soon__inner {
+  max-width: 640px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  text-align: center;
+}
+
+.vxn-soon__kicker {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-soon__head {
+  margin: 0 0 16px;
+  font-family: "Forum", serif;
+  font-weight: 400;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.1;
+  color: var(--e-global-color-vamtam_text, #0E355F);
+}
+
+.vxn-soon__text {
+  margin: 0 0 32px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--vxn-text, #35415A);
+}
+
+.vxn-soon__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+/* Takes the site-wide CTA wipe: the selector list at the foot of the CTA
+   section includes it, so only the sweep colour is named here. */
+.vxn-soon__cta {
+  display: inline-flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 30px;
+  border-radius: 999px;
+  background: var(--vxn-blue, #0053B7);
+  color: #ffffff !important;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  --vxn-cta-sweep: #00408C;
+}
+
+.vxn-soon__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-soon__back span {
+  transition: transform .25s var(--vxn-ease, ease);
+}
+
+.vxn-soon__back:hover span {
+  transform: translateX(4px);
+}
+
+@media (max-width: 620px) {
+
+  .vxn-soon {
+    padding: 72px 0 84px;
+  }
+}
+
+/* ==========================================================================
+   FOOTER: the current page is not marked (2026-09-02)
+
+   The footer menus list where you can go, not where you are — a column of
+   links with one of them lit reads as a mis-styled link rather than as
+   orientation, and the header already answers "where am I" with its chip.
+
+   post-2094.css colours `:hover` and `.elementor-item-active` in the SAME
+   rule, so this cannot simply out-rank that rule wholesale: doing so would
+   take the hover response with it. The resting active state is reset here and
+   the hover is restated from the same custom property the theme uses, so an
+   active link behaves exactly like its neighbours under the pointer.
+
+   `aria-current="page"` is deliberately left on the link. It is invisible, and
+   it is how a screen reader tells its user which entry is the current page.
+   ========================================================================== */
+
+.elementor-location-footer .elementor-nav-menu .elementor-item.elementor-item-active,
+.elementor-location-footer .elementor-nav-menu .elementor-sub-item.elementor-item-active {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
+}
+
+.elementor-location-footer .elementor-nav-menu .elementor-item.elementor-item-active:hover,
+.elementor-location-footer .elementor-nav-menu .elementor-item.elementor-item-active:focus-visible,
+.elementor-location-footer .elementor-nav-menu .elementor-sub-item.elementor-item-active:hover,
+.elementor-location-footer .elementor-nav-menu .elementor-sub-item.elementor-item-active:focus-visible {
+  color: var(--e-global-color-vamtam_accent_2) !important;
+  fill: var(--e-global-color-vamtam_accent_2) !important;
+}
+
+/* ==========================================================================
+   SUBSCRIBE band (Elementor template 4557) — the newsletter line (2026-09-06)
+
+   The band used to be a small landing page: two display headings side by side,
+   a boxed 56px field, a pill in the brand fill and a 300px column of small
+   print floated beside it. Four competing widths for one email address.
+
+   This is the same band reduced to one centred column — an accent rule, a
+   label, the sentence, a single hairline-ruled field with the button sitting on
+   the rule, and the note under it. It is the language the redesigned sections
+   use: a 12px tracked eyebrow, a DM Sans display line, an ink pill, hairline
+   rules rather than boxes.
+
+   THE GROUND IS NOT TOUCHED. The cream fill, the line artwork repeating along
+   the bottom edge and the rising light-wave over it are all left exactly as
+   they were — nothing here names element 9296635's background.
+
+   NO MARKUP CHANGES. Twenty-one page bodies still carry this template inline
+   from the capture, alongside the shared partial, so every rule here is keyed
+   to the widget ids they all share. The two arrangements differ in one way:
+   the partial renders the sentence as a single heading widget and the inline
+   copies as two ("Stay Ahead." + "Subscribe for …"). Laying the heading
+   container out as a centred wrapping row makes both read as one line.
+   ========================================================================== */
+
+.elementor-4557 {
+  /* The redesigned sections' palette. Declared here rather than inherited: the
+     --vxh-* tokens live on .vxh, and this band renders outside it on most of
+     the pages that carry it. */
+  --vxs-ink:    #16233B;
+  --vxs-text:   #35415A;
+  --vxs-muted:  #6A7590;
+  --vxs-blue:   #1436D8;
+  --vxs-blue-2: #2F63FF;
+  --vxs-line:   rgba(14, 36, 110, .2);
+  --vxs-w:      600px;   /* the field row, and the measure the note keeps to */
+}
+
+.elementor-4557 .elementor-element.elementor-element-9296635 > .e-con-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3300848 {
+  --spacer-size: clamp(80px, 10vh, 116px);
+}
+
+/* The line artwork is 187px tall and sits on the bottom edge; the content
+   clears it rather than reading through it. */
+.elementor-4557 .elementor-element.elementor-element-3d5fc70 {
+  --spacer-size: 240px;
+}
+
+/* --- the eyebrow and the sentence ----------------------------------------- */
+
+.elementor-4557 .elementor-element.elementor-element-4b7d49d {
+  --display: flex;
+  /* post-4557.css turns this container into a column below 1024px; the sentence
+     stays one wrapping row at every width. */
+  --flex-direction: row;
+  --container-widget-width: auto;
+  --container-widget-flex-grow: 0;
+  --gap: 0px;
+  --row-gap: 0px;
+  --column-gap: 0px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: .3em;
+  row-gap: 0;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* The eyebrow every other section opens with. It is generated rather than
+   marked up because the twenty-one inline copies of this template cannot be
+   given a new widget without editing all of them. */
+.elementor-4557 .elementor-element.elementor-element-4b7d49d::before {
+  content: "Newsletter";
+  /* Elementor reserves every container's ::before for its background overlay
+     and pins it to the box (.e-con::before in frontend.css). This container has
+     no overlay, so the pseudo-element is free — but it has to be put back in
+     flow before it can be a flex item. */
+  position: static;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  z-index: auto;
+  flex: 1 0 100%;
+  padding-top: 18px;
+  margin: 0 0 clamp(14px, 1.7vw, 22px);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--vxs-blue);
+  /* the 26px accent rule, centred above the label */
+  background-image: linear-gradient(90deg, var(--vxs-blue), var(--vxs-blue-2));
+  background-repeat: no-repeat;
+  background-size: 26px 2px;
+  background-position: 50% 0;
+}
+
+.elementor-4557 .elementor-element.elementor-element-f0def51,
+.elementor-4557 .elementor-element.elementor-element-06eccf7 {
+  width: auto;
+  max-width: 100%;
+  margin: 0;
+  text-align: center;
+}
+
+.elementor-4557 .elementor-element.elementor-element-f0def51 .elementor-heading-title,
+.elementor-4557 .elementor-element.elementor-element-06eccf7 .elementor-heading-title {
+  margin: 0;
+  font-family: "DM Sans", -apple-system, "Segoe UI", sans-serif;
+  font-weight: 500;
+  font-size: clamp(30px, 3.5vw, 46px);
+  line-height: 1.12;
+  letter-spacing: -.032em;
+  color: var(--vxs-ink);
+}
+
+/* --- the field row -------------------------------------------------------- */
+
+.elementor-4557 .elementor-element.elementor-element-c96c2e7 {
+  --display: flex;
+  --flex-direction: column;
+  --align-items: center;
+  --container-widget-width: 100%;
+  --container-widget-flex-grow: 0;
+  --width: 100%;
+  --margin-top: 0px;
+  --margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: var(--vxs-w);
+  margin: clamp(30px, 3.6vw, 44px) auto 0;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe {
+  width: 100%;
+  max-width: 100%;
+  --container-widget-width: 100%;
+  --flex-grow: 0;
+  --flex-shrink: 1;
+}
+
+/* One ruled line: the field on the left, the button sitting on the same rule. */
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-form-fields-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--vxs-line);
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-form-fields-wrapper:focus-within {
+  border-bottom-color: var(--vxs-blue);
+  box-shadow: 0 1px 0 0 var(--vxs-blue);
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-field-group {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-field-group.elementor-field-type-email {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-field-group.e-form__buttons {
+  flex: 0 0 auto;
+}
+
+/* Deep enough to clear post-4557.css's white fill (six classes) and the kit
+   sheet's blanket rule on every input on the page. */
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-form-fields-wrapper .elementor-field-group input.elementor-field.elementor-field-textual {
+  width: 100%;
+  min-height: 0;
+  padding: 6px 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--vxs-ink);
+  box-shadow: none;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-form-fields-wrapper .elementor-field-group input.elementor-field.elementor-field-textual:focus {
+  outline: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-form-fields-wrapper .elementor-field-group input.elementor-field.elementor-field-textual::placeholder {
+  color: var(--vxs-muted);
+  opacity: 1;
+}
+
+/* The ink pill. `form.elementor-form button[type="submit"]` paints every submit
+   on the site in the brand fill with !important, so this has to answer in kind
+   — at a specificity that clears it. The site-wide hover wipe is kept and
+   simply recoloured, so the button still behaves like every other CTA. */
+.elementor-4557 .elementor-element.elementor-element-3b33bfe form.elementor-form button.elementor-button[type="submit"] {
+  --vxn-cta-sweep: var(--vxs-blue);
+  min-height: 0;
+  padding: 12px 22px !important;
+  border-radius: 999px !important;
+  background-image: none !important;
+  background-color: var(--vxs-ink) !important;
+  color: #fff !important;
+  fill: #fff !important;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe form.elementor-form button.elementor-button[type="submit"] span {
+  gap: 8px;
+  justify-content: center;
+}
+
+/* The template's paper-plane glyph is swapped for the north-east arrow the
+   redesigned sections use, drawn as a mask so it takes the label's colour. */
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-button-icon {
+  width: 15px;
+  height: 15px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17L17 7M9 7h8v8'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17L17 7M9 7h8v8'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform .25s cubic-bezier(.22, .61, .36, 1);
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-button-icon i {
+  display: none;
+}
+
+.elementor-4557 .elementor-element.elementor-element-3b33bfe form.elementor-form button.elementor-button[type="submit"]:hover .elementor-button-icon {
+  transform: translate(2px, -2px);
+}
+
+/* Elementor drops its own success / error notice in here after a submit. */
+.elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-message {
+  margin: 14px 0 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--vxs-ink);
+  text-align: center;
+}
+
+/* --- the note ------------------------------------------------------------- */
+
+.elementor-4557 .elementor-element.elementor-element-82aa64e {
+  width: 100%;
+  max-width: 100%;
+  --container-widget-width: 100%;
+  text-align: center;
+}
+
+.elementor-4557 .elementor-element.elementor-element-82aa64e > .elementor-widget-container {
+  margin: 0;
+}
+
+.elementor-4557 .elementor-element.elementor-element-82aa64e p {
+  margin: 14px auto 0;
+  max-width: 46ch;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--vxs-muted);
+}
+
+.elementor-4557 .elementor-element.elementor-element-82aa64e a {
+  color: var(--vxs-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- narrower screens ----------------------------------------------------- */
+
+@media (max-width: 1024px) {
+
+  .elementor-4557 .elementor-element.elementor-element-3300848 {
+    --spacer-size: 76px;
+  }
+
+  .elementor-4557 .elementor-element.elementor-element-3d5fc70 {
+    --spacer-size: 220px;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .elementor-4557 .elementor-element.elementor-element-3300848 {
+    --spacer-size: 60px;
+  }
+
+  .elementor-4557 .elementor-element.elementor-element-3d5fc70 {
+    --spacer-size: 200px;
+  }
+
+  /* The site-wide mobile heading clamp near the top of this file is
+     !important, so the band's display line must be too — it is the section's
+     title, not a 21px h3. */
+  .elementor-4557 .elementor-element.elementor-element-f0def51 .elementor-heading-title,
+  .elementor-4557 .elementor-element.elementor-element-06eccf7 .elementor-heading-title {
+    font-size: clamp(28px, 8vw, 36px) !important;
+    line-height: 1.14 !important;
+  }
+
+  /* The pill drops under the field rather than squeezing it. */
+  .elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-form-fields-wrapper {
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 0;
+    border-bottom: 0;
+    box-shadow: none;
+  }
+
+  .elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-form-fields-wrapper:focus-within {
+    box-shadow: none;
+  }
+
+  .elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-field-group.elementor-field-type-email {
+    flex: 1 0 100%;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--vxs-line);
+    transition: border-color .25s ease;
+  }
+
+  .elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-field-group.elementor-field-type-email:focus-within {
+    border-bottom-color: var(--vxs-blue);
+    box-shadow: 0 1px 0 0 var(--vxs-blue);
+  }
+
+  .elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-field-group.e-form__buttons {
+    flex: 1 0 100%;
+  }
+
+  .elementor-4557 .elementor-element.elementor-element-3b33bfe form.elementor-form button.elementor-button[type="submit"] {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   UAE SERVICE DETAIL — the six top-level practice pages (2026-09-02)
+
+   Markup: includes/partials/service-uae.php. Copy: data/services-uae.php.
+   Follows the client's Figma page: a stripes-lit hero with an inset panel,
+   the "What We Do" split, the "Services Offered" card grid, the mosaic "Our
+   Process" panel, the outlined "Expertise" box, the "Integrated Capabilities"
+   accordion and the newsletter band on blue.
+
+   Motion rides on the site's reveal primitive (data-vxn-in -> .is-in,
+   staggered by DOM order). Three things are added on top, all CSS:
+     - .vxn-usvc__media reveals with a brand-blue wipe and a slow settle from
+       a 1.08 scale, the way the reference site uncovers its images;
+     - .vxn-usvc-steps grows its connector line down the timeline once the
+       list is in view, then the steps rise in after it;
+     - .vxn-usvc-acc__panel animates open through grid-template-rows, so the
+       accordion never jumps.
+   ========================================================================== */
+
+.vxn-usvc {
+  --vxn-usvc-ease-wipe: cubic-bezier(.77, 0, .18, 1);
+  display: block;
+  background: #ffffff;
+}
+
+.vxn-usvc__inner {
+  max-width: min(100%, 1320px);
+  margin-inline: auto;
+  padding-inline: 34px;
+}
+
+.vxn-usvc__kicker {
+  display: block;
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-usvc__kicker--light {
+  color: rgba(255, 255, 255, .92);
+}
+
+.vxn-usvc .vxn-usvc__h2 {
+  margin: 0 0 22px;
+  font-family: "Forum", serif;
+  font-weight: 400;
+  font-size: clamp(32px, 3.4vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -.005em;
+  color: var(--vxn-ink, #16233B);
+}
+
+.vxn-usvc .vxn-usvc__h2--light {
+  color: #ffffff;
+}
+
+.vxn-usvc .vxn-usvc__p {
+  margin: 0 0 18px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--vxn-text, #35415A);
+}
+
+.vxn-usvc__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 30px;
+  min-height: 56px;
+  padding: 0 24px;
+  border-radius: 6px;
+  background: var(--vxn-blue, #0053B7);
+  color: #ffffff !important;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: 0 12px 28px -14px rgba(0, 83, 183, .7);
+  transition: background-color .3s var(--vxn-ease), transform .35s var(--vxn-ease), box-shadow .35s var(--vxn-ease);
+}
+
+.vxn-usvc__btn:hover,
+.vxn-usvc__btn:focus-visible {
+  background: var(--vxn-blue-dark, #00408C);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 32px -14px rgba(0, 83, 183, .75);
+}
+
+.vxn-usvc__arrow {
+  flex: none;
+  transition: transform .35s var(--vxn-ease);
+}
+
+.vxn-usvc__btn:hover .vxn-usvc__arrow {
+  transform: translateX(5px);
+}
+
+/* --- hero ------------------------------------------------------------------
+   The same construction as the UAE home hero (en-ae/index.php): the page
+   header is the transparent variant (139) and cancels its own reserved
+   height, so the hero begins under the bar and pads itself by the bar's
+   measured height (--vxn-usvc-hdr, set by the script in the partial). One
+   still image with a slow drift, the left-weighted scrim, copy on the left. */
+
+.vxn-usvc-hero {
+  --vxn-usvc-hdr: 0px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  /* Tall as the home hero on a laptop, but capped so a very tall display does
+     not turn a single-image banner into a wall. */
+  min-height: clamp(540px, 82vh, 860px);
+  padding: calc(var(--vxn-usvc-hdr) + 48px) 0 96px;
+  overflow: hidden;
+  background: #0E355F;
+  isolation: isolate;
+}
+
+.vxn-usvc-hero__stage {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.vxn-usvc-hero__stage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.02);
+  animation: vxn-usvc-drift 14s ease-out forwards;
+}
+
+@keyframes vxn-usvc-drift {
+  from { transform: scale(1.02); }
+  to   { transform: scale(1.09); }
+}
+
+.vxn-usvc-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgba(6, 17, 26, .66) 0%, rgba(6, 17, 26, .48) 34%, rgba(6, 17, 26, .16) 64%, rgba(6, 17, 26, 0) 100%),
+    linear-gradient(180deg, rgba(6, 17, 26, .34) 0%, rgba(6, 17, 26, 0) 30%, rgba(6, 17, 26, .30) 100%);
+}
+
+.vxn-usvc-hero__inner {
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 34px;
+}
+
+.vxn-usvc-hero__copy {
+  position: relative;
+  max-width: 720px;
+}
+
+.vxn-usvc-hero__kicker {
+  display: inline-block;
+  margin: 0 0 18px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  color: rgba(255, 255, 255, .85) !important;
+  text-decoration: none;
+}
+
+.vxn-usvc-hero__kicker:hover {
+  color: #ffffff !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.vxn-usvc .vxn-usvc-hero__title {
+  margin: 0 0 20px;
+  font-family: "Forum", serif;
+  font-weight: 400;
+  font-size: clamp(34px, 4.1vw, 62px);
+  line-height: 1.08;
+  letter-spacing: -.015em;
+  color: #ffffff;
+}
+
+.vxn-usvc .vxn-usvc-hero__lede {
+  margin: 0 0 34px;
+  max-width: 560px;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, .82);
+}
+
+.vxn-usvc-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* The white pill and the round arrow, as on the home hero. */
+.vxn-usvc-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  height: 54px;
+  padding: 0 32px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0053B7 !important;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  text-decoration: none;
+  transition: background-color .3s ease, color .3s ease, transform .3s ease;
+}
+
+.vxn-usvc-hero__cta:hover,
+.vxn-usvc-hero__cta:focus-visible {
+  background: #0053B7;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.vxn-usvc-hero__go {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background-image: var(--vxn-grad-gold);
+  color: #ffffff !important;
+  text-decoration: none;
+  transition: transform .25s ease;
+}
+
+.vxn-usvc-hero__go:hover,
+.vxn-usvc-hero__go:focus-visible {
+  transform: translateY(-1px) rotate(45deg);
+}
+
+.vxn-usvc-hero__go svg {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vxn-usvc-hero__stage img { animation: none; }
+}
+
+/* --- What We Do ------------------------------------------------------------ */
+
+.vxn-usvc-what {
+  padding: 96px 0 72px;
+}
+
+.vxn-usvc-what__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 110px);
+  align-items: start;
+}
+
+.vxn-usvc-what__text .vxn-usvc__h2 {
+  max-width: 12em;
+  margin-bottom: 44px;
+}
+
+.vxn-usvc__media {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  isolation: isolate;
+  background: var(--vxn-navy-dark, #0E355F);
+}
+
+.vxn-usvc__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.08);
+  transition: transform 1.3s var(--vxn-ease) .15s;
+}
+
+/* The wipe: a brand-blue sheet over the picture that slides out to the right
+   once the figure is in view, with the picture settling from its slight zoom
+   underneath it. */
+.vxn-usvc__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--vxn-blue, #0053B7);
+  transform: translateX(0);
+  transition: transform .95s var(--vxn-usvc-ease-wipe) .1s;
+}
+
+.vxn-usvc__media.is-in::after {
+  transform: translateX(101%);
+}
+
+.vxn-usvc__media.is-in img {
+  transform: scale(1);
+}
+
+.vxn-usvc-what__media {
+  aspect-ratio: 660 / 510;
+}
+
+/* --- Services Offered ------------------------------------------------------ */
+
+.vxn-usvc-offer {
+  padding: 24px 0 96px;
+}
+
+.vxn-usvc-offer__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: 24px;
+}
+
+.vxn-usvc-offer__head {
+  grid-column: 3 / -1;
+  grid-row: 1;
+  align-self: center;
+  padding: 24px 0 24px 56px;
+}
+
+.vxn-usvc-offer__head .vxn-usvc__h2 {
+  margin-bottom: 26px;
+}
+
+.vxn-usvc-offer__head .vxn-usvc__p {
+  margin: 0;
+  max-width: 34em;
+}
+
+.vxn-usvc .vxn-usvc-offer__link {
+  color: var(--vxn-ink, #16233B);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+
+.vxn-usvc .vxn-usvc-offer__link:hover {
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-usvc-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 272px;
+  padding: 30px;
+  border: 1px solid var(--vxn-line, rgba(11, 44, 86, .12));
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--vxn-ink, #16233B);
+  text-decoration: none;
+  transition: transform .5s var(--vxn-ease), box-shadow .5s var(--vxn-ease), border-color .3s var(--vxn-ease);
+}
+
+a.vxn-usvc-card:hover,
+a.vxn-usvc-card:focus-visible {
+  transform: translateY(-6px);
+  border-color: rgba(0, 83, 183, .35);
+  box-shadow: 0 26px 48px -22px rgba(11, 44, 86, .3);
+}
+
+.vxn-usvc-card__icon {
+  display: block;
+  width: 60px;
+  height: 60px;
+  color: var(--vxn-blue, #0053B7);
+}
+
+.vxn-usvc-card__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.vxn-usvc-card__body {
+  display: block;
+}
+
+.vxn-usvc-card__title {
+  display: block;
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--vxn-ink, #16233B);
+}
+
+.vxn-usvc-card__desc {
+  display: block;
+  margin-top: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--vxn-text, #35415A);
+}
+
+.vxn-usvc-card--accent {
+  justify-content: center;
+  background: var(--vxn-blue, #0053B7);
+  border-color: var(--vxn-blue, #0053B7);
+  box-shadow: 0 22px 44px -18px rgba(0, 83, 183, .6);
+}
+
+.vxn-usvc .vxn-usvc-card--accent p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+/* --- Our Process ----------------------------------------------------------- */
+
+.vxn-usvc-process {
+  padding: 0 0 96px;
+}
+
+.vxn-usvc-process__panel {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(40px, 5vw, 64px) clamp(28px, 4.5vw, 64px) clamp(48px, 6vw, 80px);
+  border-radius: 10px;
+  background: #031a5e var(--vxn-usvc-process) center / cover no-repeat;
+  color: #ffffff;
+  box-shadow: 0 34px 70px -34px rgba(0, 16, 64, .7);
+}
+
+.vxn-usvc .vxn-usvc-process__text {
+  max-width: 760px;
+  margin: 0 0 56px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, .92);
+}
+
+.vxn-usvc-steps {
+  position: relative;
+  max-width: 640px;
+  margin: 0;
+  padding: 8px 0 0 44px;
+  list-style: none;
+}
+
+/* The connector: one vertical line the steps hang off. It grows down from the
+   top once the list is in view; the steps themselves rise in after it on the
+   shared stagger, so the eye follows the line to each one. */
+.vxn-usvc-steps::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 30px;
+  width: 1px;
+  background: rgba(255, 255, 255, .72);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.3s var(--vxn-ease) .1s;
+}
+
+.vxn-usvc-steps.is-in::before {
+  transform: scaleY(1);
+}
+
+.vxn-usvc-step {
+  position: relative;
+  padding: 0 0 34px;
+}
+
+.vxn-usvc-step:last-child {
+  padding-bottom: 0;
+}
+
+.vxn-usvc-step::before {
+  content: "";
+  position: absolute;
+  left: -38px;
+  top: 13px;
+  width: 30px;
+  height: 1px;
+  background: rgba(255, 255, 255, .72);
+}
+
+.vxn-usvc-step::after {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid rgba(255, 255, 255, .85);
+  border-right: 1px solid rgba(255, 255, 255, .85);
+  transform: rotate(45deg);
+}
+
+.vxn-usvc-step__t {
+  display: block;
+  font-size: 21px;
+  line-height: 1.25;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.vxn-usvc-step__s {
+  display: block;
+  margin-top: 5px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, .82);
+}
+
+/* --- Expertise ------------------------------------------------------------- */
+
+.vxn-usvc-exp {
+  padding: 0 0 40px;
+}
+
+.vxn-usvc-exp__box {
+  position: relative;
+  padding: 56px 48px 0;
+  margin-bottom: 150px;
+  border: 1px solid rgba(14, 53, 95, .45);
+  border-radius: 12px;
+}
+
+.vxn-usvc-exp__h2 {
+  margin-bottom: 8px;
+}
+
+.vxn-usvc-exp__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 450px) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 84px);
+  align-items: start;
+  margin-top: 40px;
+}
+
+/* The picture hangs below the box: it overlaps the bottom border, which
+   continues past it on the right. */
+.vxn-usvc-exp__media {
+  aspect-ratio: 450 / 580;
+  margin-bottom: -150px;
+  border-radius: 10px;
+}
+
+.vxn-usvc-exp__text {
+  padding: 8px 0 56px;
+}
+
+.vxn-usvc-exp__p {
+  font-size: 17px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* --- Integrated Capabilities ---------------------------------------------- */
+
+.vxn-usvc-int {
+  padding: 40px 0 110px;
+}
+
+.vxn-usvc-int__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(40px, 8vw, 150px);
+  align-items: start;
+}
+
+.vxn-usvc-int__head {
+  padding-top: 8px;
+}
+
+.vxn-usvc .vxn-usvc-int__text {
+  margin: 0 0 60px;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--vxn-ink, #16233B);
+}
+
+.vxn-usvc-acc__item {
+  border-bottom: 1px solid var(--vxn-line, rgba(11, 44, 86, .12));
+}
+
+.vxn-usvc .vxn-usvc-acc__h {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* The theme styles every <button> as a filled blue pill, so the accordion
+   trigger resets that wholesale — it is a heading that happens to be a button. */
+.vxn-usvc-acc__btn,
+.vxn-usvc-acc__btn:hover,
+.vxn-usvc-acc__btn:focus {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 22px 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  text-align: left;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  cursor: pointer;
+  font-family: inherit !important;
+  font-size: 27px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  color: var(--vxn-ink, #16233B) !important;
+  transition: color .25s var(--vxn-ease);
+}
+
+.vxn-usvc-acc__btn:hover,
+.vxn-usvc-acc__btn:focus-visible {
+  color: var(--vxn-blue, #0053B7) !important;
+  outline: none;
+}
+
+.vxn-usvc-acc__icon {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-right: 4px;
+}
+
+.vxn-usvc-acc__icon::before,
+.vxn-usvc-acc__icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform .4s var(--vxn-ease);
+}
+
+.vxn-usvc-acc__icon::after {
+  transform: rotate(90deg);
+}
+
+.is-open .vxn-usvc-acc__icon::after {
+  transform: rotate(0deg);
+}
+
+.vxn-usvc-acc__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .55s var(--vxn-ease);
+}
+
+.is-open > .vxn-usvc-acc__panel {
+  grid-template-rows: 1fr;
+}
+
+.vxn-usvc-acc__body {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity .4s var(--vxn-ease), transform .45s var(--vxn-ease), visibility 0s .45s;
+}
+
+.is-open > .vxn-usvc-acc__panel > .vxn-usvc-acc__body {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity .45s var(--vxn-ease) .12s, transform .5s var(--vxn-ease) .1s, visibility 0s;
+}
+
+.vxn-usvc .vxn-usvc-acc__body p {
+  margin: 0 0 12px;
+  padding-right: 48px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--vxn-text, #35415A);
+}
+
+.vxn-usvc .vxn-usvc-acc__more {
+  display: inline-block;
+  margin-bottom: 26px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--vxn-blue, #0053B7);
+  text-decoration: none;
+}
+
+.vxn-usvc .vxn-usvc-acc__more:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --- Newsletter on blue ---------------------------------------------------- */
+
+.vxn-usvc-sub {
+  padding: 0 0 96px;
+}
+
+.vxn-usvc-sub__panel {
+  padding: 8px 40px 40px;
+  background: #032056 var(--vxn-usvc-sub) center / cover no-repeat;
+  color: #ffffff;
+}
+
+/* The shared band partial is reused inside the panel. It arrives with the
+   cream background, the lines artwork and the site-wide two-column layout;
+   here it sits on the blue image, single column, form and note side by side. */
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-9296635 {
+  background: none !important;
+}
+
+.vxn-usvc-sub .elementor-element-9296635::after {
+  display: none;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-3300848 {
+  --spacer-size: 40px;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-3d5fc70 {
+  --spacer-size: 24px;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-4b7d49d {
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 10px;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-f0def51 .elementor-heading-title {
+  color: #ffffff;
+  font-size: clamp(32px, 3.6vw, 50px);
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-06eccf7 .elementor-heading-title {
+  color: rgba(255, 255, 255, .9);
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-c96c2e7 {
+  grid-template-columns: minmax(0, 600px) minmax(0, 1fr);
+  align-items: center;
+  --margin-top: 26px;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-3b33bfe {
+  grid-column: 1;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-82aa64e {
+  grid-column: 2;
+  max-width: 480px;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-82aa64e > .elementor-widget-container {
+  margin: 0;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-82aa64e p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, .88);
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-82aa64e a {
+  color: #ffffff;
+}
+
+.vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-3b33bfe .elementor-field-group .elementor-field.elementor-field-textual {
+  border-color: transparent;
+}
+
+/* --- Get in Touch (post-17.css block) ------------------------------------- */
+
+.vxn-usvc-contact {
+  padding-bottom: 40px;
+}
+
+/* post-17.css spaces the block for the home page, where 330px sits between it
+   and the stats band above; here the newsletter band already ends the page
+   body, so the gap closes to a normal section rhythm. */
+.vxn-usvc-contact.elementor-17 .elementor-element.elementor-element-ea14ed8 {
+  --margin-top: 32px;
+  margin-top: 32px;
+}
+
+/* --- narrower screens ------------------------------------------------------ */
+
+@media (max-width: 1024px) {
+
+  .vxn-usvc-hero {
+    min-height: 0;
+    padding: calc(var(--vxn-usvc-hdr) + 80px) 0 80px;
+  }
+
+  .vxn-usvc-hero__scrim {
+    background: linear-gradient(180deg, rgba(6, 17, 26, .62) 0%, rgba(6, 17, 26, .44) 45%, rgba(6, 17, 26, .70) 100%);
+  }
+
+  .vxn-usvc-what {
+    padding: 72px 0 56px;
+  }
+
+  .vxn-usvc-what__grid,
+  .vxn-usvc-int__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vxn-usvc-offer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vxn-usvc-offer__head {
+    grid-column: 1 / -1;
+    padding: 0 0 16px;
+  }
+
+  .vxn-usvc-card {
+    min-height: 230px;
+  }
+
+  .vxn-usvc-exp__box {
+    padding: 40px 28px 40px;
+    margin-bottom: 40px;
+  }
+
+  .vxn-usvc-exp__grid {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 24px;
+  }
+
+  .vxn-usvc-exp__media {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 0;
+  }
+
+  .vxn-usvc-exp__text {
+    padding-bottom: 0;
+  }
+
+  .vxn-usvc-int {
+    padding: 24px 0 80px;
+  }
+
+  .vxn-usvc-int__head {
+    order: -1;
+  }
+
+  .vxn-usvc .vxn-usvc-int__text {
+    margin-bottom: 32px;
+  }
+
+  .vxn-usvc-sub__panel {
+    padding: 8px 24px 32px;
+  }
+
+  .vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-c96c2e7 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vxn-usvc-sub .elementor-4557 .elementor-element.elementor-element-82aa64e {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 640px) {
+
+  .vxn-usvc__inner {
+    padding-inline: 20px;
+  }
+
+  .vxn-usvc-hero__inner {
+    padding: 0 20px;
+  }
+
+  .vxn-usvc-hero__cta {
+    height: 50px;
+    padding: 0 24px;
+  }
+
+  .vxn-usvc-offer__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .vxn-usvc-card {
+    min-height: 0;
+    gap: 28px;
+  }
+
+  .vxn-usvc-process__panel {
+    border-radius: 8px;
+  }
+
+  .vxn-usvc-steps {
+    padding-left: 36px;
+  }
+
+  .vxn-usvc-step::before {
+    left: -30px;
+    width: 22px;
+  }
+
+  .vxn-usvc-acc__btn {
+    font-size: 22px;
+    padding: 18px 0;
+  }
+
+  .vxn-usvc .vxn-usvc-int__text {
+    font-size: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .vxn-usvc__media::after {
+    display: none;
+  }
+
+  .vxn-usvc__media img,
+  .vxn-usvc-steps::before {
+    transform: none;
     transition: none;
   }
-  .elementor-nav-menu--main .vxn-mega > .vxn-mega__panel { transform: none; }
-  .elementor-nav-menu--main .vxn-mega__panel .vxn-mega__item:hover { transform: none; }
-  .elementor-nav-menu--main .vxn-mega__panel .vxn-mega__wrap .vxn-mega__card:hover { transform: none; }
-}
 
-/* --------------------------------------------------------------------------
-   The two declarations above that the full-bleed rule outranks.
-
-   That rule is 0-8-2 and lives inside @media (min-width: 1025px) — it pins the
-   sheet under the bar and neutralises any transform on it. Its padding and its
-   `transform: none` therefore beat the block above, which is why the sheet kept
-   its 46px/44px and refused to rise. Matched here selector for selector, in the
-   same query, so the height and the opening animation land.
-
-   The transform is safe on this element: it is the fixed panel itself, not an
-   ancestor of one, so nothing loses its containing block.
-   -------------------------------------------------------------------------- */
-
-@media (min-width: 1025px) {
-  .elementor-nav-menu--main.elementor-nav-menu__container .elementor-nav-menu>li.vxn-mega.menu-item.menu-item-has-children>ul.vxn-mega__panel.sub-menu {
-    padding: 26px 0 24px !important;
-    transform: translateY(-10px) !important;
-  }
-
-  .elementor-nav-menu--main.elementor-nav-menu__container .elementor-nav-menu>li.vxn-mega.menu-item.menu-item-has-children:hover>ul.vxn-mega__panel.sub-menu,
-  .elementor-nav-menu--main.elementor-nav-menu__container .elementor-nav-menu>li.vxn-mega.menu-item.menu-item-has-children:focus-within>ul.vxn-mega__panel.sub-menu {
-    transform: translateY(0) !important;
+  .vxn-usvc-acc__panel,
+  .vxn-usvc-acc__body {
+    transition: none;
   }
 }
 
-@media (min-width: 1025px) and (prefers-reduced-motion: reduce) {
-  .elementor-nav-menu--main.elementor-nav-menu__container .elementor-nav-menu>li.vxn-mega.menu-item.menu-item-has-children>ul.vxn-mega__panel.sub-menu,
-  .elementor-nav-menu--main.elementor-nav-menu__container .elementor-nav-menu>li.vxn-mega.menu-item.menu-item-has-children:hover>ul.vxn-mega__panel.sub-menu {
-    transform: none !important;
+/* The site-wide mobile heading clamp (the !important h1/h2 rules near the top
+   of this file) would shrink the detail page's display headings to body-ish
+   sizes; they are restated here at the same priority. */
+@media (max-width: 767px) {
+
+  .vxn-usvc .vxn-usvc-hero__title {
+    font-size: clamp(36px, 10vw, 44px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .vxn-usvc .vxn-usvc__h2 {
+    font-size: clamp(28px, 8vw, 34px) !important;
+    line-height: 1.1 !important;
+  }
+
+  .vxn-usvc .vxn-usvc-offer__link {
+    white-space: normal;
   }
 }
 
-/* --------------------------------------------------------------------------
-   And the declaration that actually set the sheet's height.
+/* ==========================================================================
+   Footer — room off the top edge (2026-09-07)
 
-   .vxn-mega__inner carried `min-height: 545px`, which sized the panel to a
-   fixed slab whatever it contained — the index needs 319px — and stretched the
-   promo cards to fill the rest. Trimming padding and type could never shorten
-   the sheet while that stood; it is the reason the first pass moved it by only
-   40px.
-
-   Replaced with a floor low enough to be a floor rather than a height, so the
-   sheet now measures its content — which is the index column, the taller of the
-   two. The cards then stretch to meet it, so the pair of textured panels finish
-   level with the link list rather than floating short of it.
-   -------------------------------------------------------------------------- */
-
-.elementor-nav-menu--main .vxn-mega__inner {
-  min-height: 0;
-}
-
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__cards {
-  align-items: stretch;
-}
-
-/* The grid row is as tall as the index; each card fills its cell. The CTA
-   already carries margin-top:auto, so the extra height opens up between the
-   title and the arrow rather than stranding it in the middle. */
-.elementor-nav-menu--main .vxn-mega__panel .vxn-mega__wrap .vxn-mega__card {
-  height: 100%;
+   Both footers open straight into their first row, so the wordmark and the
+   link columns sat hard against the seam above them — against the striped band
+   on the home page, and against the section boundary everywhere else. The
+   padding goes on the Elementor root inside <footer> rather than on <footer>
+   itself, so it lands inside the footer's own fill instead of adding a strip of
+   page colour above it.
+   ========================================================================== */
+footer.main-footer .elementor-location-footer {
+  padding-top: clamp(40px, 5vw, 76px);
 }

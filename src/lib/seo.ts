@@ -52,10 +52,20 @@ export function vxnSeoKey(p: string): string {
  * inherits the legacy home row, because it *is* the page that used to live at
  * the root; the UAE home falls back to its own PageConfig values until the CMS
  * is given an "en-ae" row.
+ *
+ * `ownRow` is the same rule for a page that is not a home: a page declaring
+ * `seo_own` answers for its own metadata and must NOT inherit the shared row
+ * underneath it. /en-ae/services/ is the case this exists for — a different
+ * catalogue, written for a different market, that happens to sit at the same
+ * path inside its edition. Without it the page would advertise the India
+ * services page's title and description to search engines. An exact
+ * "en-ae/services" row still wins, so editing it in the admin panel keeps
+ * working.
  */
-export function vxnSeoResolveRow(p: string): SeoRow {
+export function vxnSeoResolveRow(p: string, ownRow = false): SeoRow {
   const key = vxnSeoKey(p);
   if (Object.prototype.hasOwnProperty.call(SEO_MAP, key)) return SEO_MAP[key];
+  if (ownRow) return {};
 
   const first = key.split('/')[0];
   if (vxnRegionExists(first)) {
@@ -133,7 +143,7 @@ export function vxnSeo(page: PageConfig, region: string, origin = vxnSeoOrigin()
     p = '/' + region + (p === '' ? '/' : p);
   }
 
-  const seo = vxnSeoResolveRow(p);
+  const seo = vxnSeoResolveRow(p, page.seo_own === true);
   const fallbackCanonical = origin + BASE + (p !== '' ? p : '/');
 
   let title = (seo.title ?? '').trim();

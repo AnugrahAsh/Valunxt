@@ -1,0 +1,189 @@
+/* ==========================================================================
+   VALUNXT — inner-page skin (site-wide, both editions)
+
+   Loaded from includes/head.php after the brand sheet and the mega sheet.
+   Two jobs:
+
+   1. Re-point the brand tokens at the cobalt ramp, so every button, accent,
+      footer panel and hover across the ~40 inner pages moves with the home.
+   2. Turn the captured inner-page hero (Elementor container c4d353f, shared by
+      every inner page) into a cobalt stage carrying one of the abstract
+      compositions — chosen by the page's first path segment, which head.php
+      writes onto <body> as `vxn-p-<segment>`.
+
+   Everything else on the inner pages keeps its markup; this sheet only
+   restyles what is already there (cards, buttons, section titles) toward the
+   glass-and-cobalt language.
+   ========================================================================== */
+
+:root {
+	--vxn-blue: #1436D8;
+	--vxn-blue-dark: #0B2DBE;
+	--vxn-blue-light: #2F63FF;
+	--vxn-navy-2: #0B2DBE;
+	--vxn-sky: #8FA9FF;
+	--vxn-grad-gold: linear-gradient(115deg, #1436D8 0%, #2F63FF 100%);
+	--vxn-grad-hover: linear-gradient(115deg, #0B2DBE 0%, #1436D8 100%);
+	--vxn-grad-soft: linear-gradient(115deg, #2F63FF 0%, #6E8EF5 100%);
+	--vxn-grad-navy: linear-gradient(118deg, #06166A 0%, #0B2DBE 55%, #1541E6 100%);
+	--vxn-grad-footer: linear-gradient(165deg, #1541E6 0%, #0B2DBE 45%, #06166A 100%);
+	--vxn-navy: #1436D8;
+	--vxn-navy-dark: #0B2DBE;
+	--vxn-gold: #1436D8;
+	--vxn-gold-dark: #0B2DBE;
+	--vxn-cta-sweep: #0B2DBE;
+	--vxi-stage: linear-gradient(118deg, #06166A 0%, #0B2DBE 48%, #1541E6 78%, #2F63FF 100%);
+}
+
+/* --------------------------------------------------------------------------
+   The inner hero → a stage
+   -------------------------------------------------------------------------- */
+.elementor-3752 .elementor-element-c4d353f {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	background-image: none !important;
+	background-color: #fff !important;
+	--min-height: 0 !important;
+	padding-top: clamp(64px, 8vw, 110px) !important;
+	padding-bottom: clamp(64px, 8vw, 110px) !important;
+	border-bottom: 1px solid rgba(14, 36, 110, .12);
+}
+/* One pseudo-element carries both art layers (two backgrounds); the other is the white feather that keeps the copy side clean. */
+.elementor-3752 .elementor-element-c4d353f::before {
+	content: ""; position: absolute; inset: -12% -8% -12% 26%; z-index: 0; pointer-events: none;
+	background-repeat: no-repeat; background-size: cover, cover; background-position: center, center;
+	will-change: transform; animation: vxi-drift 34s ease-in-out infinite alternate;
+	opacity: .95;
+}
+.elementor-3752 .elementor-element-c4d353f::after {
+	content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+	background: linear-gradient(90deg, #fff 0%, #fff 28%, rgba(255, 255, 255, .92) 40%, rgba(255, 255, 255, .35) 56%, rgba(255, 255, 255, 0) 72%), linear-gradient(180deg, rgba(255, 255, 255, .35), rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .45) 100%);
+}
+@keyframes vxi-drift { from { transform: translate3d(-1.5%, -1%, 0) scale(1.02); } to { transform: translate3d(1.5%, 1%, 0) scale(1.06); } }
+@keyframes vxi-drift-flip { from { transform: scaleX(-1) translate3d(1.5%, -1%, 0) scale(1.02); } to { transform: scaleX(-1) translate3d(-1.5%, 1%, 0) scale(1.06); } }
+.elementor-3752 .elementor-element-c4d353f > .e-con-inner { position: relative; z-index: 2; min-height: 0 !important; }
+
+/* Composition by page (first path segment → body.vxn-p-*). Neighbours in the menu deliberately differ; mirrored takes stop repeats reading as repeats. */
+.elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/ribbons-1.svg"), url("../img/abs/ribbons-2.svg"); }
+body.vxn-p-about .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/orbs-1.svg"), url("../img/abs/orbs-2.svg"); }
+body.vxn-p-industries .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/helix-1.svg"), url("../img/abs/helix-2.svg"); }
+body.vxn-p-contact .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/waves-1.svg"), url("../img/abs/waves-2.svg"); }
+body.vxn-p-network .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/arcs-1.svg"), url("../img/abs/arcs-2.svg"); }
+body.vxn-p-clients .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/planes-1.svg"), url("../img/abs/planes-2.svg"); }
+body.vxn-p-location .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/ribbons-1.svg"), url("../img/abs/ribbons-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-blogs .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/waves-1.svg"), url("../img/abs/waves-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-research .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/arcs-1.svg"), url("../img/abs/arcs-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-community .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/orbs-1.svg"), url("../img/abs/orbs-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-partnership .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/helix-1.svg"), url("../img/abs/helix-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-free-consultation .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/ribbons-1.svg"), url("../img/abs/ribbons-2.svg"); }
+body.vxn-p-track-record .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/planes-1.svg"), url("../img/abs/planes-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-faq .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/waves-1.svg"), url("../img/abs/waves-2.svg"); }
+body.vxn-p-privacy-policy .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/arcs-1.svg"), url("../img/abs/arcs-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-terms-conditions .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/arcs-1.svg"), url("../img/abs/arcs-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-disclaimer .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/arcs-1.svg"), url("../img/abs/arcs-2.svg"); transform: scaleX(-1); animation-name: vxi-drift-flip; }
+body.vxn-p-404 .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/orbs-1.svg"), url("../img/abs/orbs-2.svg"); }
+body.vxn-p-services .elementor-3752 .elementor-element-c4d353f::before { background-image: url("../img/abs/planes-1.svg"), url("../img/abs/planes-2.svg"); }
+
+/* Breadcrumb as a glass chip; the title in the kit's display voice. */
+.elementor-3752 .elementor-element-c4d353f .elementor-element-7b36cfb {
+	display: inline-flex !important; align-items: center; gap: 10px; width: max-content !important; max-width: 100%;
+	padding: 8px 14px 8px 12px; border-radius: 999px;
+	background: rgba(255, 255, 255, .8); border: 1px solid rgba(14, 36, 110, .12);
+	margin-bottom: 18px !important;
+}
+.elementor-3752 .elementor-element-c4d353f .elementor-element-7b36cfb .elementor-heading-title,
+.elementor-3752 .elementor-element-c4d353f .elementor-element-7b36cfb .elementor-heading-title a {
+	font: 600 12px/1 "DM Sans", sans-serif !important; letter-spacing: .08em !important; text-transform: uppercase !important; color: #35415A !important;
+}
+.elementor-3752 .elementor-element-c4d353f .elementor-element-3f5733d { display: none !important; }
+.elementor-3752 .elementor-element-c4d353f h1.elementor-heading-title {
+	font-family: "DM Sans", sans-serif !important; font-weight: 500 !important;
+	font-size: clamp(38px, 5vw, 68px) !important; line-height: 1.04 !important; letter-spacing: -.028em !important;
+	color: #0B1440 !important; max-width: 16ch;
+}
+/* The kit's page-hero partial (faq, community, track-record, leadership) drops its photo. */
+.vxn-simplehero { background-image: none !important; }
+.vxn-simplehero > .e-con-inner { min-height: 0 !important; }
+
+/* --------------------------------------------------------------------------
+   Inner components, toward glass and cobalt
+   -------------------------------------------------------------------------- */
+body:not(.home) .elementor-button.elementor-button-link,
+body:not(.home) .elementor-form .elementor-button {
+	border-radius: 999px !important;
+	background-image: linear-gradient(115deg, #1436D8, #2F63FF) !important;
+	box-shadow: 0 12px 28px -14px rgba(20, 54, 216, .6) !important;
+	transition: transform .35s cubic-bezier(.22, .61, .36, 1), box-shadow .35s ease !important;
+}
+body:not(.home) .elementor-button.elementor-button-link:hover,
+body:not(.home) .elementor-form .elementor-button:hover { transform: translateY(-1px); box-shadow: 0 18px 34px -14px rgba(20, 54, 216, .75) !important; }
+/* Section eyebrows on inner pages carry the kit's short rule. */
+body:not(.home) .elementor-widget-heading span.elementor-heading-title.elementor-size-default:first-child:not(:only-child) { letter-spacing: .12em; }
+/* Cards the inner pages already draw, made glassier. */
+.vxn-sec__card, .vxn-loc__card, .vxn-adv__card, .vxn-svc-card, .vxn-plat__card, .vxn-faq details, .vxn-ind__card {
+	background: rgba(255, 255, 255, .78) !important;
+	-webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%);
+	border: 1px solid rgba(14, 36, 110, .12) !important;
+	border-radius: 18px !important;
+	transition: transform .4s cubic-bezier(.22, .61, .36, 1), box-shadow .4s ease, border-color .3s ease !important;
+}
+.vxn-sec__card:hover, .vxn-loc__card:hover, .vxn-adv__card:hover, .vxn-svc-card:hover, .vxn-ind__card:hover {
+	transform: translateY(-4px); box-shadow: 0 30px 60px -34px rgba(14, 36, 110, .45); border-color: rgba(20, 54, 216, .3) !important;
+}
+@media (prefers-reduced-motion: reduce) { .elementor-3752 .elementor-element-c4d353f::before, .elementor-3752 .elementor-element-c4d353f::after { animation: none; } }
+
+/* Hero type: always ink on the light stage, whatever the captured template says. */
+.elementor-3752 .elementor-element-c4d353f .elementor-heading-title,
+.elementor-3752 .elementor-element-c4d353f .elementor-heading-title a,
+.elementor-3752 .elementor-element-c4d353f h1,
+.elementor-3752 .elementor-element-c4d353f h2 { color: #0B1440 !important; }
+.elementor-3752 .elementor-element-c4d353f .elementor-element-7b36cfb .elementor-heading-title,
+.elementor-3752 .elementor-element-c4d353f .elementor-element-7b36cfb .elementor-heading-title a { color: #35415A !important; }
+.elementor-3752 .elementor-element-c4d353f p,
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-text-editor,
+.elementor-3752 .elementor-element-c4d353f span.elementor-heading-title:not(.elementor-page-title *) { color: #35415A !important; }
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-text-editor p { font: 400 clamp(16px, 1.2vw, 19px)/1.6 "DM Sans", sans-serif !important; max-width: 56ch; }
+.elementor-3752 .elementor-element-c4d353f .elementor-divider-separator { border-top-color: rgba(14, 36, 110, .15) !important; }
+
+/* Override the brand sheet's hero animation on this container: its glint paints
+   the title white via background-clip, and its ::before/::after (photo settle,
+   glass sheen) occupy the layers the artwork and feather need. */
+html.vxn-js .elementor-3752 .elementor-element-c4d353f h1.elementor-heading-title {
+	color: #0B1440 !important; -webkit-text-fill-color: #0B1440 !important;
+	background-image: none !important; -webkit-background-clip: border-box !important; background-clip: border-box !important;
+	animation: vxn-title-rise .9s cubic-bezier(.22, .61, .36, 1) both !important;
+}
+@keyframes vxn-title-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+html.vxn-js .elementor-3752 .elementor-element-c4d353f::before {
+	inset: -12% -8% -12% 26% !important; z-index: 0 !important; width: auto !important;
+	background-color: transparent !important; background-repeat: no-repeat !important; background-size: cover, cover !important; background-position: center, center !important;
+	animation: vxi-drift 34s ease-in-out infinite alternate !important; opacity: .95 !important;
+}
+html.vxn-js .elementor-3752 .elementor-element-c4d353f::after {
+	inset: 0 !important; top: 0 !important; bottom: 0 !important; left: 0 !important; width: auto !important; z-index: 1 !important;
+	background: linear-gradient(90deg, #fff 0%, #fff 28%, rgba(255, 255, 255, .92) 40%, rgba(255, 255, 255, .35) 56%, rgba(255, 255, 255, 0) 72%), linear-gradient(180deg, rgba(255, 255, 255, .35), rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .45) 100%) !important;
+	animation: none !important;
+}
+html.vxn-js body.vxn-p-location .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js body.vxn-p-blogs .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js body.vxn-p-research .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js body.vxn-p-community .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js body.vxn-p-partnership .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js body.vxn-p-track-record .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js body.vxn-p-privacy-policy .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js body.vxn-p-terms-conditions .elementor-3752 .elementor-element-c4d353f::before,
+html.vxn-js body.vxn-p-disclaimer .elementor-3752 .elementor-element-c4d353f::before { animation-name: vxi-drift-flip !important; }
+/* Standfirst paragraphs inside the hero (Network, Clients, Partnership …). */
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-text-editor p,
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-text-editor { color: #35415A !important; -webkit-text-fill-color: #35415A !important; }
+html.vxn-js .elementor-3752 .elementor-element-c4d353f::before { inset: -22% -10% -22% 26% !important; }
+/* Everything typed inside the hero reads ink or slate; the title rule below keeps its own colour. */
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-container,
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-container * { color: #35415A !important; -webkit-text-fill-color: #35415A !important; }
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-container h1,
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-container h1 * { color: #0B1440 !important; -webkit-text-fill-color: #0B1440 !important; }
+.elementor-3752 .elementor-element-c4d353f .elementor-widget-container span.elementor-heading-title { font-size: clamp(16px, 1.2vw, 19px); line-height: 1.6; max-width: 56ch; display: inline-block; }
+.elementor-3752 .elementor-element-c4d353f .elementor-element-7b36cfb span.elementor-heading-title { font-size: 12px; line-height: 1; max-width: none; }
+/* Size the art to the box explicitly: the SVGs slice to fill, so nothing cuts. */
+html.vxn-js .elementor-3752 .elementor-element-c4d353f::before { background-size: 100% 100%, 100% 100% !important; }

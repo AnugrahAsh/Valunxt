@@ -47,43 +47,23 @@ export const BRAND = {
 /* -------------------------------------------------------------------------- */
 /* Navigation
  *
- * Grouped rather than flat: six top-level links crowded the bar and wrapped at
- * laptop widths, which is what was breaking. Three destinations plus one
- * grouped menu fits at every width and states the hierarchy.
+ * Routed by intent, the way every one of the six references routes: Buy, Rent
+ * and Off-Plan land the visitor on the listings grid with that tab already
+ * selected (the query string is what the search store reads on load), and the
+ * rest are anchors on the pillar page.
+ *
+ * Every href is written page-relative ("/#services"), so the same list works
+ * from a service page — Nav.tsx resolves it to /{region}/real-estate/#services
+ * rather than to a fragment that only exists on the page you are already on.
  */
 
-export interface NavGroup {
-  label: string;
-  href?: string;
-  children?: { label: string; href: string; note: string }[];
-}
-
-export const NAV: NavGroup[] = [
-  {
-    label: 'Transact',
-    children: [
-      { label: 'Buy Property', href: '/buy-property/', note: 'Search, due diligence, negotiation and transfer' },
-      { label: 'Sell, Rent & Lease', href: '/sell-rent-lease-property/', note: 'Valuation, marketing and tenancy management' },
-      { label: 'Off-Plan Properties', href: '/off-plan-properties/', note: 'Launch access with the developer risk assessed' },
-    ],
-  },
-  {
-    label: 'Sectors',
-    children: [
-      { label: 'Residential', href: '/residential/', note: 'Homes matched to community, budget and lifestyle' },
-      { label: 'Commercial', href: '/commercial/', note: 'Offices, retail, warehousing and industrial units' },
-    ],
-  },
-  {
-    label: 'Advisory',
-    children: [
-      { label: 'Mortgage Services', href: '/mortgage-services/', note: 'Whole-of-market financing, arranged end to end' },
-      { label: 'Investment Advisory', href: '/investment-advisory/', note: 'Yield, portfolio construction and exit planning' },
-      { label: 'Valuations & Advisory', href: '/valuations-advisory/', note: 'RICS and RERA-aligned independent valuation' },
-    ],
-  },
-  { label: 'Our Process', href: '/#process' },
-  { label: 'Contact', href: '/#contact' },
+export const NAV: Link[] = [
+  { label: 'Buy', href: '/?kind=buy#listings' },
+  { label: 'Rent', href: '/?kind=rent#listings' },
+  { label: 'Off-Plan', href: '/?kind=offplan#listings' },
+  { label: 'Communities', href: '/#communities' },
+  { label: 'Sell & Let', href: '/#sell' },
+  { label: 'Services', href: '/#services' },
 ];
 
 export const FOOTER_COLUMNS: { title: string; links: Link[] }[] = [
@@ -93,52 +73,55 @@ export const FOOTER_COLUMNS: { title: string; links: Link[] }[] = [
       { label: 'Buy Property', href: '/buy-property/' },
       { label: 'Sell, Rent & Lease', href: '/sell-rent-lease-property/' },
       { label: 'Off-Plan Properties', href: '/off-plan-properties/' },
+      { label: 'Residential', href: '/residential/' },
+      { label: 'Commercial', href: '/commercial/' },
     ],
   },
   {
-    title: 'Services',
+    title: 'Advisory',
     links: [
-      { label: 'Residential', href: '/residential/' },
-      { label: 'Commercial', href: '/commercial/' },
       { label: 'Mortgage Services', href: '/mortgage-services/' },
       { label: 'Investment Advisory', href: '/investment-advisory/' },
       { label: 'Valuations & Advisory', href: '/valuations-advisory/' },
+      { label: 'Our Process', href: '/#process' },
     ],
   },
   {
     title: 'The Group',
     links: [
       { label: 'About VALUNXT', href: '/#about' },
-      { label: 'Our Process', href: '/#process' },
+      { label: 'Property Gallery', href: '/#gallery' },
       { label: 'Client Reviews', href: '/#reviews' },
-      { label: 'Market Insights', href: '/#insights' },
-    ],
-  },
-  {
-    title: 'Get in Touch',
-    links: [
-      { label: 'Speak to an Advisor', href: '/#contact' },
-      { label: 'Request a Valuation', href: '/#contact' },
       { label: 'FAQs', href: '/#faqs' },
+      { label: 'Speak to an Advisor', href: '/#contact' },
     ],
   },
 ];
 
 /**
- * Developer partners. `logo` is intentionally unset: a developer's mark is
- * their property and displaying it asserts a commercial relationship, so the
- * module type-sets the names and the host drops real files into
- * public/real-estate/img/partners/ once it has the right to use them.
+ * Developer partners.
+ *
+ * These were type-set names for as long as the module had no artwork it was
+ * entitled to use. The marks now shipped in
+ * public/real-estate/img/developers/ come from VALUNXT's own previous property
+ * site, supplied by the client for this purpose — so the artwork is the
+ * group's to display and a row of real logos replaces a row of set capitals.
+ *
+ * `logo` remains optional and Partners.tsx still falls back to the name, so an
+ * entry whose relationship lapses can be reduced to text by deleting one line
+ * rather than rebuilding the section.
  */
 export const PARTNERS: Partner[] = [
-  { name: 'EMAAR' },
-  { name: 'DAMAC' },
-  { name: 'NAKHEEL' },
-  { name: 'SOBHA' },
-  { name: 'ALDAR' },
-  { name: 'MERAAS' },
-  { name: 'OMNIYAT' },
-  { name: 'ELLINGTON' },
+  { name: 'EMAAR', logo: '/real-estate/img/developers/emaar.webp' },
+  { name: 'DAMAC', logo: '/real-estate/img/developers/damac.webp' },
+  { name: 'NAKHEEL', logo: '/real-estate/img/developers/nakheel.webp' },
+  { name: 'SOBHA', logo: '/real-estate/img/developers/sobha-realty.webp' },
+  { name: 'ALDAR', logo: '/real-estate/img/developers/aldar-properties.webp' },
+  { name: 'MERAAS', logo: '/real-estate/img/developers/meraas.webp' },
+  { name: 'OMNIYAT', logo: '/real-estate/img/developers/omniyat.webp' },
+  { name: 'ELLINGTON', logo: '/real-estate/img/developers/ellington.webp' },
+  { name: 'BINGHATTI', logo: '/real-estate/img/developers/binghatti-properties.webp' },
+  { name: 'DUBAI PROPERTIES', logo: '/real-estate/img/developers/dubai-properties.webp' },
 ];
 
 export const PARTNERS_TITLE = 'Trusted by Leading Developers & Industry Partners';

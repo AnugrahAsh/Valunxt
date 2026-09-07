@@ -1,25 +1,23 @@
 'use client';
 
 /**
- * The two accordions: the process steps and the FAQ list.
+ * The two accordions: the process steps on the navy panel, and the FAQ list.
  *
- * One component, two skins, because the behaviour is identical and the only
- * differences are chrome. `variant="steps"` renders the numbered dark panel on
- * the process section; `variant="faq"` renders the bordered light list.
- *
- * Open state is real React state and the panel heights come from a CSS
- * max-height transition, so there is no measuring, no layout thrash and no
- * dependency. The trade-off is the max-height ceiling in the stylesheet — long
- * enough for the copy these carry, and stated there so it can be raised.
+ * One component, two skins, because the behaviour is identical and only the
+ * chrome differs. Open state is real React state and the panel heights come from
+ * a CSS max-height transition, so there is no measuring and no layout thrash.
+ * The trade-off is the max-height ceiling in the stylesheet — long enough for
+ * the copy these carry, and stated there so it can be raised.
  *
  * Accessibility: each header is a real <button> with aria-expanded pointing at
- * its panel, and the panel is hidden from the a11y tree while closed.
+ * its panel, and the panel is hidden from the accessibility tree while closed.
+ * Clicking an open row closes it — everything collapsed is a valid state, not a
+ * dead end.
  */
 import { useId, useState } from 'react';
-import { Chevron } from './icons';
 
 export interface AccordionItem {
-  /** Shown on the left of the header row. Optional; steps use it, FAQs do not. */
+  /** '01' … '04'. Rendered, so it is copy rather than an index. */
   number?: string;
   title: string;
   body: string;
@@ -37,11 +35,10 @@ export default function Accordion({
 }) {
   const [open, setOpen] = useState(initial);
   const uid = useId();
-
-  const isSteps = variant === 'steps';
+  const steps = variant === 'steps';
 
   return (
-    <div className={isSteps ? 're-steps' : 're-faq__list'}>
+    <div className={steps ? 'vxn-re-steps' : 'vxn-re-faqs'}>
       {items.map((item, i) => {
         const isOpen = open === i;
         const panelId = `${uid}-p${i}`;
@@ -49,37 +46,27 @@ export default function Accordion({
         return (
           <div
             key={item.title}
-            className={isSteps ? 're-step' : 're-faq__item'}
+            className={steps ? 'vxn-re-step' : 'vxn-re-faq'}
             data-open={isOpen ? 'true' : 'false'}
           >
             <button
               type="button"
               id={btnId}
-              className={isSteps ? 're-step__btn' : 're-faq__btn'}
+              className={steps ? 'vxn-re-step__btn' : 'vxn-re-faq__btn'}
               aria-expanded={isOpen}
               aria-controls={panelId}
-              /* Clicking the open row closes it — a section with everything
-                 collapsed is a valid state, not a dead end. */
               onClick={() => setOpen(isOpen ? -1 : i)}
             >
-              <span>
-                {item.number ? `${item.number}. ` : ''}
-                {item.title}
-              </span>
-              {isSteps ? (
-                <span className="re-step__chev" aria-hidden="true">
-                  <Chevron />
-                </span>
-              ) : (
-                <span className="re-faq__sign" aria-hidden="true" />
-              )}
+              {steps && item.number ? <span className="vxn-re-step__num">{item.number}</span> : null}
+              <span>{item.title}</span>
+              <span className={steps ? 'vxn-re-step__sign' : 'vxn-re-faq__sign'} aria-hidden="true" />
             </button>
             <div
               id={panelId}
               role="region"
               aria-labelledby={btnId}
-              className={isSteps ? 're-step__body' : 're-faq__body'}
-              /* inert while closed so the copy is not read out or tabbed into */
+              className={steps ? 'vxn-re-step__body' : 'vxn-re-faq__body'}
+              /* inert while closed, so the copy is not read out or tabbed into */
               aria-hidden={!isOpen}
             >
               <p>{item.body}</p>

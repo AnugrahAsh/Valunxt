@@ -35,7 +35,7 @@ export const BUY_LISTINGS: Listing[] = [
     baths: '2 bath',
     area: '1,240 sq ft',
     status: 'Ready',
-    img: '/real-estate/img/buy.webp',
+    img: '/real-estate/img/listings/marina-tower.webp',
     tags: ['Freehold', 'Marina view', 'Chiller free'],
   },
   {
@@ -47,7 +47,7 @@ export const BUY_LISTINGS: Listing[] = [
     baths: '5 bath',
     area: '4,100 sq ft',
     status: 'Ready',
-    img: '/real-estate/img/offplan.webp',
+    img: '/real-estate/img/listings/golf-villa.webp',
     tags: ['Freehold', 'Private pool', 'Golf course'],
   },
   {
@@ -59,7 +59,7 @@ export const BUY_LISTINGS: Listing[] = [
     baths: '2 WC',
     area: '2,050 sq ft',
     status: 'Ready',
-    img: '/real-estate/img/service-commercial.webp',
+    img: '/real-estate/img/types/commercial.webp',
     tags: ['Commercial', 'Fitted', 'Canal view'],
   },
 ];
@@ -74,7 +74,7 @@ export const RENT_LISTINGS: Listing[] = [
     baths: '1 bath',
     area: '780 sq ft',
     status: 'Available now',
-    img: '/real-estate/img/buy.webp',
+    img: '/real-estate/img/types/luxury-appartment.webp',
     tags: ['Furnished', '4 cheques', 'Burj view'],
   },
   {
@@ -86,7 +86,7 @@ export const RENT_LISTINGS: Listing[] = [
     baths: '4 bath',
     area: '2,400 sq ft',
     status: 'Available now',
-    img: '/real-estate/img/sell.webp',
+    img: '/real-estate/img/types/townhouse.webp',
     tags: ['Unfurnished', '2 cheques', 'Community pool'],
   },
   {
@@ -113,7 +113,7 @@ export const OFFPLAN_LISTINGS: Listing[] = [
     baths: '1–4 bath',
     area: '710–2,300 sq ft',
     status: 'Q4 2027',
-    img: '/real-estate/img/offplan.webp',
+    img: '/real-estate/img/listings/offplan-tower.webp',
     tags: ['60/40 plan', 'Escrow registered', 'Waterfront'],
   },
   {
@@ -125,7 +125,7 @@ export const OFFPLAN_LISTINGS: Listing[] = [
     baths: '5 bath',
     area: '3,600 sq ft',
     status: 'Q2 2028',
-    img: '/real-estate/img/sell.webp',
+    img: '/real-estate/img/types/villas.webp',
     tags: ['80/20 plan', 'Escrow registered', 'Post-handover'],
   },
   {
@@ -137,7 +137,7 @@ export const OFFPLAN_LISTINGS: Listing[] = [
     baths: '1–3 bath',
     area: '820–1,600 sq ft',
     status: 'Q1 2027',
-    img: '/real-estate/img/buy.webp',
+    img: '/real-estate/img/listings/waterfront-residences.webp',
     tags: ['70/30 plan', 'Escrow registered', 'Sea view'],
   },
 ];

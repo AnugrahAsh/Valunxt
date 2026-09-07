@@ -50,13 +50,11 @@
     "title": "About | VALUNXT Capital",
     "desc": "VALUNXT Capital is a premium real estate wealth, capital, intelligence, and technology group serving investors across India and the UAE.",
     "og_image": "/assets/content/uploads/2025/03/valunxt-og.png",
-    "body": "wp-singular page-template-default page page-id-258 page-parent wp-custom-logo wp-embed-responsive wp-theme-execor full header-layout-logo-menu has-page-header no-middle-header responsive-layout vamtam-is-elementor elementor-active elementor-pro-active vamtam-wc-cart-empty wc-product-gallery-slider-active vamtam-font-smoothing layout-full elementor-default elementor-kit-5 elementor-page elementor-page-258 elementor-page-3752",
+    "body": "wp-singular page-template-default page page-id-258 page-parent wp-custom-logo wp-embed-responsive wp-theme-execor full header-layout-logo-menu has-page-header no-middle-header responsive-layout vamtam-is-elementor elementor-active elementor-pro-active vamtam-wc-cart-empty wc-product-gallery-slider-active vamtam-font-smoothing layout-full elementor-default elementor-kit-5 elementor-page elementor-page-258 elementor-page-3752 vxh-page",
     "post_css": [
       "5",
-      "258",
       "3837",
       "2094",
-      "3752",
       "4557"
     ],
     "header": "3837",
@@ -69,7 +67,15 @@
       "/about/"
     ],
     "inline_css": "<style>body{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/about-us.webp\")}</style>",
-    "path": "/about/"
+    "path": "/about/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ],
+    "js": [
+      "/assets/js/vxn-services-ae.js"
+    ]
   },
   "/about/leadership/": {
     "title": "Leadership | VALUNXT Capital",
@@ -318,17 +324,15 @@
     "title": "Accounting, Tax, Valuation & Advisory in the UAE | VALUNXT Capital",
     "desc": "A senior team of accountants, tax advisers and valuers in Dubai and Abu Dhabi. Bookkeeping, VAT and corporate tax, RICS-regulated valuation and advisory — at fixed fees agreed before work begins.",
     "og_image": "/assets/content/uploads/2025/03/valunxt-og.png",
-    "body": "home wp-singular page-template-default page page-id-17 wp-custom-logo wp-embed-responsive wp-theme-execor full header-layout-logo-menu has-page-header no-middle-header responsive-layout vamtam-is-elementor elementor-active elementor-pro-active vamtam-wc-cart-empty wc-product-gallery-slider-active vamtam-font-smoothing layout-full elementor-default elementor-kit-5 elementor-page elementor-page-17",
+    "body": "home wp-singular page-template-default page page-id-17 wp-custom-logo wp-embed-responsive wp-theme-execor full header-layout-logo-menu has-page-header no-middle-header responsive-layout vamtam-is-elementor elementor-active elementor-pro-active vamtam-wc-cart-empty wc-product-gallery-slider-active vamtam-font-smoothing layout-full elementor-default elementor-kit-5 elementor-page elementor-page-17 vxh-page",
     "post_css": [
       "5",
       "17",
-      "139",
+      "3837",
       "2094",
-      "7162",
-      "4557",
-      "2190"
+      "4557"
     ],
-    "header": "139",
+    "header": "3837",
     "footer": "2094",
     "canvas": false,
     "post_id": 17,
@@ -338,7 +342,13 @@
       "/en-ae/"
     ],
     "inline_css": "",
-    "path": "/en-ae/"
+    "path": "/en-ae/",
+    "css": [
+      "/assets/css/vxn-home-ae.css"
+    ],
+    "js": [
+      "/assets/js/vxn-home-ae.js"
+    ]
   },
   "/en-in/": {
     "title": "Real Estate Wealth, Capital, Intelligence & Technology | VALUNXT Capital",
@@ -419,13 +429,11 @@
     "title": "Industries | VALUNXT Capital",
     "desc": "Property sectors VALUNXT Capital covers — residential, office, retail, logistics, land and hospitality — and the client segments we act for across India and the UAE.",
     "og_image": "/assets/content/uploads/2025/03/valunxt-og.png",
-    "body": "wp-singular page-template-default page page-id-262 wp-custom-logo wp-embed-responsive wp-theme-execor full header-layout-logo-menu has-page-header no-middle-header responsive-layout vamtam-is-elementor elementor-active elementor-pro-active vamtam-wc-cart-empty wc-product-gallery-slider-active vamtam-font-smoothing layout-full elementor-default elementor-kit-5 elementor-page elementor-page-262 elementor-page-3752",
+    "body": "wp-singular page-template-default page page-id-262 wp-custom-logo wp-embed-responsive wp-theme-execor full header-layout-logo-menu has-page-header no-middle-header responsive-layout vamtam-is-elementor elementor-active elementor-pro-active vamtam-wc-cart-empty wc-product-gallery-slider-active vamtam-font-smoothing layout-full elementor-default elementor-kit-5 elementor-page elementor-page-262 elementor-page-3752 vxh-page",
     "post_css": [
       "5",
-      "262",
       "3837",
       "2094",
-      "3752",
       "4557"
     ],
     "header": "3837",
@@ -438,7 +446,15 @@
       "/industries/"
     ],
     "inline_css": "<style>body{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/industry.webp\") !important}</style>",
-    "path": "/industries/"
+    "path": "/industries/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ],
+    "js": [
+      "/assets/js/vxn-services-ae.js"
+    ]
   },
   "/location/": {
     "title": "Location | VALUNXT Capital",

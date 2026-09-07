@@ -45,10 +45,35 @@ const SCROLL_AND_NAV = `
      here can fire on mobile. */
   var root = document.documentElement;
   var SEL  = '.elementor-location-header nav.elementor-nav-menu--main li.menu-item-has-children';
+  var MEGA = '.elementor-location-header nav.elementor-nav-menu--main li.vxn-mega';
+  /* The mega panel is display:none when it is not hovered, and \`display\` cannot
+     be transitioned — so the only way to animate the close is to keep the item
+     open a moment longer. \`.is-closing\` holds \`display:block\` for 180ms while
+     the panel fades out under it (see the mega-menu block in vxn-mega.css).
+     The alternative, leaving all twelve panels rendered so opacity could do the
+     work, would have every card image on the page loading eagerly. */
+  var closing = null, closeTimer = null;
+  function trackClose(){
+    var open = null;
+    try { open = document.querySelector(MEGA + ':hover, ' + MEGA + ':focus-within'); } catch (e) {}
+    if (open) {
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      if (closing && closing !== open) closing.classList.remove('is-closing');
+      open.classList.remove('is-closing');
+      closing = open;
+      return;
+    }
+    if (!closing) return;
+    var el = closing; closing = null;
+    el.classList.add('is-closing');
+    if (closeTimer) clearTimeout(closeTimer);
+    closeTimer = setTimeout(function(){ el.classList.remove('is-closing'); closeTimer = null; }, 180);
+  }
   function sync(){
     var open = false;
     try { open = !!document.querySelector(SEL + ':hover, ' + SEL + ':focus-within'); } catch (e) {}
     root.classList.toggle('vxn-nav-open', open);
+    trackClose();
   }
   function bind(){
     var heads = document.querySelectorAll('.elementor-location-header');
@@ -166,6 +191,10 @@ const ENTRANCE_ANIMATIONS = `
   }
   function reveal(el){
     if (el.__vxnRevealed) return; el.__vxnRevealed = 1;
+    /* Two kinds of element share this function. \`[data-vxn-in]\` is the site's
+       own primitive and only needs its class flipped — its timing, distance
+       and stagger all live in CSS. */
+    if (el.hasAttribute('data-vxn-in')) { el.classList.add('is-in'); return; }
     var s = settings(el), name = animName(s);
     var delay = parseInt(s._animation_delay || s.animation_delay || 0, 10) || 0;
     setTimeout(function(){
@@ -194,6 +223,31 @@ const ENTRANCE_ANIMATIONS = `
     requestAnimationFrame(function(){ ticking = false; check(); }); }
   function start(){
     items = Array.prototype.slice.call(document.querySelectorAll('.elementor-invisible'));
+    /* The reveal primitive shares this observer rather than opening a second
+       one: \`[data-vxn-in]\` covers the hand-built sections Elementor's markup
+       never carried an animation for. \`reveal()\` treats the two the same — see
+       the class branch there.
+
+       The stagger is worked out here, once, from DOM order: siblings that
+       carry the attribute get an increasing \`--vxn-i\`, which the stylesheet
+       turns into a transition-delay. Templates therefore never hard-code
+       delays, and inserting a card in the middle of a row cannot leave a hole
+       in the sequence. Capped at 6 so a long list does not end up waiting
+       half a second for its last item. */
+    var staggered = Array.prototype.slice.call(document.querySelectorAll('[data-vxn-in]'));
+    var groups = [];
+    staggered.forEach(function(el){
+      if (el.style.getPropertyValue('--vxn-i')) return;   // an explicit index wins
+      var p = el.parentNode;
+      var g = groups.indexOf(p);
+      if (g === -1){ groups.push(p); g = groups.length - 1; groups[g] = p; }
+    });
+    groups.forEach(function(p){
+      var kids = Array.prototype.filter.call(p.children, function(c){ return c.hasAttribute && c.hasAttribute('data-vxn-in'); });
+      if (kids.length < 2) return;
+      kids.forEach(function(c, i){ c.style.setProperty('--vxn-i', Math.min(i, 6)); });
+    });
+    items = items.concat(staggered);
     if (!items.length) return;
     if ('IntersectionObserver' in window){
       var io = new IntersectionObserver(function(entries, obs){
@@ -393,7 +447,7 @@ const LEAD_FORMS = `
 (function(){
   var EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;
 
-  function group(el){ return el ? el.closest('.elementor-field-group') : null; }
+  function group(el){ return el ? el.closest('.elementor-field-group, .vxc-field') : null; }
 
   function clearError(g){
     if (!g) return;
@@ -478,7 +532,10 @@ const LEAD_FORMS = `
 
   function init(){
     if (!window.intlTelInput) return;
-    var inputs = document.querySelectorAll('.elementor-form input[type="tel"]');
+    /* The captured Elementor forms, plus the enquiry block's own form — which
+       carries none of Elementor's markup so that none of its styling reaches
+       it, and so has to be named here rather than matched by it. */
+    var inputs = document.querySelectorAll('.elementor-form input[type="tel"], .vxc-form input[type="tel"]');
     var country = detectCountry();
     Array.prototype.forEach.call(inputs, function(input){
       if (input.__vxnIti) return; input.__vxnIti = true;
@@ -574,6 +631,12 @@ export function siteScriptItems(page: PageConfig, region: RegionSlug | string): 
     inline(activeNavScript(page, r)),
     src('/assets/vendor/intl-tel-input/js/intlTelInput.min.js'),
     inline(LEAD_FORMS),
+
+    /* The page's own behaviour, as $PAGE['js'] declares it. In the PHP build
+       these were `<script defer>` tags emitted at the end of the template, so
+       they executed after every parser-blocking script above them had run —
+       which is exactly where appending them here puts them. */
+    ...(page.js ?? []).map(src),
   ];
 }
 

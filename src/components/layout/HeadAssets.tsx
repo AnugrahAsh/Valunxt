@@ -60,6 +60,15 @@ const STYLESHEETS: string[] = [
   '/assets/content/themes/execor/vamtam/assets/css/dist/elementor/responsive/elementor-small.css',
 ];
 
+/**
+ * The cache key for the redesign's stylesheets — the two site-wide skins and
+ * every page-owned sheet. /assets/* is served immutable for a year, so this MUST
+ * be bumped whenever one of those files changes or browsers keep the old copy.
+ * PHP derived it from filemtime(); a constant is the same idea without a stat
+ * per request. Same convention as valunxt-brand.css?v=175.
+ */
+const VXN_CSS_V = 54;
+
 const VAMTAM_THEME_OPTIONS = `
         body {
             --vamtam-body-link-regular: #000000;
@@ -655,10 +664,21 @@ export default function HeadAssets({ page }: { page: PageConfig }) {
 
       <InlineCss css={page.inline_css} />
 
-      <link rel="stylesheet" href={`${BASE}/assets/css/valunxt-brand.css?v=157`} media="all" />
+      <link rel="stylesheet" href={`${BASE}/assets/css/valunxt-brand.css?v=175`} media="all" />
       {/* Landing-page feature blocks. Purely additive — after the brand sheet so
           it can build on its tokens without overriding any of its rules. */}
       <link rel="stylesheet" href={`${BASE}/assets/css/valunxt-landing.css?v=4`} media="all" />
+      {/* Mega menu, second generation — restyles the sheet the brand sheet positions. */}
+      <link rel="stylesheet" href={`${BASE}/assets/css/vxn-mega.css?v=${VXN_CSS_V}`} media="all" />
+      {/* Inner-page skin: cobalt tokens site-wide and the stage treatment of the
+          shared inner hero. */}
+      <link rel="stylesheet" href={`${BASE}/assets/css/vxn-inner.css?v=${VXN_CSS_V}`} media="all" />
+      {/* Page-owned stylesheets, exactly as $PAGE['css'] listed them: last of the
+          site's own sheets, so they build on the brand tokens and the two skins
+          above rather than fight them. */}
+      {(page.css ?? []).map((href) => (
+        <link key={href} rel="stylesheet" href={`${BASE}${href}?v=${VXN_CSS_V}`} media="all" />
+      ))}
       {/* intl-tel-input: international phone field with country code + flag dropdown (lead-capture forms) */}
       <link
         rel="stylesheet"

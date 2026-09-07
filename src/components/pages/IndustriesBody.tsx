@@ -1,214 +1,289 @@
 /**
- * /industries/ — page body.
+ * /industries/ — Industries & Sectors, shared by both editions.
  *
- * Port of industries/index.php. The captured Elementor markup is unchanged: the only
- * edits are the ones JSX requires (className, self-closed voids, style
- * objects) and internal links going through rurl() so they stay in the
- * visitor's market.
+ * Second generation, in the kit's light system: a light stage with the page's
+ * own artwork, a sector explorer (auto-advancing tabs with a photograph and the
+ * work we do in each), the client segments as cards, and the closing block.
+ * Sector and segment copy lives in data/industries.ts.
+ *
+ * Kit: components/vxh/kit. Styles: /assets/css/vxn-home-ae.css +
+ * /assets/css/vxn-services-ae.css + /assets/css/vxn-pages.css. Behaviour:
+ * /assets/js/vxn-services-ae.js.
+ *
+ * Port of industries/index.php.
  */
-import { rurl } from '@/lib/region';
-import IndustriesSectorsSection from '@/components/sections/IndustriesSectorsSection';
+import type { CSSProperties } from 'react';
+
+import { BASE, rurl, vxnRegionData, vxnRegionPhone } from '@/lib/region';
+import { CLIENT_SEGMENTS, INDUSTRY_SECTORS, sectorHref } from '@/data/industries';
+import { Abs, Ico } from '@/components/vxh/kit';
+import SubscribeSection from '@/components/sections/SubscribeSection';
+import Html from '@/components/Html';
 import type { PageConfig } from '@/lib/page-config';
 
+/** The explorer's photography, cycled across the sectors. */
+const PHOTOS = [
+  '/assets/content/uploads/homepage/industry-1.webp',
+  '/assets/content/uploads/homepage/industry-2.webp',
+  '/assets/content/uploads/homepage/industry-3.webp',
+  '/assets/content/uploads/homepage/industry-4.webp',
+  '/assets/content/uploads/homepage/industry-5.webp',
+  '/assets/content/uploads/homepage/building-real-esate.webp',
+];
+
+const SEG_ICONS = ['users', 'shield', 'globe', 'building', 'scales', 'layers', 'target', 'doc'];
+
+function cssVars(vars: Record<string, string | number>): CSSProperties {
+  return vars as CSSProperties;
+}
+
 export default function IndustriesBody({ page, region }: { page: PageConfig; region: string }) {
+  const reg = vxnRegionData(region);
+  const phone = vxnRegionPhone(region);
+  const tel = reg.tel;
+
   return (
-    <>
+    <div id="main-content">
+      <div id="main" role="main" className="vamtam-main layout-full">
+        <div className="vxh vxp">
+          <section className="vxh-stage vxp-hero" aria-label="Industries and sectors">
+            <Abs variant="helix" />
+            <div className="vxh__in">
+              <div className="vxh-stage__grid">
+                <div>
+                  <nav className="vxh-crumb" aria-label="Breadcrumb">
+                    <a href={rurl(region, '/')}>Home</a>
+                    <i />
+                    <b>Industries</b>
+                  </nav>
+                  <h1 className="vxh-h1">
+                    The sectors we value, research <span className="vxh-grad">and fund.</span>
+                  </h1>
+                  <p className="vxh-lede">
+                    Residential, office, retail, warehousing, land and hospitality &mdash; and the
+                    clients we act for in each, from private owners to lenders.
+                  </p>
+                  <div className="vxh-stage__cta">
+                    <a className="vxh-btn vxh-btn--primary" href={rurl(region, '/free-consultation/')}>
+                      Free Consultation <Ico name="ne" size={18} />
+                    </a>
+                    <a className="vxh-btn vxh-btn--ghost" href="#vxp-sectors">
+                      Explore the sectors <Ico name="arrow" size={18} />
+                    </a>
+                  </div>
+                </div>
+                <figure className="vxp-hero__fig" data-vxn-in="up">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`${BASE}/assets/content/uploads/homepage/industry-1.webp`}
+                    alt=""
+                    width={900}
+                    height={720}
+                    fetchPriority="high"
+                  />
+                  <figcaption>
+                    <Ico name="building" size={14} /> {INDUSTRY_SECTORS.length} sectors &middot;{' '}
+                    {CLIENT_SEGMENTS.length} client segments
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </section>
 
-      <div id="main-content">
+          {/* Sector explorer */}
+          <section className="vxp-split vxp-x" id="vxp-sectors" aria-labelledby="vxp-sec-h">
+            <div className="vxh__in">
+              <div className="vxh-head vxh-head--split">
+                <div>
+                  <span className="vxh-eyebrow">Sectors</span>
+                  <h2 className="vxh-h2" id="vxp-sec-h">
+                    Six asset classes, one standard of evidence.
+                  </h2>
+                </div>
+                <p className="vxh-lede">
+                  Choose a sector to see how we work in it and the practice that carries the work.
+                </p>
+              </div>
+              <div className="vxd-x" data-vxd-explorer>
+                <div className="vxd-x__tabs" role="tablist" aria-label="Sectors">
+                  {INDUSTRY_SECTORS.map((s, i) => (
+                    <button
+                      className="vxd-x__tab"
+                      role="tab"
+                      id={`vxp-x-tab-${i}`}
+                      aria-selected={i === 0}
+                      aria-controls={`vxp-x-pane-${i}`}
+                      type="button"
+                      {...(i === 0 ? {} : { tabIndex: -1 })}
+                      key={s.n}
+                    >
+                      <span className="vxd-x__n">{s.n}</span>
+                      <span>
+                        <Html as="span" className="vxd-x__t" html={s.title} />
+                        <Html as="span" className="vxd-x__d" html={s.work.join(' &middot; ')} />
+                      </span>
+                      <span className="vxd-x__prog" aria-hidden="true" />
+                    </button>
+                  ))}
+                </div>
+                <div className="vxd-x__screen">
+                  {INDUSTRY_SECTORS.map((s, i) => (
+                    <div
+                      className={`vxd-x__pane${i === 0 ? ' is-active' : ''}`}
+                      role="tabpanel"
+                      id={`vxp-x-pane-${i}`}
+                      aria-labelledby={`vxp-x-tab-${i}`}
+                      hidden={i !== 0}
+                      key={s.n}
+                    >
+                      <div className="vxd-x__copy">
+                        <span className="vxd-x__k">{s.n} &middot; Sector</span>
+                        <Html as="h3" className="vxd-x__h" html={s.title} />
+                        <Html as="p" className="vxd-x__lede" html={s.desc} />
+                        <ul className="vxd-x__pts">
+                          {s.work.map((w, wi) => (
+                            <li style={cssVars({ '--i': wi })} key={w}>
+                              <b>
+                                <Ico name="check" size={11} />
+                              </b>
+                              <Html as="span" html={w} />
+                            </li>
+                          ))}
+                        </ul>
+                        <a
+                          className="vxh-btn vxh-btn--blue"
+                          href={rurl(region, sectorHref(region, s.href))}
+                        >
+                          The practice behind it <Ico name="arrow" size={16} />
+                        </a>
+                      </div>
+                      <div className="vxd-x__media">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={BASE + PHOTOS[i % PHOTOS.length]}
+                          alt=""
+                          loading="lazy"
+                          width={600}
+                          height={420}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <div className="vxd-x__dots" aria-hidden="true">
+                    {INDUSTRY_SECTORS.map((s, i) => (
+                      <i className={i === 0 ? 'is-on' : undefined} key={s.n} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-      	<div id="main" role="main" className="vamtam-main layout-full">
+          {/* Segments */}
+          <section
+            className="vxp-split"
+            aria-labelledby="vxp-seg-h"
+            style={{ background: 'var(--vxh-cream)', borderTop: '1px solid var(--vxh-line)' }}
+          >
+            <div className="vxh__in">
+              <div className="vxh-head vxh-head--split">
+                <div>
+                  <span className="vxh-eyebrow">Who We Act For</span>
+                  <h2 className="vxh-h2" id="vxp-seg-h">
+                    The clients behind the mandates.
+                  </h2>
+                </div>
+                <p className="vxh-lede">
+                  Different questions, the same discipline: fixed fees, senior people and every
+                  number documented to hold up.
+                </p>
+              </div>
+              <div className="vxp-segs">
+                {CLIENT_SEGMENTS.map((g, i) => (
+                  <div className="vxp-seg" data-vxn-in="up" key={g.t}>
+                    <span className="vxp-seg__ic">
+                      <Ico name={SEG_ICONS[i % SEG_ICONS.length]} size={20} />
+                    </span>
+                    <Html as="h3" className="vxp-seg__t" html={g.t} />
+                    <Html as="p" className="vxp-seg__d" html={g.d} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
-
-
-
-
-      		<article id="post-262" className="full post-262 page type-page status-publish hentry">
-      			<div data-elementor-type="single-page" data-elementor-id="3752" className="elementor elementor-3752 elementor-location-single post-262 page type-page status-publish hentry" data-elementor-post-type="elementor_library">
-      				<div className="elementor-element elementor-element-c4d353f e-flex e-con-boxed e-con e-parent" data-id="c4d353f" data-element_type="container" data-e-type="container" data-settings={"{\"background_background\":\"classic\"}"}>
-      					<div className="e-con-inner">
-      						<div className="elementor-element elementor-element-6200b41 e-con-full e-flex e-con e-child" data-id="6200b41" data-element_type="container" data-e-type="container">
-      							<div className="elementor-element elementor-element-7b36cfb e-con-full e-flex e-con e-child" data-id="7b36cfb" data-element_type="container" data-e-type="container">
-      								<div className="elementor-element elementor-element-c739b5b elementor-widget elementor-widget-heading" data-id="c739b5b" data-element_type="widget" data-e-type="widget" data-widget_type="heading.default">
-      									<div className="elementor-widget-container">
-      										<span className="elementor-heading-title elementor-size-default"><a href={rurl(region, '/')}>Home</a></span>
-      									</div>
-      								</div>
-      								<div className="elementor-element elementor-element-1707a75 elementor-widget elementor-widget-theme-post-title elementor-page-title elementor-widget-heading" data-id="1707a75" data-element_type="widget" data-e-type="widget" data-widget_type="theme-post-title.default">
-      									<div className="elementor-widget-container">
-      										<span className="elementor-heading-title elementor-size-default">&gt; Industries</span>
-      									</div>
-      								</div>
-      							</div>
-      							<div className="elementor-element elementor-element-3f5733d elementor-widget-divider--view-line elementor-widget elementor-widget-divider" data-id="3f5733d" data-element_type="widget" data-e-type="widget" data-widget_type="divider.default">
-      								<div className="elementor-widget-container">
-      									<div className="elementor-divider">
-      										<span className="elementor-divider-separator">
-      										</span>
-      									</div>
-      								</div>
-      							</div>
-      							<div className="elementor-element elementor-element-8c0b074 e-con-full e-flex e-con e-child" data-id="8c0b074" data-element_type="container" data-e-type="container">
-      								<div className="elementor-element elementor-element-16f0cb0 elementor-invisible animated-fast elementor-widget elementor-widget-heading" data-id="16f0cb0" data-element_type="widget" data-e-type="widget" data-settings={"{\"_animation\":\"slideInUp\"}"} data-widget_type="heading.default">
-      									<div className="elementor-widget-container">
-      										<h1 className="elementor-heading-title elementor-size-default">Industries &amp; Sectors</h1>
-      									</div>
-      								</div>
-      								<div className="elementor-element elementor-element-44a505e elementor-invisible animated-fast elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-widget elementor-widget-theme-post-title elementor-page-title elementor-widget-heading" data-id="44a505e" data-element_type="widget" data-e-type="widget" data-settings={"{\"_animation\":\"slideInUp\"}"} data-widget_type="theme-post-title.default">
-      									<div className="elementor-widget-container">
-      										<h2 className="elementor-heading-title elementor-size-default">Industries</h2>
-      									</div>
-      								</div>
-      								<div className="elementor-element elementor-element-44a2511 elementor-invisible animated-fast elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-widget elementor-widget-theme-post-excerpt" data-id="44a2511" data-element_type="widget" data-e-type="widget" data-settings={"{\"_animation\":\"slideInUp\",\"_animation_delay\":50}"} data-widget_type="theme-post-excerpt.default">
-      									<div className="elementor-widget-container">
-      										Residential, office, retail, warehousing, land and hospitality &mdash; the sectors we value, research and fund, and the clients we act for in each. </div>
-      								</div>
-      							</div>
-      						</div>
-      					</div>
-      				</div>
-      				<div className="elementor-element elementor-element-afe1311 e-con-full e-flex e-con e-parent" data-id="afe1311" data-element_type="container" data-e-type="container">
-      					<div className="elementor-element elementor-element-9851ed0 elementor-widget elementor-widget-theme-post-content" data-id="9851ed0" data-element_type="widget" data-e-type="widget" data-widget_type="theme-post-content.default">
-      						<div className="elementor-widget-container">
-      							<div data-elementor-type="wp-page" data-elementor-id="262" className="elementor elementor-262" data-elementor-post-type="page">
-      								<div className="elementor-element elementor-element-3828824 e-flex e-con-boxed e-con e-parent" data-id="3828824" data-element_type="container" data-e-type="container">
-      									<div className="e-con-inner">
-      										<style id="vxn-ind-intro-css" dangerouslySetInnerHTML={{ __html: `
-      											.elementor-262 .vxn-ind-intro {
-      												display: grid;
-      												grid-template-columns: 1fr 1fr;
-      												gap: 22px 64px;
-      												align-items: start;
-      												margin: 0 0 52px;
-      											}
-
-      											.elementor-262 .vxn-ind-intro p.vxn-ind-intro__eyebrow {
-      												font-family: "DM Sans", sans-serif !important;
-      												font-size: 12px !important;
-      												letter-spacing: .2em !important;
-      												text-transform: uppercase !important;
-      												color: #9C00DD !important;
-      												font-weight: 600 !important;
-      												margin: 0 0 14px !important;
-      											}
-
-      											.elementor-262 .vxn-ind-intro h2.vxn-ind-intro__title {
-      												font-family: "Forum", serif !important;
-      												font-weight: 400 !important;
-      												color: #0E355F !important;
-      												font-size: clamp(28px, 3.4vw, 44px) !important;
-      												line-height: 1.12 !important;
-      												margin: 0 !important;
-      											}
-
-      											.elementor-262 .vxn-ind-intro p.vxn-ind-intro__lead {
-      												font-family: "DM Sans", sans-serif !important;
-      												font-size: 17px !important;
-      												line-height: 1.8 !important;
-      												color: #4d5863 !important;
-      												margin: 0 !important;
-      											}
-
-      											@media(max-width:900px) {
-      												.elementor-262 .vxn-ind-intro {
-      													grid-template-columns: 1fr;
-      													gap: 14px;
-      													margin-bottom: 36px;
-      												}
-      											}
-      										` }} />
-      										<IndustriesSectorsSection region={region} />
-      									</div>
-      								</div>
-      							</div>
-      						</div>
-      					</div>
-      				</div>
-      				<div className="elementor-element elementor-element-37e3794 e-con-full e-flex e-con e-parent" data-id="37e3794" data-element_type="container" data-e-type="container">
-      					<div className="elementor-element elementor-element-251f9d0 elementor-widget elementor-widget-template" data-id="251f9d0" data-element_type="widget" data-e-type="widget" data-widget_type="template.default">
-      						<div className="elementor-widget-container">
-      							<div className="elementor-template">
-      								<div data-elementor-type="container" data-elementor-id="4557" className="elementor elementor-4557" data-elementor-post-type="elementor_library">
-      									<div className="elementor-element elementor-element-9296635 e-flex e-con-boxed e-con e-parent" data-id="9296635" data-element_type="container" data-e-type="container" data-settings={"{\"background_background\":\"classic\"}"}>
-      										<div className="e-con-inner">
-      											<div className="elementor-element elementor-element-3300848 elementor-widget elementor-widget-spacer" data-id="3300848" data-element_type="widget" data-e-type="widget" data-widget_type="spacer.default">
-      												<div className="elementor-widget-container">
-      													<div className="elementor-spacer">
-      														<div className="elementor-spacer-inner"></div>
-      													</div>
-      												</div>
-      											</div>
-      											<div className="elementor-element elementor-element-4b7d49d e-con-full e-flex e-con e-child" data-id="4b7d49d" data-element_type="container" data-e-type="container">
-      												<div className="elementor-element elementor-element-f0def51 elementor-invisible animated-fast elementor-widget elementor-widget-heading" data-id="f0def51" data-element_type="widget" data-e-type="widget" data-settings={"{\"_animation\":\"slideInUp\"}"} data-widget_type="heading.default">
-      													<div className="elementor-widget-container">
-      														<h3 className="elementor-heading-title elementor-size-default">Stay Ahead.</h3>
-      													</div>
-      												</div>
-      												<div className="elementor-element elementor-element-06eccf7 elementor-invisible animated-fast elementor-widget elementor-widget-heading" data-id="06eccf7" data-element_type="widget" data-e-type="widget" data-settings={"{\"_animation\":\"slideInUp\",\"_animation_delay\":100}"} data-widget_type="heading.default">
-      													<div className="elementor-widget-container">
-      														<h3 className="elementor-heading-title elementor-size-default">Subscribe for Expert Insights.</h3>
-      													</div>
-      												</div>
-      											</div>
-      											<div className="elementor-element elementor-element-c96c2e7 elementor-invisible e-con-full animated-fast e-flex e-con e-child" data-id="c96c2e7" data-element_type="container" data-e-type="container" data-settings={"{\"animation\":\"fadeIn\",\"animation_delay\":150}"}>
-      												<div className="vamtam-has-theme-widget-styles elementor-element elementor-element-3b33bfe elementor-widget-tablet__width-inherit elementor-button-align-stretch elementor-widget elementor-widget-form" data-id="3b33bfe" data-element_type="widget" data-e-type="widget" data-settings={"{\"button_width\":\"25\",\"step_next_label\":\"Next\",\"step_previous_label\":\"Previous\",\"button_width_tablet\":\"25\",\"step_type\":\"number_text\",\"step_icon_shape\":\"circle\"}"} data-widget_type="form.default">
-      													<div className="elementor-widget-container">
-      														<form className="elementor-form" method="post" name="Subscribe" aria-label="Subscribe">
-      															<input type="hidden" name="post_id" value="4557" />
-      															<input type="hidden" name="form_id" value="3b33bfe" />
-      															<input type="hidden" name="referer_title" value="Industries" />
-
-      															<input type="hidden" name="queried_id" value="262" />
-
-      															<div className="elementor-form-fields-wrapper elementor-labels-">
-      																<div className="elementor-field-type-email elementor-field-group elementor-column elementor-field-group-email elementor-col-70 elementor-md-70 elementor-field-required">
-      																	<label htmlFor="form-field-email" className="elementor-field-label elementor-screen-only">
-      																		Email </label>
-      																	<input size={1} type="email" name="form_fields[email]" id="form-field-email" className="elementor-field elementor-size-sm  elementor-field-textual" placeholder="Email" required />
-      																</div>
-      																<div className="elementor-field-group elementor-column elementor-field-type-submit elementor-col-25 e-form__buttons elementor-md-25">
-      																	<button className="elementor-button elementor-size-sm" type="submit">
-      																		<span className="elementor-button-content-wrapper">
-      																			<span className="elementor-button-icon">
-      																				<i aria-hidden="true" className="vamtamtheme- vamtam-theme-send"></i> </span>
-      																			<span className="elementor-button-text">Subscribe</span>
-      																		</span>
-      																	</button>
-      																</div>
-      															</div>
-      														</form>
-      													</div>
-      												</div>
-      												<div className="vamtam-has-theme-widget-styles elementor-element elementor-element-82aa64e elementor-widget__width-initial elementor-widget-tablet__width-inherit elementor-widget elementor-widget-text-editor" data-id="82aa64e" data-element_type="widget" data-e-type="widget" data-widget_type="text-editor.default">
-      													<div className="elementor-widget-container">
-      														<p>You can unsubscribe at any time using the link in the footer of our emails. View our <a href={rurl(region, '/privacy-policy/')}>Privacy Policy</a>.</p>
-      													</div>
-      												</div>
-      											</div>
-      											<div className="elementor-element elementor-element-3d5fc70 elementor-widget elementor-widget-spacer" data-id="3d5fc70" data-element_type="widget" data-e-type="widget" data-widget_type="spacer.default">
-      												<div className="elementor-widget-container">
-      													<div className="elementor-spacer">
-      														<div className="elementor-spacer-inner"></div>
-      													</div>
-      												</div>
-      											</div>
-      										</div>
-      									</div>
-      								</div>
-      							</div>
-      						</div>
-      					</div>
-      				</div>
-      			</div>
-      		</article>
-
-
-
-
-
-
-      	</div>{/* #main */}
-
+          {/* Ready */}
+          <section className="vxh-ready" aria-labelledby="vxp-ready-h" style={{ background: '#fff' }}>
+            <Abs variant="arcs" mod="light" />
+            <div className="vxh__in">
+              <div className="vxh-ready__grid">
+                <div>
+                  <span className="vxh-eyebrow">Ready When You Are</span>
+                  <h2 className="vxh-h2" id="vxp-ready-h">
+                    Tell us the asset. We will say what it needs.
+                  </h2>
+                  <p className="vxh-lede">
+                    A free consultation, a fixed-fee quote in writing, and a named partner from the
+                    first call.
+                  </p>
+                </div>
+                <ul className="vxh-ways">
+                  <li>
+                    <a className="vxh-way" href={rurl(region, '/free-consultation/')}>
+                      <span className="vxh-way__ic">
+                        <Ico name="users" size={22} />
+                      </span>
+                      <span>
+                        <span className="vxh-way__t" style={{ display: 'block' }}>
+                          Book a free consultation
+                        </span>
+                        <span className="vxh-way__d" style={{ display: 'block' }}>
+                          No obligation. A partner listens first and says what is actually needed.
+                        </span>
+                      </span>
+                      <Ico name="ne" size={20} className="arr" />
+                    </a>
+                  </li>
+                  <li>
+                    <a className="vxh-way" href={rurl(region, '/services/')}>
+                      <span className="vxh-way__ic">
+                        <Ico name="grid" size={22} />
+                      </span>
+                      <span>
+                        <span className="vxh-way__t" style={{ display: 'block' }}>
+                          See every practice
+                        </span>
+                        <span className="vxh-way__d" style={{ display: 'block' }}>
+                          Accounting, transactions, mortgages, valuation, research and technology.
+                        </span>
+                      </span>
+                      <Ico name="ne" size={20} className="arr" />
+                    </a>
+                  </li>
+                  <li>
+                    <a className="vxh-way" href={`tel:${tel}`}>
+                      <span className="vxh-way__ic">
+                        <Ico name="phone" size={22} />
+                      </span>
+                      <span>
+                        <span className="vxh-way__t" style={{ display: 'block' }}>
+                          Call {phone}
+                        </span>
+                        <span className="vxh-way__d" style={{ display: 'block' }}>
+                          {reg.hours} &middot; {reg.cities}
+                        </span>
+                      </span>
+                      <Ico name="ne" size={20} className="arr" />
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+        {/* /.vxh */}
+        <SubscribeSection page={page} region={region} />
       </div>
-    </>
+    </div>
   );
 }

@@ -10,7 +10,11 @@
  *
  * Layout is two regions on one full-bleed white sheet: an index region on the
  * left (section title, lede, the two-up link list, and the ruled "view all" CTA
- * at its foot) and a pair of promo cards on the right.
+ * at its foot) and, on the right, a feature card carrying the brand's abstract
+ * bands plus a short list of quick routes.
+ *
+ * Second generation: the pair of image promo cards it used to close with is
+ * gone, and vxn-mega.css defines no rule for them any more.
  *
  * Port of includes/partials/more-mega.php.
  */
@@ -111,12 +115,19 @@ interface MegaLink {
   icon: string;
   d: string;
 }
-interface MegaCard {
+/** The single promo card at the head of the side region. */
+interface MegaFeature {
   eyebrow: string;
   title: string;
+  text: string;
   href: string;
-  img: string;
   cta: string;
+}
+/** One of the short routes listed under the feature card. */
+interface MegaQuick {
+  t: string;
+  href: string;
+  icon: string;
 }
 interface MegaContent {
   label: string;
@@ -125,7 +136,8 @@ interface MegaContent {
   lede: string;
   sidehead: string;
   links: MegaLink[];
-  cards: MegaCard[];
+  feature?: MegaFeature;
+  quick?: MegaQuick[];
   viewall: string;
   viewall_label: string;
 }
@@ -150,15 +162,18 @@ function preset(key: MegaPreset, region: string): MegaContent {
         icon: s.icon ?? 'document',
         d: s.desc ?? '',
       })),
-      /* The two cards mirror the first two entries of the list they sit beside,
-         so a change to the registry carries into them without a second edit. */
-      cards: services.slice(0, 2).map((s) => ({
-        eyebrow: 'Advisory',
-        title: s.short ?? s.title,
-        href: s.href,
-        img: s.img,
-        cta: 'Discover',
-      })),
+      feature: {
+        eyebrow: 'Not sure where to start?',
+        title: 'Tell us what you need to do.',
+        text: 'A partner says what is needed, what is not, and what it will cost &mdash; before any work begins.',
+        href: '/free-consultation/',
+        cta: 'Free consultation',
+      },
+      quick: [
+        { t: 'All services', href: '/services/', icon: 'document' },
+        { t: 'Industries we serve', href: '/industries/', icon: 'building' },
+        { t: 'Contact a partner', href: '/contact/', icon: 'globe' },
+      ],
       viewall: '/services/',
       viewall_label: 'View all services',
     };
@@ -186,13 +201,18 @@ function preset(key: MegaPreset, region: string): MegaContent {
         icon: c.icon ?? 'document',
         d: c.discipline ?? '',
       })),
-      cards: companies.slice(0, 2).map((c) => ({
-        eyebrow: 'Group company',
-        title: c.name,
-        href: c.url,
-        img: c.img,
-        cta: 'Discover',
-      })),
+      feature: {
+        eyebrow: 'One group',
+        title: 'Specialists, under one roof.',
+        text: 'Valuation, advisory, transactions and finance &mdash; each a regulated firm in its own right, answering to one team.',
+        href: '/our-group/',
+        cta: 'Meet the group',
+      },
+      quick: [
+        { t: 'All companies', href: '/our-group/', icon: 'document' },
+        { t: 'Our network', href: '/network/', icon: 'globe' },
+        { t: 'Contact a partner', href: '/contact/', icon: 'users' },
+      ],
       viewall: '/our-group/',
       viewall_label: 'View all companies',
     };
@@ -221,21 +241,17 @@ function preset(key: MegaPreset, region: string): MegaContent {
         d: 'Working with us across markets',
       },
     ],
-    cards: [
-      {
-        eyebrow: 'Featured',
-        title: 'Research &amp; Reports',
-        href: '/research/',
-        img: '/assets/content/uploads/new-folder/insights-1.webp',
-        cta: 'Discover',
-      },
-      {
-        eyebrow: 'Commentary',
-        title: 'Market Insight',
-        href: '/blogs/',
-        img: '/assets/content/uploads/new-folder/insights-2.webp',
-        cta: 'Discover',
-      },
+    feature: {
+      eyebrow: 'Latest',
+      title: 'Research &amp; Reports',
+      text: 'Market intelligence and investment research, written for the leaders who have to act on it.',
+      href: '/research/',
+      cta: 'Read the research',
+    },
+    quick: [
+      { t: 'Free consultation', href: '/free-consultation/', icon: 'users' },
+      { t: 'FAQ', href: '/faq/', icon: 'document' },
+      { t: 'Contact', href: '/contact/', icon: 'globe' },
     ],
     viewall: '/blogs/',
     viewall_label: 'View all insights',
@@ -307,29 +323,45 @@ export default function MegaMenu({
               </a>
             </div>
 
-            {p.cards.length ? (
-              <div className="vxn-mega__cards">
-                {p.cards.map((c) => (
-                  <a
-                    key={c.href + c.title}
-                    className="vxn-mega__card"
-                    href={rurl(region, c.href)}
-                    {...tab}
-                  >
-                    <Html as="span" className="vxn-mega__eyebrow" html={c.eyebrow} />
-                    <Html as="span" className="vxn-mega__cardtitle" html={c.title} />
-                    <span className="vxn-mega__cardmedia">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={c.img} alt="" loading="lazy" />
-                    </span>
-                    <span className="vxn-mega__cardcta">
-                      <Html as="span" className="vxn-mega__cardctatxt" html={c.cta} />
-                      <MegaArrow />
-                    </span>
-                  </a>
-                ))}
-              </div>
-            ) : null}
+            <div className="vxn-mega__side">
+              {p.feature ? (
+                <a className="vxn-mega__feature" href={rurl(region, p.feature.href)} {...tab}>
+                  {/* The brand's abstract bands, drawn rather than photographed:
+                      the card carries no image, so it costs nothing to load. */}
+                  <i className="vxn-mega__band" aria-hidden="true" />
+                  <i className="vxn-mega__band" aria-hidden="true" />
+                  <i className="vxn-mega__band" aria-hidden="true" />
+                  <Html as="span" className="vxn-mega__eyebrow" html={p.feature.eyebrow} />
+                  <Html as="span" className="vxn-mega__cardtitle" html={p.feature.title} />
+                  <Html as="span" className="vxn-mega__cardtext" html={p.feature.text} />
+                  <span className="vxn-mega__cardcta">
+                    <Html as="span" html={p.feature.cta + ' '} />
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path d="M7 17L17 7M9 7h8v8" />
+                    </svg>
+                  </span>
+                </a>
+              ) : null}
+              {p.quick?.length ? (
+                <div className="vxn-mega__quick">
+                  {p.quick.map((q) => (
+                    <a key={q.href + q.t} href={rurl(region, q.href)} {...tab}>
+                      <MegaIcon token={q.icon} />
+                      {q.t}
+                    </a>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </div>
         </li>
       </ul>

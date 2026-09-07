@@ -4,7 +4,7 @@
  *
  * Port of includes/partials/footer-3425.php.
  */
-import { BASE, rurl } from '@/lib/region';
+import { BASE, rurl, vxnServices } from '@/lib/region';
 import { vxnOffice, vxnYear } from '@/lib/site-data';
 import SocialIcons, { type SocialItem } from './SocialIcons';
 
@@ -339,24 +339,36 @@ export default function Footer3425({ region }: { region: string }) {
   );
 }
 
+/**
+ * The Services column, built from vxnServices() rather than a second
+ * hand-written copy of the list.
+ *
+ * It used to name India's four verticals in both markets, so a UAE reader was
+ * offered four URLs that market does not publish. The registry already answers
+ * "what does this market lead with" for the header menu, the home page and the
+ * services index; reading it here means the footer can never disagree with them.
+ * The captured menu-item ids stay on the first four rows, because the footer
+ * stylesheet targets them.
+ */
 function ServiceMenu({ region, id, hidden = false }: { region: string; id: string; hidden?: boolean }) {
   const tab = hidden ? { tabIndex: -1 } : {};
-  const items: Array<[string, string, string]> = [
-    ['/services/real-estate-investment-advisory/', 'Real Estate Investment Advisory', '3446'],
-    ['/services/capital-advisory/', 'Capital Advisory', '3447'],
-    ['/services/research-intelligence/', 'Research & Intelligence', '3448'],
-    ['/services/technology-ai/', 'Technology & AI', '3449'],
-  ];
+  const ITEM_IDS = ['3446', '3447', '3448', '3449'];
   return (
     <ul id={id} className="elementor-nav-menu sm-vertical">
-      {items.map(([href, label, mid]) => (
+      {vxnServices(region).map((s, i) => (
         <li
-          key={mid}
-          className={`menu-item menu-item-type-post_type menu-item-object-page menu-item-${mid}`}
+          key={s.href}
+          className={
+            'menu-item menu-item-type-post_type menu-item-object-page' +
+            (ITEM_IDS[i] ? ` menu-item-${ITEM_IDS[i]}` : '')
+          }
         >
-          <a href={rurl(region, href)} className="elementor-item" {...tab}>
-            {label}
-          </a>
+          <a
+            href={rurl(region, s.href)}
+            className="elementor-item"
+            {...tab}
+            dangerouslySetInnerHTML={{ __html: s.title }}
+          />
         </li>
       ))}
     </ul>

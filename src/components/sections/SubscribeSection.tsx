@@ -2,11 +2,20 @@
  * "Stay Ahead" newsletter subscribe section (Elementor template 4557).
  * Shared across all pages so the pre-footer matches the home page.
  *
+ * The heading is per market (Expert Insights for the UAE, Market Intelligence
+ * for India) and sits on one line over the form, centred.
+ *
+ * THE DESIGN IS ENTIRELY IN CSS — see "SUBSCRIBE band … the newsletter line" in
+ * valunxt-brand.css. Twenty-one page bodies still carry this template inline
+ * from the capture, so the band is restyled through the widget ids they all
+ * share rather than through markup here; that is what keeps one design on every
+ * page. Renaming or removing a data-id below would drop this block out of it.
+ *
  * Note: pages rendering this section must also list '4557' in page.post_css.
  *
  * Port of includes/partials/subscribe-4557.php.
  */
-import { rurl } from '@/lib/region';
+import { rurl, vxnRegion } from '@/lib/region';
 import type { PageConfig } from '@/lib/page-config';
 
 const FORM_SETTINGS =
@@ -20,6 +29,10 @@ export default function SubscribeSection({
   region: string;
 }) {
   const refererTitle = decodeURIComponent(page.post_title ?? 'VALUNXT Capital');
+  const heading =
+    vxnRegion(region) === 'en-ae'
+      ? 'Stay Ahead. Subscribe for Expert Insights.'
+      : 'Stay Ahead. Subscribe for Market Intelligence.';
 
   return (
     <div
@@ -64,21 +77,7 @@ export default function SubscribeSection({
               data-widget_type="heading.default"
             >
               <div className="elementor-widget-container">
-                <h3 className="elementor-heading-title elementor-size-default">Stay Ahead.</h3>
-              </div>
-            </div>
-            <div
-              className="elementor-element elementor-element-06eccf7 elementor-invisible animated-fast elementor-widget elementor-widget-heading"
-              data-id="06eccf7"
-              data-element_type="widget"
-              data-e-type="widget"
-              data-settings='{"_animation":"slideInUp","_animation_delay":100}'
-              data-widget_type="heading.default"
-            >
-              <div className="elementor-widget-container">
-                <h3 className="elementor-heading-title elementor-size-default">
-                  Subscribe for Market Intelligence.
-                </h3>
+                <h3 className="elementor-heading-title elementor-size-default">{heading}</h3>
               </div>
             </div>
           </div>

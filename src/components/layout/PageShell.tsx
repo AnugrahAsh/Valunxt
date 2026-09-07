@@ -9,6 +9,7 @@
  *     [captured Elementor footer]    includes/partials/footer-<id>.php
  *   </div>
  *   #scroll-to-top
+ *   [progress bar + partner dock]    includes/partials/vxn-dock.php
  *   [cookie consent]                 includes/partials/cookie-consent.php
  *   [scripts]                        includes/scripts.php
  *
@@ -23,10 +24,12 @@ import Preloader from './Preloader';
 import Header139 from './Header139';
 import Header3134 from './Header3134';
 import Header3837 from './Header3837';
+import SmoothScroll from './SmoothScroll';
 import Footer2094 from './Footer2094';
 import Footer3425 from './Footer3425';
 import CookieConsent from './CookieConsent';
 import SiteScripts from './SiteScripts';
+import VxnDock from './VxnDock';
 
 function SiteHeader({
   which,
@@ -60,6 +63,7 @@ export default function PageShell({
 
   return (
     <>
+      <SmoothScroll />
       <Preloader />
       <SiteHeader which={page.header} region={region} />
       <div id="page" className="main-container">
@@ -69,6 +73,7 @@ export default function PageShell({
       <div id="scroll-to-top" className="vamtam-scroll-to-top">
         <div id="scroll-to-top-text">top</div>
       </div>
+      <VxnDock region={region} />
       <CookieConsent region={region} />
       <SiteScripts page={page} region={region} />
     </>

@@ -13,8 +13,8 @@
  */
 import rawConfigs from '@/data/page-configs.json';
 import type { PageConfig } from './page-config';
-import { vxnRegion, vxnRegionExists, vxnServiceBySlug, vxnSubService } from './region';
-import { uaeServiceConfig, uaeSubServiceConfig } from './uae-service-pages';
+import { vxnRegion, vxnRegionExists } from './region';
+import { uaeServicePageConfig } from './uae-service-pages';
 
 type RawConfigs = Record<string, PageConfig & Record<string, unknown>>;
 
@@ -54,31 +54,28 @@ export function reportConfig(path: string): ReportPageConfig {
 }
 
 /**
- * The UAE services pages, which are derived from vxnServices() rather than
- * declared in the registry — see lib/uae-service-pages.ts for why.
+ * The UAE services pages, which are derived from the UAE service tree rather
+ * than declared in the registry — see lib/uae-service-pages.ts for why.
  *
  * They have to be resolvable from a bare URL, not just from their route. The
  * root layout asks resolveRequest() which page a request is for and emits that
  * page's stylesheets into <head>; a page the registry has never heard of got
- * the 404 fallback's three, so the breadcrumb hero (post-3752) and the
- * subscribe block (post-4557) both rendered unstyled. Deriving them here means
- * the head and the route agree on one config rather than two.
+ * the 404 fallback's three, so the vxh kit sheets the detail template needs
+ * would be missing. Deriving them here means the head and the route agree on
+ * one config rather than two.
  *
- * Matches /services/<service>/ and /services/<service>/<sub>/ only — the
- * /services/ index itself is a registry page in both markets.
+ * Matches /services/ and everything under it. The index is a registry page in
+ * both markets, but the UAE publishes a different page there — its own title,
+ * description and stylesheets — so it is derived from India's entry rather than
+ * served as it stands.
  */
 function derivedPage(region: string, rest: string): PageConfig | null {
   if (region !== 'en-ae') return null;
 
   const parts = rest.split('/').filter(Boolean);
-  if (parts[0] !== 'services' || parts.length < 2 || parts.length > 3) return null;
+  if (parts[0] !== 'services' || parts.length > 3) return null;
 
-  const service = vxnServiceBySlug(parts[1], region);
-  if (!service) return null;
-  if (parts.length === 2) return uaeServiceConfig(service);
-
-  const sub = vxnSubService(service, parts[2]);
-  return sub ? uaeSubServiceConfig(service, sub) : null;
+  return uaeServicePageConfig(parts.slice(1), CONFIGS['/services/'] ?? null);
 }
 
 /**

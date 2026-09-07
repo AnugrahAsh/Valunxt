@@ -1,14 +1,13 @@
 /**
  * /{region}/real-estate/{service}/ — the eight service pages.
  *
- * One dynamic segment covers all of them: they are the same template driven by
- * a different ServicePage record, exactly as the UAE services routes are driven
- * by vxnServices(). Adding a ninth is a record in the module's data/pages.ts
- * plus its slug in SERVICE_SLUGS — no file here changes.
+ * One dynamic segment covers all of them: they are the same template driven by a
+ * different ServicePage record. Adding a ninth is a record in
+ * data/pages.ts plus its slug in SERVICE_SLUGS — no file here changes.
  *
  * An unknown slug 404s rather than rendering an empty shell, and that 404 is the
- * site's own — realEstateRequest() answers false for it, so the root layout
- * serves the normal head and NotFoundBody renders styled. See src/app/layout.tsx.
+ * site's own: realEstateRequest() answers false for it, so the root layout
+ * serves the normal head and NotFoundBody renders styled.
  */
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -41,8 +40,8 @@ export default async function RealEstateServicePage({ params }: Params) {
   if (!page) notFound();
 
   return (
-    <Shell locale={region}>
-      <ServicePageBody locale={region} page={page} />
+    <Shell region={region}>
+      <ServicePageBody region={region} page={page} />
     </Shell>
   );
 }

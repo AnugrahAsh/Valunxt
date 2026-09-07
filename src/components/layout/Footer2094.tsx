@@ -4,7 +4,7 @@
  *
  * Port of includes/partials/footer-2094.php.
  */
-import { BASE, rurl } from '@/lib/region';
+import { BASE, rurl, vxnServices } from '@/lib/region';
 import { vxnEmail, vxnOffice, vxnYear } from '@/lib/site-data';
 import SocialIcons, { type SocialItem } from './SocialIcons';
 
@@ -28,6 +28,52 @@ const SOCIAL: readonly SocialItem[] = [
    and the UAE offices the UAE number — no office is ever listed under another
    country's phone. */
 const FOOTER_OFFICES = ['dubai', 'mumbai', 'noida'] as const;
+
+/**
+ * The Services column, built from vxnServices() rather than a fourth hand-written
+ * copy of the list.
+ *
+ * It used to name India's four verticals in both markets, so a UAE reader was
+ * offered four URLs that market does not publish. The registry already answers
+ * "what does this market lead with" for the header menu, the home page and the
+ * services index; reading it here means the footer can never disagree with them.
+ */
+function FooterServices({
+  region,
+  id,
+  hidden = false,
+  itemIds,
+}: {
+  region: string;
+  /** The captured <ul id>. */
+  id: string;
+  /** True for the hidden copy — every link gets tabindex="-1". */
+  hidden?: boolean;
+  /** The captured menu-item-<n> classes, in order, where the template had them. */
+  itemIds?: string[];
+}) {
+  const tab = hidden ? { tabIndex: -1 } : {};
+  return (
+    <ul id={id} className="elementor-nav-menu sm-vertical">
+      {vxnServices(region).map((s, i) => (
+        <li
+          key={s.href}
+          className={
+            'menu-item menu-item-type-post_type menu-item-object-page' +
+            (itemIds?.[i] ? ` menu-item-${itemIds[i]}` : '')
+          }
+        >
+          <a
+            href={rurl(region, s.href)}
+            className="elementor-item"
+            {...tab}
+            dangerouslySetInnerHTML={{ __html: s.title }}
+          />
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function Footer2094({ region }: { region: string }) {
   return (
@@ -189,34 +235,7 @@ export default function Footer2094({ region }: { region: string }) {
                       aria-label="Services"
                       className="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-vertical e--pointer-none"
                     >
-                      <ul id="menu-1-1a1c786" className="elementor-nav-menu sm-vertical">
-                        <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                          <a
-                            href={rurl(region, '/services/real-estate-investment-advisory/')}
-                            className="elementor-item"
-                          >
-                            Real Estate Investment Advisory
-                          </a>
-                        </li>
-                        <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                          <a href={rurl(region, '/services/capital-advisory/')} className="elementor-item">
-                            Capital Advisory
-                          </a>
-                        </li>
-                        <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                          <a
-                            href={rurl(region, '/services/research-intelligence/')}
-                            className="elementor-item"
-                          >
-                            Research &amp; Intelligence
-                          </a>
-                        </li>
-                        <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                          <a href={rurl(region, '/services/technology-ai/')} className="elementor-item">
-                            Technology &amp; AI
-                          </a>
-                        </li>
-                      </ul>
+                      <FooterServices region={region} id="menu-1-1a1c786" />
                     </nav>
                   </div>
                 </div>

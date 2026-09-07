@@ -1,197 +1,140 @@
 /**
- * The template behind all three L2 pages.
+ * The template behind all eight service pages.
  *
- * buy-property, sell-rent-lease-property and off-plan-properties are the same
- * page with different content, so they are one component driven by a
- * `ServicePage` record from data/pages.ts. A fourth service page costs a data
- * entry and a route file — no new component, no new CSS.
+ * They are the same page with different content, so they are one component
+ * driven by a `ServicePage` record from data/pages.ts. A ninth page costs a data
+ * entry and a slug in SERVICE_SLUGS — no new component, no new CSS, no new route.
  *
- * Shape: dark hero with three highlight tiles → "what's included" grid → the
- * numbered steps → page-specific FAQs → CTA. The reviews and partner bands are
- * reused from the pillar page so every entry point carries the same proof.
+ * It reuses the pillar page's sections wherever the content is the same thing
+ * said once: the gallery, the reviews, the FAQs, the partners and the enquiry
+ * band are the section's, not the landing page's, so every entry point carries
+ * the same proof rather than the front page hoarding it.
+ *
+ * Shape: a hero carrying the page's own title over its own photograph → the
+ * highlights strip → what's included → the numbered process on the navy panel →
+ * the gallery → the ask → proof.
  */
-import type { Locale, ServicePage } from '../lib/types';
-import { url } from '../lib/routes';
-import Accordion from './Accordion';
-import Faqs from './sections/Faqs';
-import Reviews from './sections/Reviews';
-import Partners from './sections/Partners';
-import Contact from './sections/Contact';
-import { ArrowRight } from './icons';
-import { Costs, Listings, PaymentPlans, PriceTable } from './sections/MarketDetail';
-import {
-  BUY_COSTS,
-  BUY_LISTINGS,
-  OFFPLAN_LISTINGS,
-  PAYMENT_PLANS,
-  RENT_LISTINGS,
-  RENT_PRICES,
-  SALE_PRICES,
-  SELL_COSTS,
-} from '../data/market';
+import { rurl } from '@/lib/region';
 
-/**
- * Which detail blocks each page carries. Buying wants stock, prices and the
- * cost of transacting; letting wants rental stock, rent bands and the seller's
- * costs; off-plan wants launches and payment plans. Keyed by slug so a new
- * page opts in by adding a row, not by editing the template below.
- */
-const DETAIL: Record<string, React.ReactNode> = {
-  'buy-property': (
-    <>
-      <Listings
-        title="Properties on the Market Now"
-        lede="A sample of current stock across Dubai's freehold communities — residential and commercial."
-        items={BUY_LISTINGS}
-      />
-      <PriceTable
-        title="What Property Costs, by Community"
-        lede="Indicative sale prices per square foot and the gross yields those prices imply."
-        rows={SALE_PRICES}
-        columns={['Apartments', 'Villas & townhouses', 'Gross yield']}
-      />
-      <Costs
-        title="The Full Cost of a Purchase"
-        lede="Everything payable beyond the price itself, set out before you make an offer rather than after."
-        rows={BUY_COSTS}
-      />
-    </>
-  ),
-  'sell-rent-lease-property': (
-    <>
-      <Listings
-        title="Rentals Available Now"
-        lede="A sample of current rental stock — apartments, family homes and commercial units."
-        items={RENT_LISTINGS}
-      />
-      <PriceTable
-        title="What Rents Achieve, by Community"
-        lede="Indicative annual rents and the cheque structures landlords in each community typically accept."
-        rows={RENT_PRICES}
-        columns={['Apartments', 'Villas & townhouses', 'Payment terms']}
-      />
-      <Costs
-        title="What Selling Costs You"
-        lede="The deductions between the achieved price and what reaches your account."
-        rows={SELL_COSTS}
-      />
-    </>
-  ),
-  'off-plan-properties': (
-    <>
-      <Listings
-        title="Launches Worth Considering"
-        lede="Registered projects with escrow in place, current payment plans and expected handover."
-        items={OFFPLAN_LISTINGS}
-      />
-      <PaymentPlans items={PAYMENT_PLANS} />
-    </>
-  ),
-};
+import type { Locale, ServicePage } from '../lib/types';
+import Accordion from './Accordion';
+import { ArrowRight, ArrowUpRight } from './icons';
+import { Communities, Contact, Faqs, Gallery, Partners, Reviews } from './sections';
 
 export default function ServicePageBody({
-  locale,
+  region,
   page,
   formAction,
 }: {
-  locale: Locale;
+  region: Locale;
   page: ServicePage;
   formAction?: string;
 }) {
   return (
     <>
-      <section className="re-phero">
-        <div className="re-phero__bg" aria-hidden="true">
+      {/* The hero, in the same clothes as the pillar page's but shorter — a
+          service page's job is to get to the substance, not to hold the screen. */}
+      <section className="vxn-re-hero" style={{ minHeight: 'clamp(460px, 74vh, 720px)' }}>
+        <div className="vxn-re-hero__media">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={page.heroImg} alt="" />
         </div>
-        <div className="re-wrap re-phero__inner">
-          <span className="re-eyebrow re-eyebrow--ghost">{page.eyebrow}</span>
-          <h1 className="re-h1">
-            <span>{page.title}</span>
-            <span>{page.titleAccent}</span>
-          </h1>
-          <p className="re-lede">{page.lede}</p>
+        <span className="vxn-re-hero__scrim" aria-hidden="true" />
 
-          <div className="re-phigh">
+        <div className="vxn-re-hero__inner">
+          <div className="vxn-re-hero__grid">
+            <div>
+              <span className="vxn-re__eyebrow vxn-re__eyebrow--inv">{page.eyebrow}</span>
+              <h1 className="vxn-re__h1 vxn-re-hero__title">
+                {page.title}
+                <em>{page.titleAccent}</em>
+              </h1>
+              <p className="vxn-re__lede vxn-re-hero__lede">{page.lede}</p>
+              <div className="vxn-re-hero__cta">
+                <a className="vxn-re__btn vxn-re__btn--solid" href="#contact">
+                  {page.ctaTitle.length > 40 ? 'Speak to an Advisor' : page.ctaTitle}
+                  <ArrowRight />
+                </a>
+                <a className="vxn-re__btn vxn-re__btn--ghost" href={rurl(region, '/real-estate/#gallery')}>
+                  View the portfolio
+                  <ArrowUpRight />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Highlights */}
+      <section className="vxn-re__sec vxn-re__sec--tight">
+        <div className="vxn-re__wrap">
+          <div className="vxn-re-val__items" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 0 }}>
             {page.highlights.map((h) => (
-              <div className="re-phigh__item" key={h.label}>
-                <p className="re-phigh__value">{h.value}</p>
-                <p className="re-phigh__label">{h.label}</p>
-                {h.detail ? <p className="re-phigh__detail">{h.detail}</p> : null}
+              <div className="vxn-re-val__item" key={h.label}>
+                <span className="vxn-re-about__value">{h.value}</span>
+                <h4 style={{ marginTop: 10 }}>{h.label}</h4>
+                {h.detail ? <p>{h.detail}</p> : null}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="re-section">
-        <div className="re-wrap">
-          <div className="re-sec-head">
-            <h2 className="re-h2">{page.offerTitle}</h2>
-            <p className="re-lede">{page.offerLede}</p>
+      {/* What's included */}
+      <section className="vxn-re__sec vxn-re__sec--cream">
+        <div className="vxn-re__wrap">
+          <div className="vxn-re__head">
+            <span className="vxn-re__eyebrow">What’s included</span>
+            <h2 className="vxn-re__h2">{page.offerTitle}</h2>
+            <p className="vxn-re__lede">{page.offerLede}</p>
           </div>
 
-          <div className="re-grid-3">
+          <div className="vxn-re-svcs">
             {page.offer.map((o) => (
-              <div className="re-offer-card" key={o.title}>
-                <h3 className="re-h3">{o.title}</h3>
-                <p>{o.summary}</p>
-                <ul className="re-svc__list">
-                  {o.bullets.map((b) => (
-                    <li key={b}>{b}</li>
-                  ))}
-                </ul>
+              <div className="vxn-re-svc" key={o.title}>
+                <div className="vxn-re-svc__body" style={{ paddingTop: 30 }}>
+                  <span className="vxn-re-svc__title">{o.title}</span>
+                  <span className="vxn-re-svc__summary">{o.summary}</span>
+                  <ul className="vxn-re-svc__list">
+                    {o.bullets.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="re-proc">
-        <div className="re-wrap">
-          <div className="re-proc__grid">
-            <figure className="re-proc__figure">
+      {/* Process */}
+      <section className="vxn-re__sec" id="process">
+        <div className="vxn-re__wrap">
+          <div className="vxn-re-proc">
+            <figure className="vxn-re-proc__figure">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={page.heroImg} alt="" loading="lazy" />
             </figure>
-            <div className="re-proc__panel">
-              <span className="re-eyebrow re-eyebrow--ghost">Process</span>
-              <h2 className="re-h2" style={{ margin: '16px 0 22px' }}>
-                {page.stepsTitle}
-              </h2>
+            <div className="vxn-re-proc__panel">
+              <span className="vxn-re__eyebrow vxn-re__eyebrow--inv">Process</span>
+              <h2 className="vxn-re__h2 vxn-re__h2--inv">{page.stepsTitle}</h2>
               <Accordion variant="steps" items={page.steps} initial={0} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Page-specific detail: stock, prices, plans and costs. */}
-      {DETAIL[page.slug] ?? null}
-
+      <Communities region={region} />
+      <Gallery />
+      <Contact formAction={formAction} />
+      <Reviews />
       <Faqs
-        locale={locale}
+        region={region}
         items={page.faqs}
         title={`${page.eyebrow} — Common Questions`}
         lede="The questions we are asked most often at this stage, answered plainly."
       />
-
-      <section className="re-section re-section--tight">
-        <div className="re-wrap">
-          <div className="re-pcta">
-            <h2 className="re-h2">{page.ctaTitle}</h2>
-            <p>{page.ctaBody}</p>
-            <a className="re-btn re-btn--light" href={url(locale, '/#contact')}>
-              Speak to an Advisor
-              <ArrowRight />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <Reviews />
       <Partners />
-      <Contact locale={locale} action={formAction} />
     </>
   );
 }

@@ -19,11 +19,11 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { headers } from 'next/headers';
 import { vxnSeoOrigin } from '@/lib/seo';
-import { vxnRegionData } from '@/lib/region';
+import { vxnRegionData, vxnRegionExists } from '@/lib/region';
 import { pageConfig, resolveRequest } from '@/lib/pages';
 import HeadAssets, { SiteFavicons } from '@/components/layout/HeadAssets';
-import { PRELOADER_GATE_SCRIPT } from '@/components/layout/Preloader';
 import { realEstateRequest } from '@/real-estate/lib/routes';
+import { PRELOADER_GATE_SCRIPT } from '@/components/layout/Preloader';
 import type { PageConfig } from '@/lib/page-config';
 
 export const metadata: Metadata = {
@@ -65,6 +65,16 @@ const CMS_BODY_CLASS =
   'elementor-kit-5 elementor-page elementor-page-3752';
 
 /**
+ * The document reset the real estate section needs, and nothing more.
+ *
+ * That section's stylesheet scopes everything under `.vxn-re`, which is exactly
+ * why `body` itself is not covered by it. On the rest of the site the Elementor
+ * cascade zeroes the body margin; here nothing does, so the browser default 8px
+ * would show as a gutter down both sides of every full-bleed section.
+ */
+const RE_DOCUMENT_CSS = `html,body{margin:0;padding:0;}body{background:#FCFBF8;-webkit-font-smoothing:antialiased;}`;
+
+/**
  * What head.php rendered for a URL with no page behind it — the 404 template.
  *
  * Read from the registry rather than restated here. It was restated, and it had
@@ -73,18 +83,6 @@ const CMS_BODY_CLASS =
  * neither — so every 404 rendered the subscribe form unstyled. The literal below
  * is only a floor, so the layout can never throw on a missing registry entry.
  */
-/**
- * The document reset the real estate section needs and nothing more.
- *
- * That section renders inside `.re-root`, and every rule in real-estate.css is
- * scoped under it — which is exactly why `body` itself is not covered. On the
- * rest of the site the Elementor cascade zeroes the body margin; here nothing
- * does, so the browser's default 8px would show as a white gutter down both
- * sides of every full-bleed section. The background matches `--re-page` so the
- * ground behind the module is the module's own, not white.
- */
-const RE_DOCUMENT_CSS = `html,body{margin:0;padding:0;}body{background:#FCFBF8;}`;
-
 const FALLBACK: PageConfig = pageConfig('/404/') ?? {
   title: 'VALUNXT Capital',
   body: '',
@@ -94,6 +92,23 @@ const FALLBACK: PageConfig = pageConfig('/404/') ?? {
   post_id: 0,
   path: '/',
 };
+
+/**
+ * The `vxn-p-<segment>` hook the inner-page skin keys off — the first path
+ * segment with the region prefix dropped, or `home` at the root of an edition.
+ * vxn-inner.css uses it to pick each page's artwork, so a page that does not
+ * carry it falls back to the generic stage.
+ *
+ * Port of the block at the foot of includes/head.php.
+ */
+function bodyPageClass(page: PageConfig | null, path: string): string {
+  const raw = (page?.path ?? path) || '/';
+  const segs = raw
+    .split('/')
+    .filter((p) => p !== '' && !vxnRegionExists(p));
+  const seg = segs.length ? segs[0].toLowerCase().replace(/[^a-z0-9-]/g, '') : 'home';
+  return `vxn-p-${seg}`;
+}
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const h = await headers();
@@ -113,19 +128,26 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     );
   }
 
-  /* The real estate section, for the same reason and with one difference.
-     It renders its own header and footer inside `.re-root`, and real-estate.css
-     is self-contained — it needs none of the 53 Elementor stylesheets, the
-     inline theme blocks or the WordPress body classes, and loading them only
-     gives the host cascade something to reach in with. So it gets a lean head:
-     the site's favicons, a body reset, and nothing else.
+  /* The real estate section, for the same reason as /admin and with one
+     difference.
+
+     It renders its own navigation and its own footer, and its stylesheet is
+     self-contained — so it needs none of the 53 Elementor stylesheets, the
+     inline theme blocks or the WordPress body classes. It was briefly built the
+     other way, inside PageShell with the whole cascade loaded, and the cost was
+     immediate: the kit styles `a` at (0,1,1) and every link in the section came
+     out white on white until each rule was rewritten to outrank it. A section
+     with its own chrome has nothing to gain from that fight.
+
+     What it does take is the brand: the two VALUNXT typefaces and the tokens in
+     its own sheet, so it reads as VALUNXT without carrying the theme.
 
      Unlike /admin it IS a public page, so analytics still runs and the icons are
-     still the site's — this is the same company, on the same domain.
+     still the site's — same company, same domain.
 
      realEstateRequest() answers only for the pillar page and the eight published
-     service slugs. An unknown slug under /real-estate/ therefore falls through
-     to the branch below and 404s in the site's own chrome, styled. */
+     service slugs, so an unknown slug under /real-estate/ falls through to the
+     branch below and 404s in the site's own chrome, styled. */
   const realEstate = realEstateRequest(path);
   if (realEstate) {
     return (
@@ -133,6 +155,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <head>
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <SiteFavicons />
+          {/* The brand's two faces, from the site's own font sheets — the only
+              part of the theme cascade this section has a use for. */}
+          <link rel="stylesheet" href="/assets/content/uploads/elementor/google-fonts/css/dmsans.css" media="all" />
+          <link rel="stylesheet" href="/assets/content/uploads/elementor/google-fonts/css/forum.css" media="all" />
+          {/* The version query is the cache key: /assets/* is served immutable for a
+              year, so this MUST be bumped whenever the sheet changes or browsers
+              keep the old one. Same convention as valunxt-brand.css?v=157. */}
+          <link rel="stylesheet" href="/assets/css/valunxt-realestate.css?v=10" media="all" />
           <style dangerouslySetInnerHTML={{ __html: RE_DOCUMENT_CSS }} />
         </head>
         <body>
@@ -157,7 +187,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         </noscript>
         <HeadAssets page={page ?? FALLBACK} />
       </head>
-      <body className={page?.body ?? CMS_BODY_CLASS} suppressHydrationWarning>
+      <body
+        className={`${page?.body ?? CMS_BODY_CLASS} ${bodyPageClass(page, path)}`}
+        suppressHydrationWarning
+      >
         {/* The intro gate reads sessionStorage and must settle before the first
             paint, so it is the one script that runs ahead of hydration. It only
             touches <html>, which is why that element suppresses the warning. */}

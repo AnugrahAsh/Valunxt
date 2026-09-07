@@ -7,8 +7,8 @@
  * It used to point at the *same page* in the other market, which reads well
  * until the two editions stop publishing the same pages. They have: the UAE has
  * its own six services and thirty pages beneath them, and India has none of
- * them — so switching country from /en-ae/services/mortgages-services/ offered
- * /en-in/services/mortgages-services/, which is a 404. Changing market is a
+ * them — so switching country from /en-ae/services/mortgage-services/ offered
+ * /en-in/services/mortgage-services/, which is a 404. Changing market is a
  * change of edition, so it starts at that edition's front door.
  *
  * No cookie work is needed here: proxy.ts records vxn_region from whatever
