@@ -49,19 +49,20 @@ order. A route file reads like the `index.php` it replaces:
 
 ```tsx
 // src/app/[region]/faq/page.tsx
-const { generateMetadata, Page } = definePage('/faq/', ({ page, region }) => (
-  <>
-    <PageHeroSection page={page} region={region} />
-    <FaqSection region={region} />
-    <SubscribeSection page={page} region={region} />
-  </>
+const { generateMetadata, Page } = definePage('/faq/', ({ region }) => (
+  <FaqBody region={region} />
 ));
 ```
+
+A page body is itself a sequence of sections, most of them from
+[`vxh/PageKit`](src/components/vxh/PageKit.tsx) — the opening, the FAQ, the
+newsletter, the closing band — with the page's own content between them.
 
 | Directory                                             | What lives there |
 | ----------------------------------------------------- | ---------------- |
 | [`src/components/layout/`](src/components/layout)      | The chrome: preloader, the three captured headers, the two captured footers, the mega menu, the region switcher, the cookie banner, the script block |
-| [`src/components/sections/`](src/components/sections)  | Sections shared by more than one page: page hero, subscribe band, FAQ, community, platform, research list and detail, industries, leadership, testimonials, track record, blog article, clients advisory |
+| [`src/components/sections/`](src/components/sections)  | Sections shared by more than one page: page hero, subscribe band, enquiry form, platform, research detail, industries, leadership, testimonials, track record, blog article, clients advisory |
+| [`src/components/vxh/`](src/components/vxh)            | The redesign's own kit: glyphs and abstracts, the shared page furniture, the animated grounds, the parallax engine and the 3D mark |
 | [`src/components/pages/`](src/components/pages)        | One component per page body, where that body is unique to the page |
 | [`src/app/`](src/app)                                  | Routes — thin files that name a page and list its sections |
 
@@ -113,11 +114,11 @@ motion that either explains something or answers the pointer.
 | | |
 |---|---|
 | `src/components/vxh/kit.tsx` | The kit: line icons, the sparkline, the abstract band layer, and the product-style mini UIs (`ledger`, `gauge`, `listing`, `bars`, `chart`, `pipe`). Port of `includes/vxh-kit.php`. |
-| `public/assets/css/vxn-mega.css` | Mega menu, second generation. Site-wide. |
+| `public/assets/css/vxn-mega.css` | Mega menu, second generation, and the burger's blue card panel. Site-wide. |
 | `public/assets/css/vxn-inner.css` | The inner-page skin: cobalt tokens site-wide and the stage treatment of the shared inner hero. Site-wide, keyed off the `vxn-p-<segment>` class the root layout puts on `<body>`. |
 | `public/assets/css/vxn-home-ae.css` | Tokens, buttons, cards and the abstract layer. Page-owned. |
 | `public/assets/css/vxn-services-ae.css` | The services components — the rail, the explorer, the tools. Page-owned. |
-| `public/assets/css/vxn-pages.css` | The About and Industries components. Page-owned. |
+| `public/assets/css/vxn-pages.css` | The shared page furniture — the opening, section heads, the FAQ, the newsletter, the parallax vocabulary — plus the components of About, Location, Careers, Research, Clients, Partnership, Community and Contact. Page-owned. |
 | [`SmoothScroll`](src/components/layout/SmoothScroll.tsx) | Lenis, site-wide: the wheel drives a velocity that decays rather than the scroll position directly, so a flick carries and the scroll-composed sections read a continuous position instead of a staircase of wheel steps. It moves the real document scroll, so sticky, anchors and every `getBoundingClientRect()` keep working. Off under reduced motion and in `/admin`; touch is left to the platform. |
 | `public/assets/js/vxn-home-ae.js` | Home behaviour: the console, the process deck, the intent tabs, the values rail, the counters. |
 | `public/assets/js/vxn-services-ae.js` | Services behaviour: the sticky rail, the explorer, the four interactive tools, the comparison toggle. |
@@ -132,10 +133,13 @@ the Elementor block — which is where the PHP's `<script defer>` tags executed.
 **Which pages carry it**
 
 - `/en-ae/` — [`HomeAeBody`](src/components/pages/HomeAeBody.tsx)
-- `/en-ae/services/` — [`UaeServicesBody`](src/components/pages/UaeServicesBody.tsx)
+- `/services/` — [`ServicesIndexBody`](src/components/pages/ServicesIndexBody.tsx),
+  both editions
 - `/en-ae/services/<practice>/` and `/<practice>/<sub>/` — one template,
   [`ServiceDetailBody`](src/components/pages/uae-services/ServiceDetailBody.tsx)
-- `/about/` and `/industries/` — both editions
+- `/about/`, `/about/careers/`, `/location/`, `/faq/`, `/research/`,
+  `/community/`, `/clients/`, `/partnership/`, `/contact/` and `/industries/` —
+  both editions
 - The mega menu, the reading-progress bar and the "Talk to a partner" dock —
   every page
 - The enquiry block that closes the home page, the services index and every
@@ -375,6 +379,82 @@ gallery (three stock photographs saying nothing the copy did not), the related
 insights (the same three posts on all six pages) and the other-practices grid
 all went; expertise folded into the overview, and the grid became one line of
 links at the foot.
+
+### The rest of the site
+
+Ten pages that were still captured Elementor — Who We Are, Location, Careers,
+FAQ, Research & Reports, Community, Clients, Partnership, Contact and the
+services index — were rebuilt in the same language. What they had in common was
+the shape of the failure: a photographic banner with the page's name printed
+over it, then the content as a grid of bordered boxes, then a newsletter band in
+a different typeface from everything above it.
+
+**The shared parts.** [`vxh/PageKit`](src/components/vxh/PageKit.tsx) holds the
+four blocks a page repeats — the opening (`PageHero`), section heads, the FAQ
+disclosure and the newsletter — so ten copies of three ideas became one. A page
+still owns its ground: which abstract or animated field sits behind the hero,
+which parallax its sections ride, and everything in between. No two pass the
+same pair, which is the point.
+
+| | |
+|---|---|
+| [`vxh/PageKit`](src/components/vxh/PageKit.tsx) | The opening, section heads, `Faq` / `FaqGroups` (native `<details>`, one FAQPage JSON-LD built from the same array that renders the markup), the newsletter band and the closing "ways to reach us". |
+| [`vxh/Field`](src/components/vxh/Field.tsx) | The ogl grounds, named: `ink`, `slate`, `paper`, `mist`. Six pages each picking their own four hex values is how a palette stops being one. |
+| [`vxh/Subscribe`](src/components/vxh/Subscribe.tsx) | The newsletter field. Same `form_id`, `post_id` and `form_fields[email]` the Elementor widget sent, so a subscription is indistinguishable from one already in the log; it intercepts its own submit because the endpoint answers with JSON. |
+| [`vxh/Parallax`](src/components/vxh/Parallax.tsx) | One rAF loop for the whole site. It writes two numbers on any `[data-vxh-par]` element — `--p` and `--pc` — and CSS decides what they mean. Ten effects (`rise`, `sink`, `deep`, `slide`, `tilt`, `zoom`, `spin`, `ghost`, `sway`, `peel`) are ten rules rather than ten scroll listeners — one per page, none repeated; adding an eleventh is CSS. |
+| [`vxh/markScene`](src/components/vxh/markScene.ts) | The X as geometry, shared by every 3D mark on the site: the fetch, the parse, the extrusion and the room it is lit by. The mark is the logo file itself, not a redraw of it. |
+| [`vxh/Mark`](src/components/vxh/Mark.tsx) | The X as a section's ground — the About page's spine. It turns on its own account, adds the scroll to that, leans toward the pointer, and can be grabbed and thrown. |
+
+**Who We Are** is the shortest of the three generations it has had. The middle
+of the page is one scrolled run with the mark turning behind it and five
+chapters arriving over it — who we are, what we do, how we work, why the group
+is four firms, where we are. That is the whole of "about us", as five short
+paragraphs rather than nine sections. It degrades to five paragraphs in a
+column: three is imported only near the viewport, only with WebGL, never under
+reduced motion, and nothing on the page waits for it.
+
+**Location** was eight cards with stock photographs of cities and no map, so the
+one question the page exists to answer took a trip to Google. It is now one map
+with four pins ([`OfficeAtlas`](src/components/pages/location/OfficeAtlas.tsx)),
+an aerial toggle for the surroundings, and every office still listed in full
+underneath — which is what a reader without the script gets, and what a crawler
+indexes. The aerial view is Google's classic embed with `t=k`; a 3D tiles
+renderer needs an API key provisioned, billed and rotated, and a key that has to
+be rotated is not a better map, it is a map that stops working.
+
+**The services index** is now one page for both markets, read from
+`vxnServices()`. India led with four verticals and the UAE with six practices,
+which is a difference in the data; they had also drifted into two different
+designs, which was not. The practices are numbered rows, and the photographs
+stack in a sticky frame beside them where the one on top is the practice you are
+reading ([`PracticeIndex`](src/components/pages/uae-services/PracticeIndex.tsx)
+moves a class and does nothing else).
+
+**Every one of the ten** closes with a FAQ and the newsletter. The questions are
+specific to the page rather than a shared block, every answer is in the DOM
+whether or not its panel is open, and each page emits one FAQPage entity.
+
+### The burger
+
+Elementor's dropdown — the desktop list re-rendered as a white stack under the
+bar — was the whole navigation of the site on a phone, and on every laptop under
+1400px where the bar collapses.
+
+[`VxnMenu`](src/components/layout/VxnMenu.tsx) replaces it with a blue card that
+comes in from the left, inset from all four edges so the page stays visible
+around it. Four things move on four curves: the veil fades, the card slides and
+un-skews on a hinge at its left edge, the items stagger in behind it, and the
+burger's three rules fold into a cross. Closing runs straight back with no
+stagger, because a menu that takes 700ms to leave feels broken however well it
+arrives.
+
+Header 3837 renders its bar twice — the sticky copy and the spacer that reserves
+its height — so the panel is mounted once by `PageShell` and the buttons carry
+the intent rather than the state. They agree because the event names the target
+state rather than toggling: two buttons and an Escape key can never disagree
+about whether it is open. Focus moves into the card and Tab is kept inside it;
+the page behind stops scrolling, and the floating chrome the site carries at
+every corner is hidden while it is open.
 
 ### The UAE service tree
 

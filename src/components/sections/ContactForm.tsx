@@ -12,7 +12,9 @@
  *
  * FIELD NAMES ARE LOAD-BEARING. form-handler matches by suffix — `full_name`,
  * `email`, `phone`, `company` — so renaming one would log the value and never
- * store it. They are unchanged from the block this replaces.
+ * store it. Only the prefix is a prop, which is why the suffixes are built here
+ * rather than written out per field: a typo in one of four literals is a lead
+ * that arrives with a blank name.
  *
  * WHY A CLIENT COMPONENT. The endpoint answers with Elementor-shaped JSON, so a
  * native post would navigate the visitor to a page of raw JSON. This intercepts
@@ -39,14 +41,32 @@ const LEAD_ENDPOINT = '/form-handler/';
 
 type Status = { state: 'idle' | 'sending' } | { state: 'sent' | 'error'; message: string };
 
-const FIELDS: { id: string; name: string; label: string; type: string; autoComplete: string }[] = [
-  { id: 'home_full_name', name: 'form_fields[home_full_name]', label: 'Full name', type: 'text', autoComplete: 'name' },
-  { id: 'home_email', name: 'form_fields[home_email]', label: 'Email', type: 'email', autoComplete: 'email' },
-  { id: 'home_phone', name: 'form_fields[home_phone]', label: 'Phone', type: 'tel', autoComplete: 'tel' },
-  { id: 'home_company', name: 'form_fields[home_company]', label: 'Company', type: 'text', autoComplete: 'organization' },
+const FIELDS: { key: string; label: string; type: string; autoComplete: string }[] = [
+  { key: 'full_name', label: 'Full name', type: 'text', autoComplete: 'name' },
+  { key: 'email', label: 'Email', type: 'email', autoComplete: 'email' },
+  { key: 'phone', label: 'Phone', type: 'tel', autoComplete: 'tel' },
+  { key: 'company', label: 'Company', type: 'text', autoComplete: 'organization' },
 ];
 
-export default function ContactForm({ privacyHref }: { privacyHref: string }) {
+export default function ContactForm({
+  privacyHref,
+  /* Which lead form this is, in form-handler's SOURCE_MAP — 5099fe1 is the
+     generic enquiry, 7655e08 is the Contact page. Passing the right one is what
+     labels the row in the admin panel; getting it wrong still stores the lead,
+     under the wrong heading. */
+  formId = '5099fe1',
+  postId = '17',
+  /* The field-name prefix. form-handler matches by suffix, so this only has to
+     be distinct enough that two forms on one page do not share ids. */
+  prefix = 'home',
+  submitLabel = 'Send enquiry',
+}: {
+  privacyHref: string;
+  formId?: string;
+  postId?: string;
+  prefix?: string;
+  submitLabel?: string;
+}) {
   const [status, setStatus] = useState<Status>({ state: 'idle' });
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -87,21 +107,21 @@ export default function ContactForm({ privacyHref }: { privacyHref: string }) {
       onSubmit={onSubmit}
       aria-label="Enquiry"
     >
-      <input type="hidden" name="form_id" value="5099fe1" />
-      <input type="hidden" name="post_id" value="17" />
+      <input type="hidden" name="form_id" value={formId} />
+      <input type="hidden" name="post_id" value={postId} />
       <input type="hidden" name="referer_title" value="VALUNXT Capital" />
-      <input type="hidden" name="queried_id" value="17" />
+      <input type="hidden" name="queried_id" value={postId} />
 
       <div className="vxc-form__fields">
         {FIELDS.map((f) => (
-          <p className="vxc-field" key={f.id}>
-            <label className="vxc-field__label" htmlFor={`vxc-${f.id}`}>
+          <p className="vxc-field" key={f.key}>
+            <label className="vxc-field__label" htmlFor={`vxc-${prefix}-${f.key}`}>
               {f.label}
             </label>
             <input
               className="vxc-field__input"
-              id={`vxc-${f.id}`}
-              name={f.name}
+              id={`vxc-${prefix}-${f.key}`}
+              name={`form_fields[${prefix}_${f.key}]`}
               type={f.type}
               autoComplete={f.autoComplete}
               required
@@ -112,7 +132,7 @@ export default function ContactForm({ privacyHref }: { privacyHref: string }) {
 
       <div className="vxc-form__foot">
         <button className="vxc-send" type="submit" disabled={sending}>
-          {sending ? 'Sending…' : 'Send enquiry'}
+          {sending ? 'Sending…' : submitLabel}
           <Ico name="ne" size={16} />
         </button>
         <p className="vxc-fine">

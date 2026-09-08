@@ -352,3 +352,334 @@ nav.elementor-nav-menu--dropdown .vxn-mega__side { display: none !important; }
 	.elementor-nav-menu--main .vxn-mega__panel>.vxn-mega__wrap { background: rgba(255, 255, 255, .985) !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
 	.elementor-nav-menu--main .vxn-mega__side { background: #F6F4EF; }
 }
+
+
+/* ==========================================================================
+   THE BURGER, AND THE CARD IT OPENS (2026-09-07)
+
+   Elementor's dropdown is gone — see layout/VxnMenu for what replaced it and
+   why. What is left of the captured markup is the `<nav>` the per-post
+   stylesheets address the widget through, so it is hidden here rather than
+   removed there.
+
+   The card is blue, white-typed, inset from all four edges, and comes in from
+   the left. Four things move on four curves: the veil fades, the card slides
+   and un-skews, the items stagger in behind it, and the burger's three rules
+   fold into a cross. Nothing here runs under reduced motion.
+   ========================================================================== */
+
+/* Elementor's own dropdown, and its toggle, in every header. */
+.elementor-location-header nav.elementor-nav-menu--dropdown,
+.elementor-location-header .elementor-menu-toggle { display: none !important; }
+
+/* --- The burger ----------------------------------------------------------- */
+
+.vxn-burger {
+	display: none;
+	appearance: none;
+	-webkit-appearance: none;
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+	width: 46px;
+	height: 46px;
+	padding: 0 !important;
+	min-height: 0 !important;
+	border: 1px solid var(--vxh-line, rgba(14, 36, 110, .12)) !important;
+	border-radius: 14px !important;
+	background: #fff !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	color: #16233B;
+	transition: border-color .25s ease, background-color .25s ease, transform .3s cubic-bezier(.22, .61, .36, 1);
+}
+.vxn-burger:hover { border-color: rgba(20, 54, 216, .34) !important; transform: translateY(-1px); }
+.vxn-burger:focus-visible { outline: 2px solid #1436D8; outline-offset: 3px; }
+
+.vxn-burger__box { position: relative; display: block; width: 20px; height: 14px; }
+.vxn-burger__box i {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 1.7px;
+	border-radius: 2px;
+	background: currentColor;
+	transition: transform .42s cubic-bezier(.65, 0, .35, 1), opacity .2s ease, width .32s ease;
+}
+.vxn-burger__box i:nth-child(1) { top: 0; }
+.vxn-burger__box i:nth-child(2) { top: 6.15px; width: 72%; }
+.vxn-burger__box i:nth-child(3) { top: 12.3px; }
+.vxn-burger:hover .vxn-burger__box i:nth-child(2) { width: 100%; }
+
+/* Open: the middle rule goes, the outer two meet and cross. */
+.vxn-burger[aria-expanded="true"] .vxn-burger__box i:nth-child(2) { opacity: 0; transform: translateX(-8px); }
+.vxn-burger[aria-expanded="true"] .vxn-burger__box i:nth-child(1) { transform: translateY(6.15px) rotate(45deg); }
+.vxn-burger[aria-expanded="true"] .vxn-burger__box i:nth-child(3) { transform: translateY(-6.15px) rotate(-45deg); }
+
+/* Below 1400 the bar cannot hold the items at a readable size, so the card is
+   the navigation — same breakpoint the desktop list is hidden at. */
+@media (max-width: 1399px) { .vxn-burger { display: inline-flex; } }
+
+/* The floating chrome the site carries at every corner — the partner dock, the
+   scroll-to-top button, the reading progress bar — all sit above the page and
+   would sit above this too. While the card is open they are not what the
+   visitor is looking at. */
+.vxn-menu-open .vxn-dock,
+.vxn-menu-open #scroll-to-top,
+.vxn-menu-open .vxn-progress {
+	opacity: 0 !important;
+	pointer-events: none !important;
+	transition: opacity .25s ease;
+}
+
+/* --- The card ------------------------------------------------------------- */
+
+.vxn-menu {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	pointer-events: none;
+	font-family: "DM Sans", -apple-system, "Segoe UI", sans-serif;
+}
+.vxn-menu.is-open { pointer-events: auto; }
+
+.vxn-menu__veil {
+	position: absolute;
+	inset: 0;
+	appearance: none;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
+	background: rgba(6, 18, 58, .5) !important;
+	-webkit-backdrop-filter: blur(6px) saturate(1.05);
+	backdrop-filter: blur(6px) saturate(1.05);
+	opacity: 0;
+	transition: opacity .5s ease;
+}
+.vxn-menu.is-open .vxn-menu__veil { opacity: 1; }
+
+.vxn-menu__card {
+	position: absolute;
+	top: clamp(10px, 1.4vw, 18px);
+	bottom: clamp(10px, 1.4vw, 18px);
+	left: clamp(10px, 1.4vw, 18px);
+	width: min(432px, calc(100vw - clamp(20px, 2.8vw, 36px)));
+	display: flex;
+	flex-direction: column;
+	border-radius: clamp(18px, 2vw, 26px);
+	overflow: hidden auto;
+	overscroll-behavior: contain;
+	color: #fff;
+	background:
+		radial-gradient(120% 80% at 12% 0%, rgba(79, 120, 255, .55) 0%, rgba(79, 120, 255, 0) 62%),
+		linear-gradient(158deg, #0B2DBE 0%, #1436D8 46%, #2F63FF 100%);
+	box-shadow: 0 50px 120px -40px rgba(4, 16, 47, .7), 0 0 0 1px rgba(255, 255, 255, .1) inset;
+	/* Off to the left and turned very slightly away, so it arrives rather than
+	   appears. transform-origin on the far edge is what makes the skew read as
+	   a hinge instead of a wobble. */
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, .3) transparent;
+	transform-origin: left center;
+	transform: translate3d(-104%, 0, 0) rotateY(9deg) scale(.97);
+	opacity: 0;
+	transition:
+		transform .62s cubic-bezier(.22, .84, .3, 1),
+		opacity .3s ease .04s;
+}
+.vxn-menu.is-open .vxn-menu__card { transform: none; opacity: 1; }
+/* It takes focus when it opens so the keyboard follows the eye; the ring would
+   be a selection nobody made. Everything inside it keeps its own. */
+.vxn-menu__card:focus { outline: none; }
+.vxn-menu__card::-webkit-scrollbar { width: 6px; }
+.vxn-menu__card::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .28); border-radius: 3px; }
+
+/* One woven texture over the blue, so the card is not a flat fill. */
+.vxn-menu__card::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.075' stroke-width='1'%3E%3Cpath d='M0 56 L56 0 M-14 14 L14 -14 M42 70 L70 42'/%3E%3C/g%3E%3C/svg%3E");
+	background-size: 56px 56px;
+}
+.vxn-menu__card > * { position: relative; }
+
+/* Everything inside rides one stagger: --i is set per item in the markup, and
+   the card's own transition has to be underway before the first one starts. */
+.vxn-menu__top,
+.vxn-menu__list > li,
+.vxn-menu__foot {
+	opacity: 0;
+	transform: translate3d(-22px, 0, 0);
+	transition: opacity .5s ease, transform .6s cubic-bezier(.22, .61, .36, 1);
+	transition-delay: calc(160ms + var(--i, 0) * 52ms);
+}
+.vxn-menu.is-open .vxn-menu__top,
+.vxn-menu.is-open .vxn-menu__list > li,
+.vxn-menu.is-open .vxn-menu__foot { opacity: 1; transform: none; }
+/* Closing runs straight back, with no stagger — a menu that takes 700ms to
+   leave feels broken however well it arrives. */
+.vxn-menu:not(.is-open) .vxn-menu__top,
+.vxn-menu:not(.is-open) .vxn-menu__list > li,
+.vxn-menu:not(.is-open) .vxn-menu__foot { transition-delay: 0s; transition-duration: .18s; }
+
+/* --- Head ----------------------------------------------------------------- */
+
+.vxn-menu__top {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: clamp(17px, 2.4vw, 28px) clamp(22px, 3vw, 34px) clamp(14px, 1.8vw, 20px);
+	border-bottom: 1px solid rgba(255, 255, 255, .14);
+}
+.vxn-menu__brand img { display: block; width: 148px; height: auto; }
+.vxn-menu__x {
+	appearance: none;
+	cursor: pointer;
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	flex: 0 0 auto;
+	padding: 0 !important;
+	min-height: 0 !important;
+	border: 1px solid rgba(255, 255, 255, .26) !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, .08) !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	color: #fff !important;
+	transition: background-color .25s ease, transform .35s cubic-bezier(.22, .61, .36, 1);
+}
+/* The glyph is the kit's arrow, turned to point back at the edge it came from. */
+.vxn-menu__x svg { transform: rotate(180deg); }
+.vxn-menu__x:hover { background: rgba(255, 255, 255, .18) !important; transform: translateX(-3px); }
+.vxn-menu__x:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* --- The list ------------------------------------------------------------- */
+
+.vxn-menu__nav { flex: 1 1 auto; padding: clamp(6px, 1.4vw, 14px) clamp(22px, 3vw, 34px); }
+.vxn-menu__list { list-style: none; margin: 0; padding: 0; counter-reset: none; }
+.vxn-menu__list > li + li { border-top: 1px solid rgba(255, 255, 255, .12); }
+
+.vxn-menu__link {
+	display: grid;
+	grid-template-columns: 2.4rem minmax(0, 1fr) 20px;
+	align-items: center;
+	gap: 14px;
+	padding: 12px 0;
+	color: #fff !important;
+	text-decoration: none;
+	transition: padding-left .35s cubic-bezier(.22, .61, .36, 1);
+}
+.vxn-menu__link:hover { padding-left: 8px; }
+.vxn-menu__n {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: .16em;
+	color: rgba(255, 255, 255, .5);
+	font-variant-numeric: tabular-nums;
+	transition: color .25s ease;
+}
+.vxn-menu__link:hover .vxn-menu__n { color: #fff; }
+.vxn-menu__t {
+	font-size: clamp(23px, 3.4vw, 30px);
+	font-weight: 500;
+	letter-spacing: -.032em;
+	line-height: 1.06;
+}
+.vxn-menu__link svg { justify-self: end; opacity: .45; transition: opacity .25s ease, transform .35s cubic-bezier(.22, .61, .36, 1); }
+.vxn-menu__link:hover svg { opacity: 1; transform: translate(2px, -2px); }
+
+/* The second tier. Small, quiet, and always open — a menu that needs to be
+   opened before it can be read is one more click on the way to a page. */
+.vxn-menu__kids {
+	list-style: none;
+	margin: -2px 0 12px;
+	padding: 0 0 0 calc(2.4rem + 14px);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 18px;
+}
+.vxn-menu__kids a {
+	font-size: 13.5px;
+	line-height: 1.45;
+	color: rgba(255, 255, 255, .68) !important;
+	text-decoration: none;
+	transition: color .2s ease;
+}
+.vxn-menu__kids a:hover { color: #fff !important; text-decoration: underline; text-underline-offset: 3px; }
+
+/* --- Foot ----------------------------------------------------------------- */
+
+.vxn-menu__foot {
+	flex: 0 0 auto;
+	padding: clamp(14px, 2vw, 22px) clamp(22px, 3vw, 34px) clamp(18px, 2.6vw, 28px);
+	border-top: 1px solid rgba(255, 255, 255, .14);
+	background: rgba(4, 16, 47, .22);
+}
+.vxn-menu__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 22px;
+	border-radius: 999px;
+	background: #fff;
+	color: #1436D8 !important;
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: -.01em;
+	text-decoration: none;
+	transition: transform .3s cubic-bezier(.22, .61, .36, 1), box-shadow .3s ease;
+}
+.vxn-menu__cta:hover { transform: translateY(-2px); box-shadow: 0 16px 34px -14px rgba(0, 0, 0, .5); }
+.vxn-menu__cta svg { transition: transform .35s cubic-bezier(.22, .61, .36, 1); }
+.vxn-menu__cta:hover svg { transform: translate(2px, -2px); }
+
+.vxn-menu__more {
+	list-style: none;
+	margin: 16px 0 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 16px;
+}
+.vxn-menu__more a {
+	font-size: 12.5px;
+	color: rgba(255, 255, 255, .62) !important;
+	text-decoration: none;
+	transition: color .2s ease;
+}
+.vxn-menu__more a:hover { color: #fff !important; }
+
+.vxn-menu__lines { display: grid; gap: 7px; margin-top: 16px; }
+.vxn-menu__lines a,
+.vxn-menu__lines span {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 13px;
+	color: rgba(255, 255, 255, .8) !important;
+	text-decoration: none;
+}
+.vxn-menu__lines a:hover { color: #fff !important; }
+.vxn-menu__lines svg { color: rgba(255, 255, 255, .5); flex: 0 0 auto; }
+
+/* Short screens: the card scrolls, and the head stays put while it does. */
+@media (max-height: 720px) {
+	.vxn-menu__t { font-size: clamp(20px, 3vw, 25px); }
+	.vxn-menu__link { padding: 11px 0; }
+	.vxn-menu__kids { margin-bottom: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.vxn-menu__card,
+	.vxn-menu__veil,
+	.vxn-menu__top,
+	.vxn-menu__list > li,
+	.vxn-menu__foot { transition-duration: .001s !important; transition-delay: 0s !important; }
+	.vxn-menu__card { transform: translate3d(-104%, 0, 0); }
+	.vxn-menu.is-open .vxn-menu__card { transform: none; }
+}

@@ -73,6 +73,13 @@ export interface Partner {
 export interface ServicePage {
   /** Last path segment, e.g. 'buy-property'. */
   slug: string;
+  /**
+   * Which set of stock this page browses. Present on the three transaction
+   * pages only; when it is set, the template renders the search and the
+   * listings rail locked to that intent, so a visitor who landed on Rent can
+   * search rentals without going back to the pillar page for the filter.
+   */
+  listingKind?: 'buy' | 'rent' | 'offplan';
   eyebrow: string;
   title: string;
   /** Second line of the hero title, set in the display serif. */

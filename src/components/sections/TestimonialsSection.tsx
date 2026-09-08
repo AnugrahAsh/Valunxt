@@ -1,33 +1,58 @@
-/* Client testimonials section, rendered on /clients/.
+/* Client testimonials, on /clients/.
 
-   Driven by src/data/testimonials.ts, which ships empty — see the note at the
-   top of that file. When empty this section renders nothing at all, so
-   /clients/ is unchanged until real, consented quotes exist.
+   Driven by src/data/testimonials.ts, which ships EMPTY on purpose — writing a
+   testimonial would be fabricating a client endorsement, so the quotes are left
+   to VALUNXT. See the note at the top of that file. While the array is empty
+   this renders nothing at all; add one consented entry and the section appears.
+
+   Restyled into the kit's language with the rest of /clients/, so the day a
+   real quote lands it is not the one section on the page in the old typeface.
+   It carries its own CSS because it is the only place these rules are needed
+   and the sheet should not grow a block for markup that is usually absent.
 
    Port of includes/partials/testimonials.php. */
 import TESTIMONIALS from '@/data/testimonials';
 
 const CSS = `
 /* ===== VALUNXT testimonials =============================================== */
-.vxn-quotes{--ny:#0E355F;--ny2:#0053B7;--gd:#0053B7;--gd2:#9C00DD;--body:#4d5863;--muted:#6b757e;--line:#e5e1d8;--paper:#f7f6f3;font-family:"DM Sans",sans-serif;color:var(--body);background:var(--paper);padding:66px 0 72px;}
-.vxn-quotes *{box-sizing:border-box;}
-.vxn-quotes__wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
-.vxn-quotes__eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gd2);font-weight:600;margin:0 0 14px;}
-.vxn-quotes h2.vxn-quotes__h{font-family:"Forum",serif!important;font-weight:400!important;color:var(--ny)!important;line-height:1.1;font-size:clamp(27px,3.4vw,42px);margin:0 0 18px;}
-.vxn-quotes__lead{margin:0 0 42px;max-width:72ch;font-size:16.5px;line-height:1.8;}
-.vxn-quotes__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
-.vxn-quotes__item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:32px 30px 28px;display:flex;flex-direction:column;margin:0;}
-.vxn-quotes__mark{font-family:"Forum",serif;font-size:46px;line-height:.7;color:var(--gd);margin:0 0 16px;}
-.vxn-quotes__text{margin:0 0 24px;padding:0;border:0;font-size:16px;line-height:1.8;color:var(--ny);}
-.vxn-quotes__attr{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);}
-.vxn-quotes__name{margin:0;font-size:14.5px;font-weight:600;color:var(--ny);}
-.vxn-quotes__role{margin:3px 0 0;font-size:13.5px;color:var(--muted);line-height:1.6;}
-.vxn-quotes__svc{display:inline-block;margin-top:12px;background:var(--paper);color:var(--ny2);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:3px;}
-.vxn-quotes__consent{margin:26px 0 0;font-size:12.5px;line-height:1.7;color:var(--muted);}
-
-@media(max-width:960px){.vxn-quotes__grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:640px){.vxn-quotes{padding:48px 0 54px;}.vxn-quotes__grid{grid-template-columns:1fr;}}
+.vxn-quotes { padding: clamp(56px, 7.5vw, 112px) 0; background: #fff; border-top: 1px solid var(--vxh-line); }
+.vxn-quotes__wrap { max-width: var(--vxh-max, 1280px); margin: 0 auto; padding: 0 var(--vxh-pad, 24px); }
+.vxn-quotes__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--vxh-blue); margin: 0 0 14px; }
+.vxn-quotes h2.vxn-quotes__h {
+	font-family: var(--vxh-display) !important;
+	font-weight: 500 !important;
+	font-size: clamp(26px, 3.4vw, 46px) !important;
+	letter-spacing: -.035em;
+	line-height: 1.08 !important;
+	color: var(--vxh-ink) !important;
+	margin: 0 0 18px;
+	max-width: 20ch;
+}
+.vxn-quotes__lead { margin: 0 0 clamp(34px, 5vw, 60px); max-width: 60ch; font-size: 15px; line-height: 1.7; color: var(--vxh-muted); }
+/* Hairline-ruled, like every other list on these pages — a quote is already a
+   quotation mark and an attribution; it does not also need a box. */
+.vxn-quotes__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 clamp(24px, 4vw, 56px); }
+.vxn-quotes__item { display: flex; flex-direction: column; margin: 0; padding: clamp(22px, 2.6vw, 32px) 0; border-top: 1px solid var(--vxh-line); }
+.vxn-quotes__mark { font-family: var(--vxh-display); font-size: 44px; line-height: .6; color: rgba(20, 54, 216, .22); margin: 0 0 18px; }
+.vxn-quotes__text {
+	margin: 0 0 22px;
+	padding: 0;
+	border: 0;
+	font-family: var(--vxh-display);
+	font-size: clamp(16px, 1.5vw, 20px);
+	font-weight: 500;
+	letter-spacing: -.02em;
+	line-height: 1.4;
+	color: var(--vxh-ink);
+	text-wrap: pretty;
+}
+.vxn-quotes__attr { margin-top: auto; }
+.vxn-quotes__name { margin: 0; font-size: 14px; font-weight: 600; color: var(--vxh-ink); }
+.vxn-quotes__role { margin: 3px 0 0; font-size: 13px; color: var(--vxh-muted); line-height: 1.55; }
+.vxn-quotes__svc { display: inline-block; margin-top: 12px; padding: 5px 11px; border: 1px solid var(--vxh-line); border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--vxh-blue); }
+.vxn-quotes__consent { margin: clamp(26px, 3vw, 38px) 0 0; padding-top: 20px; border-top: 1px solid var(--vxh-line); font-size: 12.5px; line-height: 1.65; color: var(--vxh-muted); max-width: 74ch; }
 `;
+
 
 export default function TestimonialsSection() {
   const quotes = TESTIMONIALS;

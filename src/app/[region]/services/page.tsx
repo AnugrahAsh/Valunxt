@@ -1,18 +1,21 @@
 /**
- * /services/ — the services index, one per market.
+ * /services/ — the services index, one page for both markets.
  *
- * India keeps its captured page (ServicesBody): the group's four verticals, each
- * with a written page behind it. The UAE leads with six different practices and
- * six different URLs, so it gets its own index rather than being shown India's
- * four and sent to India's pages.
+ * It used to be two: India's captured Elementor page and, at the same path, a
+ * second UAE-only page. They named different practices because the markets do,
+ * but they had also drifted into two different designs. ServicesIndexBody reads
+ * the market registry, so the practices still differ and the page does not.
+ *
+ * The declaration is still per market — the UAE index has its own title,
+ * description and stylesheet list — and is built in lib/uae-service-pages.ts
+ * rather than here, because the root layout resolves the page from the URL to
+ * emit its stylesheets, so the two have to read the same declaration or the page
+ * renders unstyled.
  */
 import type { Metadata } from 'next';
 
 import PageShell from '@/components/layout/PageShell';
-import SubscribeSection from '@/components/sections/SubscribeSection';
-import ContactSection from '@/components/sections/ContactSection';
-import ServicesBody from '@/components/pages/ServicesBody';
-import UaeServicesBody from '@/components/pages/UaeServicesBody';
+import ServicesIndexBody from '@/components/pages/ServicesIndexBody';
 import { buildMetadata } from '@/lib/seo';
 import { requirePageConfig } from '@/lib/pages';
 import { vxnRegion } from '@/lib/region';
@@ -23,16 +26,6 @@ const PATH = '/services/';
 
 type Params = { params: Promise<{ region: string }> };
 
-/**
- * The UAE index is a different page at the same path: its own title and
- * description, the vxh kit sheets, and the home page's sheet (17) for the shared
- * "Get in Touch" block it closes with. India's declaration is the registry
- * entry, unchanged.
- *
- * The override is built in lib/uae-service-pages.ts rather than here because the
- * root layout resolves the page from the URL to emit its stylesheets — so the
- * two have to read the same declaration or the page renders unstyled.
- */
 function configFor(region: string): PageConfig {
   const page = requirePageConfig(PATH);
   return region === 'en-ae' ? uaeServicesIndexConfig(page) : page;
@@ -49,21 +42,11 @@ export default async function ServicesPage({ params }: Params) {
   const region = vxnRegion(raw);
   const page = configFor(region);
 
-  if (region !== 'en-ae') {
-    return (
-      <PageShell page={page} region={region}>
-        <ServicesBody page={page} region={region} />
-      </PageShell>
-    );
-  }
-
   return (
     <PageShell page={page} region={region}>
       <div id="main-content">
         <div id="main" role="main" className="vamtam-main layout-full">
-          <UaeServicesBody region={region} />
-          <ContactSection region={region} />
-          <SubscribeSection page={page} region={region} />
+          <ServicesIndexBody region={region} />
         </div>
       </div>
     </PageShell>

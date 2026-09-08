@@ -15,6 +15,7 @@
  * grid says so. When a feed arrives, filterListings() is the one function to
  * point at it.
  */
+import { navOffset, scrollToTarget } from '../lib/scroll';
 import { useSearch, setSearch, resetSearch, PRICE_BANDS, TYPE_OPTIONS, BED_OPTIONS, LISTINGS_ANCHOR } from '../lib/search';
 import { listingCommunities, type ListingKind } from '../data/listings';
 import { IconSearch } from './icons';
@@ -32,13 +33,11 @@ export default function SearchBar() {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    const el = document.getElementById(LISTINGS_ANCHOR);
-    if (el) {
-      /* Land the grid's heading just under the pinned bar rather than flush to
-         the top of the viewport. */
-      const top = el.getBoundingClientRect().top + window.scrollY - 84;
-      window.scrollTo({ top, behavior: 'smooth' });
-    }
+    /* Through the scroll layer, and offset so the heading lands just under the
+       fixed bar rather than flush to the top of the viewport. A native
+       `window.scrollTo` is overwritten by Lenis on the next frame — see
+       lib/scroll.ts for the measurements. */
+    scrollToTarget(LISTINGS_ANCHOR, navOffset());
   }
 
   return (

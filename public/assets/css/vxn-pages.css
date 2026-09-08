@@ -21,66 +21,8 @@
 .vxp-split__grid--rev > :first-child { order: 2; }
 .vxp-split .vxh-lede { margin-top: 18px; }
 .vxp-split .vxh-lede + .vxh-lede { margin-top: 12px; }
-.vxp-media { position: relative; border-radius: var(--vxh-r); overflow: hidden; border: 1px solid var(--vxh-line); }
-.vxp-media img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transform: scale(1.02); transition: transform 1.2s var(--vxh-ease); }
-.vxp-media:hover img { transform: scale(1.06); }
-.vxp-media__tag { position: absolute; left: 16px; bottom: 16px; padding: 8px 12px; border-radius: 999px; background: rgba(255, 255, 255, .92); color: var(--vxh-ink); font-size: 12.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
-.vxp-media__tag svg { color: var(--vxh-blue); }
-.vxp-list { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 10px; }
-.vxp-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15.5px; line-height: 1.5; color: var(--vxh-ink); }
-.vxp-list li b { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: rgba(20, 54, 216, .1); color: var(--vxh-blue); margin-top: 1px; }
-.vxp-list li a { color: var(--vxh-ink) !important; font-weight: 600; }
-.vxp-list li a:hover { color: var(--vxh-blue) !important; }
 @media (max-width: 880px) { .vxp-split__grid { grid-template-columns: 1fr; } .vxp-split__grid--rev > :first-child { order: 0; } }
 
-/* Numbers band (cream) */
-.vxp-nums { padding: clamp(40px, 5vw, 64px) 0; background: var(--vxh-cream); border-top: 1px solid var(--vxh-line); border-bottom: 1px solid var(--vxh-line); }
-.vxp-nums__row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-.vxp-num { padding: 22px 22px 20px; border-radius: 16px; background: #fff; border: 1px solid var(--vxh-line); }
-.vxp-num__n { font-size: clamp(34px, 3.6vw, 48px); font-weight: 500; letter-spacing: -.03em; color: var(--vxh-blue); line-height: 1; font-variant-numeric: tabular-nums; }
-.vxp-num__n sup { font-size: .42em; margin-left: 2px; }
-.vxp-num__l { margin-top: 8px; font-size: 14px; line-height: 1.45; color: var(--vxh-text); }
-@media (max-width: 880px) { .vxp-nums__row { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .vxp-nums__row { grid-template-columns: 1fr; } }
-
-/* Philosophy flip cards: "We do not simply… / We…" */
-.vxp-flips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; perspective: 1400px; }
-.vxp-flip { position: relative; min-height: 280px; cursor: pointer; }
-.vxp-flip__in { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.22, .61, .36, 1); }
-.vxp-flip:hover .vxp-flip__in, .vxp-flip.is-on .vxp-flip__in, .vxp-flip:focus-within .vxp-flip__in { transform: rotateY(180deg); }
-.vxp-flip__face { position: absolute; inset: 0; border-radius: var(--vxh-r); padding: 26px; display: flex; flex-direction: column; justify-content: flex-end; -webkit-backface-visibility: hidden; backface-visibility: hidden; border: 1px solid var(--vxh-line); background: #fff; }
-.vxp-flip__face--b { transform: rotateY(180deg); background: linear-gradient(135deg, #0B2DBE, #2F63FF); color: #fff; border-color: transparent; overflow: hidden; }
-.vxp-flip__face--b::after { content: ""; position: absolute; inset: -30%; background: url("../img/abs/orbs-2.svg") center / cover no-repeat; opacity: .5; }
-.vxp-flip__face--b > * { position: relative; z-index: 1; }
-.vxp-flip__k { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--vxh-muted); margin-bottom: auto; }
-.vxp-flip__face--b .vxp-flip__k { color: var(--vxh-pale); }
-.vxp-flip__t { font-size: clamp(20px, 1.8vw, 24px); font-weight: 500; letter-spacing: -.02em; line-height: 1.2; color: var(--vxh-ink) !important; }
-.vxp-flip__face--b .vxp-flip__t { color: #fff !important; }
-.vxp-flip__hint { margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--vxh-blue); }
-.vxp-flip__face--b .vxp-flip__hint { color: rgba(255, 255, 255, .8); }
-@media (max-width: 880px) { .vxp-flips { grid-template-columns: 1fr; } .vxp-flip { min-height: 220px; } }
-
-/* Offices: tabs + map */
-.vxp-offices { padding: clamp(64px, 8vw, 112px) 0; }
-.vxp-off { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 48px); align-items: start; }
-.vxp-off__list { display: grid; gap: 8px; }
-.vxp-off__btn { appearance: none; font-family: inherit; cursor: pointer; text-align: left; display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--vxh-line) !important; background: var(--vxh-card) !important; background-image: none !important; box-shadow: none !important; min-height: 0 !important; height: auto !important; letter-spacing: 0 !important; text-transform: none !important; line-height: 1.3 !important; color: var(--vxh-ink) !important; font-size: 15px !important; font-weight: 600 !important; transition: border-color .25s ease, background-color .25s ease, transform .3s var(--vxh-ease) !important; }
-.vxp-off__btn:hover { transform: translateX(4px); border-color: rgba(20, 54, 216, .3) !important; }
-.vxp-off__btn[aria-pressed="true"] { background: #fff !important; border-color: var(--vxh-blue) !important; box-shadow: 0 0 0 3px rgba(20, 54, 216, .12) !important; }
-.vxp-off__ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(20, 54, 216, .08); color: var(--vxh-blue); }
-.vxp-off__btn[aria-pressed="true"] .vxp-off__ic { background: var(--vxh-blue); color: #fff; }
-.vxp-off__btn small { display: block; font-size: 12.5px !important; font-weight: 500 !important; color: var(--vxh-muted) !important; margin-top: 2px; }
-.vxp-off__btn .n { font-size: 11px !important; font-weight: 700 !important; letter-spacing: .1em; color: var(--vxh-muted) !important; }
-.vxp-off__panel { display: none; }
-.vxp-off__panel.is-on { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; animation: vxh-pane .45s var(--vxh-ease) both; }
-.vxp-off__map { border-radius: var(--vxh-r); overflow: hidden; border: 1px solid var(--vxh-line); background: var(--vxh-cream); aspect-ratio: 16 / 9; }
-.vxp-off__map iframe { display: block; width: 100%; height: 100%; border: 0; filter: saturate(.85); }
-.vxp-off__card { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.vxp-off__cell { padding: 14px 16px; border-radius: 14px; background: #fff; border: 1px solid var(--vxh-line); font-size: 14px; line-height: 1.5; color: var(--vxh-text); }
-.vxp-off__cell small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--vxh-muted); margin-bottom: 6px; }
-.vxp-off__cell a { color: var(--vxh-ink) !important; font-weight: 600; }
-.vxp-off__cell a:hover { color: var(--vxh-blue) !important; }
-@media (max-width: 1024px) { .vxp-off { grid-template-columns: 1fr; } .vxp-off__card { grid-template-columns: 1fr; } }
 
 /* Industries: segments */
 .vxp-segs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -103,26 +45,923 @@
 .vxp-x .vxd-x__dots i { background: rgba(14, 36, 110, .18); } .vxp-x .vxd-x__dots i.is-on { background: var(--vxh-blue); }
 .vxp-x .vxd-x__copy .vxh-btn { margin-top: 18px; }
 
-/* Contact: form card + routes */
-.vxp-contact { padding: clamp(56px, 7vw, 96px) 0; }
-.vxp-contact__grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
-.vxp-form { border-radius: var(--vxh-r); background: #fff; border: 1px solid var(--vxh-line); padding: clamp(22px, 3vw, 34px); box-shadow: 0 30px 60px -40px rgba(14, 36, 110, .35); }
-.vxp-form .elementor-field-group { margin-bottom: 14px; }
-.vxp-form .elementor-field-label { font: 700 11.5px/1 "DM Sans", sans-serif !important; letter-spacing: .1em; text-transform: uppercase; color: var(--vxh-muted) !important; }
-.vxp-form .elementor-field.elementor-field-textual { border: 1px solid var(--vxh-line) !important; border-radius: 12px !important; background: var(--vxh-card) !important; padding: 14px 16px !important; font-size: 15px !important; color: var(--vxh-ink) !important; transition: border-color .25s ease, box-shadow .25s ease; }
-.vxp-form .elementor-field.elementor-field-textual:focus { border-color: var(--vxh-blue) !important; box-shadow: 0 0 0 3px rgba(20, 54, 216, .12); background: #fff !important; outline: none; }
-.vxp-form .elementor-button { width: 100%; justify-content: center; height: 54px; border-radius: 999px !important; }
-.vxp-form__fine { margin-top: 14px; font-size: 12.5px; line-height: 1.5; color: var(--vxh-muted); }
-.vxp-form__fine a { color: var(--vxh-blue) !important; }
-.vxp-routes { display: grid; gap: 12px; margin-bottom: 26px; }
-.vxp-route { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 16px; padding: 16px 18px; border-radius: 16px; background: #fff; border: 1px solid var(--vxh-line); color: var(--vxh-ink) !important; transition: transform .35s var(--vxh-ease), border-color .3s ease, box-shadow .35s ease; }
-.vxp-route:hover { transform: translateX(6px); border-color: rgba(20, 54, 216, .3); box-shadow: 0 20px 40px -30px rgba(14, 36, 110, .4); }
-.vxp-route__ic { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(135deg, #1436D8, #2F63FF); color: #fff; }
-.vxp-route__t { font-weight: 600; font-size: 16px; display: block; color: var(--vxh-ink) !important; }
-.vxp-route__d { font-size: 13.5px; color: var(--vxh-text) !important; display: block; margin-top: 2px; }
-.vxp-route svg.arr { color: var(--vxh-blue); }
-@media (max-width: 1024px) { .vxp-contact__grid { grid-template-columns: 1fr; } }
 
 /* Type guards for these pages (the theme's heading rules are broad). */
-.vxh .vxp-flip__t, .vxh .vxp-seg__t { font-family: var(--vxh-display) !important; }
+.vxh .vxp-seg__t { font-family: var(--vxh-display) !important; }
 .vxh h2.vxh-h2, .vxh h3.vxh-h2 { font-family: var(--vxh-display) !important; }
+
+
+/* ==========================================================================
+   THE REDESIGNED PAGES (2026-09-07)
+
+   Everything below belongs to the pass that brought Who We Are, Location,
+   Careers, FAQ, Research, Community, Clients, Partnership, Contact and the
+   services index into the home page's design language. The block above is the
+   first pass on About and Industries and is still in use.
+
+   Three rules the whole thing is built on:
+
+     1. White ground, hairline rules, one accent. Cards and shadows are for
+        things you can pick up; a list of services is not one of those.
+     2. The heading is the largest thing in a section, and there is one idea
+        under it. If a section needs two, it is two sections.
+     3. Motion is additive. Every reveal and every parallax is an enhancement
+        over a layout that is already correct without it.
+   ========================================================================== */
+
+/* --- Parallax -------------------------------------------------------------
+   components/vxh/Parallax writes two numbers on any [data-vxh-par] element and
+   nothing else: --p (0 entering the frame, 1 leaving it) and --pc (the same,
+   centred on -1..1). What that means is decided here, so a new kind of depth is
+   a rule rather than another scroll listener.
+
+   Every one of these is a no-op until the engine runs — the fallbacks resolve
+   to the element's resting state, so a page without JavaScript, under reduced
+   motion, or before hydration is laid out exactly as intended.
+   -------------------------------------------------------------------------- */
+
+[data-vxh-par] { will-change: transform; }
+
+/* Rises against the scroll. The workhorse — a photograph, a figure, a panel. */
+[data-vxh-par="rise"]  { transform: translate3d(0, calc(var(--pc, 0) * -3.2vh), 0); }
+/* Sinks with it, so two things in one row separate as they pass. */
+[data-vxh-par="sink"]  { transform: translate3d(0, calc(var(--pc, 0) * 2.4vh), 0); }
+/* A background layer: further away, so it moves less and scales as it goes. */
+[data-vxh-par="deep"]  { transform: translate3d(0, calc(var(--pc, 0) * -7vh), 0) scale(1.12); }
+/* Slides in from the side — for a rail or a strip that reads horizontally. */
+[data-vxh-par="slide"] { transform: translate3d(calc(var(--pc, 0) * -2.6vw), 0, 0); }
+/* Leans. Barely there, and the only one that is not a translation. */
+[data-vxh-par="tilt"]  { transform: perspective(1400px) rotateX(calc(var(--pc, 0) * -2.2deg)); }
+/* Closes in: over-large at the edges of the frame, true size in the middle. */
+[data-vxh-par="zoom"]  { transform: scale(calc(1.06 + var(--pc, 0) * var(--pc, 0) * 0.05)); }
+/* Turns, slowly, all the way through. For a mark or a disc, not for type. */
+[data-vxh-par="spin"]  { transform: rotate(calc(var(--p, 0) * 26deg)); }
+/* Swings across and back, turning with it. Wide and slow — for artwork, not
+   for anything with an edge you would notice moving. */
+[data-vxh-par="sway"]  { transform: translate3d(calc(var(--pc, 0) * 1.8vw), 0, 0) rotate(calc(var(--pc, 0) * 1.4deg)); }
+/* Turns away from the reader as it passes, like a page lifting. */
+[data-vxh-par="peel"]  { transform: perspective(1200px) rotateY(calc(var(--pc, 0) * 3.2deg)) scale(1.04); }
+/* Drifts and fades at both ends — a caption or a watermark, never content. */
+[data-vxh-par="ghost"] {
+	transform: translate3d(0, calc(var(--pc, 0) * -4vh), 0);
+	opacity: calc(1 - abs(var(--pc, 0)) * 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-vxh-par] { transform: none !important; opacity: 1 !important; }
+}
+
+/* --- The opening ----------------------------------------------------------
+   Where you are, what this is, one sentence, one action — and, where a page has
+   them, a short row of facts. Nothing else goes above the fold: the pass this
+   replaces put a photograph, three bullets and a mocked-up panel up here and
+   the name of the page was the fifth thing you read.
+   -------------------------------------------------------------------------- */
+
+.vxp-open {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	background: #fff;
+	padding: calc(var(--vxn-navh, 94px) + clamp(30px, 6vh, 76px)) 0 clamp(40px, 6vh, 72px);
+}
+.vxp-open__gl,
+.vxp-open__art { position: absolute; inset: -12% -6%; z-index: -1; pointer-events: none; }
+.vxp-open__gl { opacity: .62; }
+.vxp-open__art { opacity: .85; }
+.vxp-open__gl > div,
+.vxp-open__art > .vxh-abs { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* The ground has to stop before the type starts, or the lede sits on a moving
+   pattern. One wash from the page's own white, tuned to where the copy sits. */
+.vxp-open::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background: linear-gradient(180deg, rgba(255, 255, 255, .38) 0%, rgba(255, 255, 255, .82) 46%, #fff 100%);
+}
+.vxp-open > .vxh__in { position: relative; z-index: 1; }
+
+ /* Both of these are inline-flex by default so they can sit inside a line of
+   copy elsewhere. Here each one is a line of its own. */
+.vxp-open .vxh-crumb { display: flex; color: var(--vxh-muted); margin-bottom: clamp(20px, 3.2vh, 34px); }
+.vxp-open .vxh-crumb a { color: var(--vxh-text) !important; }
+.vxp-open .vxh-crumb a:hover { color: var(--vxh-blue) !important; }
+.vxp-open .vxh-crumb b { color: var(--vxh-ink); }
+.vxp-open .vxh-crumb i { background: var(--vxh-blue); }
+.vxh-crumb__step { display: inline-flex; align-items: center; gap: 10px; }
+
+.vxp-open__eye { display: flex; margin-bottom: 14px; }
+.vxp-open__h {
+	margin: 0;
+	font-family: var(--vxh-display);
+	font-size: min(clamp(36px, 6vw, 88px), 13svh);
+	font-weight: 500;
+	letter-spacing: -.04em;
+	line-height: 1;
+	color: var(--vxh-ink) !important;
+	max-width: 16ch;
+	text-wrap: balance;
+}
+.vxp-open__foot {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: end;
+	gap: clamp(20px, 3vw, 56px);
+	margin-top: clamp(28px, 4.2vh, 50px);
+	padding-top: clamp(18px, 2.6vh, 30px);
+	border-top: 1px solid var(--vxh-line);
+}
+.vxp-open__lede {
+	margin: 0;
+	font-size: clamp(15.5px, 1.2vw, 18px);
+	line-height: 1.65;
+	color: var(--vxh-text);
+	max-width: 54ch;
+	text-wrap: pretty;
+}
+.vxp-open .vxp-open__cta { flex: none; background: var(--vxh-blue); }
+
+/* The facts row. Three or four, each two words — anything longer is a
+   paragraph wearing a label, and belongs in the section below. */
+.vxp-open__meta {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: clamp(16px, 2.4vw, 40px);
+	margin: clamp(28px, 4vh, 48px) 0 0;
+	padding-top: clamp(18px, 2.4vh, 26px);
+	border-top: 1px solid var(--vxh-line);
+}
+.vxp-open__meta dt {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+	color: var(--vxh-muted);
+}
+.vxp-open__meta dd {
+	margin: 6px 0 0;
+	font-family: var(--vxh-display);
+	font-size: clamp(16px, 1.5vw, 21px);
+	font-weight: 500;
+	letter-spacing: -.02em;
+	line-height: 1.25;
+	color: var(--vxh-ink);
+}
+
+@media (max-width: 900px) {
+	.vxp-open__h { max-width: none; }
+	.vxp-open__foot { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 22px; }
+}
+
+/* --- Sections and heads --------------------------------------------------- */
+
+.vxp-sec { position: relative; padding: clamp(56px, 7.5vw, 112px) 0; background: #fff; }
+.vxp-sec--cream { background: var(--vxh-cream); }
+.vxp-sec--tight { padding-top: 0; }
+.vxp-sec--line { border-top: 1px solid var(--vxh-line); }
+
+.vxp-head { margin-bottom: clamp(34px, 5vw, 64px); }
+.vxp-head--split {
+	display: grid;
+	grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+	gap: clamp(20px, 4vw, 72px);
+	align-items: end;
+}
+.vxp-head__h {
+	margin: clamp(14px, 2vw, 22px) 0 0;
+	font-family: var(--vxh-display);
+	font-size: clamp(26px, 3.4vw, 46px);
+	font-weight: 500;
+	letter-spacing: -.035em;
+	line-height: 1.08;
+	color: var(--vxh-ink) !important;
+	max-width: 20ch;
+	text-wrap: balance;
+}
+.vxp-head__lede {
+	margin: 18px 0 0;
+	font-size: clamp(14.5px, 1.1vw, 16.5px);
+	line-height: 1.7;
+	color: var(--vxh-muted);
+	max-width: 52ch;
+}
+.vxp-head--split .vxp-head__lede { margin: 0 0 4px; }
+@media (max-width: 880px) {
+	.vxp-head--split { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 16px; }
+	.vxp-head--split .vxp-head__lede { margin: 0; }
+	.vxp-head__h { max-width: none; }
+}
+
+/* A row of hairline-ruled items — the shape half these pages resolve to.
+   Number, name, one line, and the arrow that says it is a page. */
+.vxp-rows { list-style: none; margin: 0; padding: 0; }
+.vxp-rows > li { border-top: 1px solid var(--vxh-line); }
+.vxp-rows > li:last-child { border-bottom: 1px solid var(--vxh-line); }
+.vxp-row {
+	display: grid;
+	grid-template-columns: 3.4rem minmax(0, 1fr) minmax(0, 1.15fr) 24px;
+	align-items: baseline;
+	gap: 16px;
+	padding: clamp(17px, 2.1vw, 27px) 0;
+	color: inherit;
+	transition: padding-left .35s var(--vxh-ease);
+}
+a.vxp-row:hover { padding-left: 10px; }
+.vxp-row__n { font-size: 12px; font-weight: 700; letter-spacing: .16em; color: var(--vxh-blue); font-variant-numeric: tabular-nums; }
+.vxp-row__t {
+	font-family: var(--vxh-display);
+	font-size: clamp(17px, 1.7vw, 24px);
+	font-weight: 500;
+	letter-spacing: -.025em;
+	line-height: 1.2;
+	color: var(--vxh-ink);
+	transition: color .3s ease;
+}
+a.vxp-row:hover .vxp-row__t { color: var(--vxh-blue); }
+.vxp-row__d { font-size: 14px; line-height: 1.6; color: var(--vxh-muted); }
+.vxp-row > svg { align-self: center; justify-self: end; color: var(--vxh-line); transition: color .3s ease, transform .35s var(--vxh-ease); }
+a.vxp-row:hover > svg { color: var(--vxh-blue); transform: translate(2px, -2px); }
+@media (max-width: 860px) {
+	.vxp-row { grid-template-columns: 2.6rem minmax(0, 1fr) 20px; gap: 6px 14px; }
+	.vxp-row__d { grid-column: 2 / -1; }
+}
+
+/* --- FAQ ------------------------------------------------------------------
+   Native <details>, so it is keyboard-operable and indexable with no script.
+   The answer is in the DOM whether or not the panel is open — that is the whole
+   reason this is a disclosure and not a tab strip.
+   -------------------------------------------------------------------------- */
+
+.vxp-faq__list { border-top: 1px solid var(--vxh-line); }
+.vxp-faq__i { border-bottom: 1px solid var(--vxh-line); }
+.vxp-faq__i > summary {
+	list-style: none;
+	cursor: pointer;
+	display: grid;
+	grid-template-columns: 3.4rem minmax(0, 1fr) 24px;
+	align-items: baseline;
+	gap: 16px;
+	padding: clamp(18px, 2.2vw, 26px) 0;
+}
+.vxp-faq__i > summary::-webkit-details-marker { display: none; }
+.vxp-faq__i > summary:focus-visible { outline: 2px solid var(--vxh-blue); outline-offset: 3px; }
+.vxp-faq__n { font-size: 12px; font-weight: 700; letter-spacing: .16em; color: var(--vxh-blue); font-variant-numeric: tabular-nums; }
+.vxp-faq__q {
+	font-family: var(--vxh-display);
+	font-size: clamp(16px, 1.5vw, 21px);
+	font-weight: 500;
+	letter-spacing: -.02em;
+	line-height: 1.35;
+	color: var(--vxh-ink);
+	transition: color .25s ease;
+	text-wrap: pretty;
+}
+.vxp-faq__i:hover .vxp-faq__q,
+.vxp-faq__i[open] .vxp-faq__q { color: var(--vxh-blue); }
+/* A plus that becomes a minus. Two rules, one of which rotates away. */
+.vxp-faq__sign { position: relative; width: 16px; height: 16px; align-self: center; justify-self: end; }
+.vxp-faq__sign::before,
+.vxp-faq__sign::after {
+	content: "";
+	position: absolute;
+	inset: 50% 0 auto;
+	height: 1.5px;
+	background: var(--vxh-blue);
+	transform: translateY(-50%);
+	transition: transform .3s var(--vxh-ease), opacity .3s ease;
+}
+.vxp-faq__sign::after { transform: translateY(-50%) rotate(90deg); }
+.vxp-faq__i[open] .vxp-faq__sign::after { transform: translateY(-50%) rotate(0); opacity: 0; }
+.vxp-faq__a {
+	padding: 0 24px clamp(20px, 2.6vw, 30px) calc(3.4rem + 16px);
+	max-width: 74ch;
+}
+.vxp-faq__a p { margin: 0 0 12px; font-size: 15px; line-height: 1.75; color: var(--vxh-text); text-wrap: pretty; }
+.vxp-faq__a p:last-child { margin-bottom: 0; }
+.vxp-faq__a a { color: var(--vxh-blue) !important; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+@media (max-width: 700px) {
+	.vxp-faq__i > summary { grid-template-columns: 2.2rem minmax(0, 1fr) 20px; gap: 10px; }
+	.vxp-faq__a { padding-left: calc(2.2rem + 10px); padding-right: 0; }
+}
+
+/* --- Newsletter -----------------------------------------------------------
+   One field on a rule. It is asking for an email address, so it looks like a
+   line you write on rather than a boxed form with a heading of its own.
+   -------------------------------------------------------------------------- */
+
+.vxp-news {
+	padding: clamp(48px, 6vw, 84px) 0;
+	background: var(--vxh-cream);
+	border-top: 1px solid var(--vxh-line);
+}
+.vxp-news__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(26px, 5vw, 80px);
+	align-items: start;
+}
+.vxp-news__h {
+	margin: 14px 0 0;
+	font-family: var(--vxh-display);
+	font-size: clamp(22px, 2.4vw, 32px);
+	font-weight: 500;
+	letter-spacing: -.03em;
+	line-height: 1.14;
+	color: var(--vxh-ink) !important;
+	max-width: 20ch;
+	text-wrap: balance;
+}
+.vxp-news__note { margin: 12px 0 0; font-size: 14.5px; line-height: 1.65; color: var(--vxh-muted); max-width: 44ch; }
+.vxp-news__lab {
+	display: block;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+	color: var(--vxh-muted);
+	margin-bottom: 10px;
+}
+.vxp-news__row { display: flex; align-items: center; gap: 14px; border-bottom: 1.5px solid var(--vxh-ink); padding-bottom: 12px; }
+/* The captured Elementor sheets paint every input on the site; this one is a
+   rule, not a box, so each of those is turned off by name rather than by
+   hoping the cascade lands the right way round. */
+.vxp-news .vxp-news__in {
+	flex: 1 1 auto;
+	min-width: 0;
+	appearance: none;
+	background: transparent !important;
+	background-image: none !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	height: auto !important;
+	min-height: 0 !important;
+	font-family: inherit;
+	font-size: clamp(16px, 1.4vw, 19px) !important;
+	color: var(--vxh-ink) !important;
+	letter-spacing: -.01em;
+}
+.vxp-news .vxp-news__in::placeholder { color: var(--vxh-muted); opacity: .7; }
+.vxp-news .vxp-news__in:focus { outline: none; }
+.vxp-news__row:focus-within { border-bottom-color: var(--vxh-blue); }
+.vxp-news .vxp-news__go {
+	flex: 0 0 auto;
+	appearance: none;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: transparent !important;
+	background-image: none !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	min-height: 0 !important;
+	height: auto !important;
+	font-family: inherit;
+	font-size: 13.5px !important;
+	font-weight: 700 !important;
+	letter-spacing: .08em !important;
+	text-transform: uppercase !important;
+	color: var(--vxh-blue) !important;
+	transition: gap .3s var(--vxh-ease);
+}
+.vxp-news .vxp-news__go:hover { gap: 12px; }
+.vxp-news__msg {
+	margin: 14px 0 0;
+	font-size: 14px;
+	line-height: 1.5;
+	font-weight: 600;
+	color: var(--vxh-blue);
+}
+.vxp-news__msg.is-bad { color: #b02a26; }
+.vxp-news__fine { margin: 14px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--vxh-muted); }
+.vxp-news__fine a { color: var(--vxh-text) !important; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 880px) { .vxp-news__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+
+/* --- Closing band --------------------------------------------------------
+   The kit's own "ways to reach us". The two labels are set as blocks here
+   rather than inline on every element that renders one — this used to be three
+   `style={{display:'block'}}` props per link, on six pages.
+   -------------------------------------------------------------------------- */
+
+.vxh .vxh-way__t, .vxh .vxh-way__d { display: block; }
+
+
+/* ==========================================================================
+   ABOUT (2026-09-07)
+   ========================================================================== */
+
+/* A heading that names the run for a screen reader without setting type on a
+   page whose whole point is that the chapters arrive one at a time. */
+.vxh-sr {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* --- The run --------------------------------------------------------------
+   The layer is absolute over the whole section and the mark inside it is
+   sticky, so one object carries the reader from the first chapter to the last.
+   Sticky inside an absolute layer rather than sticky on the section's own child
+   because the chapters have to pass over the mark, not sit beside it.
+   -------------------------------------------------------------------------- */
+
+.vxa-run { position: relative; background: #fff; padding: clamp(40px, 7vw, 96px) 0 clamp(56px, 9vw, 128px); }
+.vxa-run__layer { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.vxa-run .vxh-mark { position: sticky; top: 0; height: 100svh; pointer-events: auto; cursor: grab; touch-action: pan-y; }
+.vxa-run .vxh-mark.is-held { cursor: grabbing; }
+/* The box the mark is fitted to, so a longer set of chapters does not mean a
+   larger X. It is a measurement, not a thing you can see. */
+.vxa-run__fit {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: min(760px, 62vw);
+	height: min(760px, 62vw);
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+/* The home page paints a flat sweep behind its mark until WebGL arrives, keyed
+   off its own wrapper. This one has no fallback artwork — the chapters are the
+   page — so the placeholder is turned off by name. */
+.vxa-run .vxh-mark--solo::before { content: none; }
+
+.vxa-run > .vxh__in { position: relative; z-index: 1; }
+
+.vxa-chs { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(28px, 12vh, 96px); }
+.vxa-ch { display: flex; }
+.vxa-ch--l { justify-content: flex-start; }
+.vxa-ch--r { justify-content: flex-end; }
+
+/* Each chapter is a plain white sheet, because it has to be legible over a
+   turning metal object. A translucent card would read as a widget; an opaque
+   one reads as a page the mark is behind. */
+.vxa-ch__card {
+	position: relative;
+	width: min(430px, 100%);
+	padding: clamp(22px, 2.6vw, 32px);
+	background: rgba(255, 255, 255, .92);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	border: 1px solid var(--vxh-line);
+	border-radius: var(--vxh-r);
+	box-shadow: 0 40px 80px -50px rgba(14, 36, 110, .45);
+}
+.vxa-ch__n {
+	position: absolute;
+	top: -.34em;
+	right: 14px;
+	font-family: var(--vxh-display);
+	font-size: clamp(52px, 6vw, 88px);
+	font-weight: 500;
+	letter-spacing: -.05em;
+	line-height: 1;
+	color: rgba(20, 54, 216, .12);
+	font-variant-numeric: tabular-nums;
+	pointer-events: none;
+}
+.vxa-ch__k {
+	display: block;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: .15em;
+	text-transform: uppercase;
+	color: var(--vxh-blue);
+}
+.vxa-ch__t {
+	margin: 12px 0 0;
+	font-family: var(--vxh-display);
+	font-size: clamp(21px, 2.1vw, 28px);
+	font-weight: 500;
+	letter-spacing: -.032em;
+	line-height: 1.12;
+	color: var(--vxh-ink) !important;
+	text-wrap: balance;
+}
+.vxa-ch__d { margin: 12px 0 0; font-size: 14.5px; line-height: 1.7; color: var(--vxh-text); text-wrap: pretty; }
+
+@media (max-width: 860px) {
+	.vxa-ch--r, .vxa-ch--l { justify-content: center; }
+	.vxa-ch__card { width: 100%; }
+	.vxa-chs { gap: 22px; }
+	/* On a phone the mark would sit under a column of full-width sheets and be
+	   invisible. It stays — it is still the section's ground — but the chapters
+	   stop being spread around it. */
+	.vxa-run__fit { width: 86vw; height: 86vw; }
+}
+
+/* --- Philosophy ------------------------------------------------------------
+   Three corrections. The struck line is the thing people assume; the line under
+   it is the work. Setting it as an actual <s> rather than a decoration means it
+   still reads as a correction with the stylesheet off.
+   -------------------------------------------------------------------------- */
+
+.vxa-phil__list { list-style: none; margin: 0; padding: 0; }
+.vxa-phil__list li {
+	display: grid;
+	grid-template-columns: 3.4rem minmax(0, 1fr);
+	gap: 6px 16px;
+	padding: clamp(20px, 2.6vw, 32px) 0;
+	border-top: 1px solid var(--vxh-line);
+}
+.vxa-phil__list li:last-child { border-bottom: 1px solid var(--vxh-line); }
+.vxa-phil__n {
+	grid-row: 1 / span 2;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: .16em;
+	color: var(--vxh-blue);
+	font-variant-numeric: tabular-nums;
+	padding-top: .5em;
+}
+.vxa-phil__a {
+	font-size: clamp(14px, 1.2vw, 16px);
+	line-height: 1.4;
+	color: var(--vxh-muted);
+	text-decoration-thickness: 1px;
+	text-decoration-color: rgba(20, 54, 216, .5);
+}
+.vxa-phil__b {
+	font-family: var(--vxh-display);
+	font-size: clamp(20px, 2.3vw, 32px);
+	font-weight: 500;
+	letter-spacing: -.032em;
+	line-height: 1.14;
+	color: var(--vxh-ink);
+	text-wrap: balance;
+}
+@media (max-width: 640px) {
+	.vxa-phil__list li { grid-template-columns: minmax(0, 1fr); }
+	.vxa-phil__n { grid-row: auto; padding-top: 0; }
+}
+
+/* --- The two doors -------------------------------------------------------- */
+
+.vxa-doors__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 28px); }
+.vxa-door { display: block; color: inherit; }
+.vxa-door figure {
+	margin: 0 0 clamp(16px, 2vw, 22px);
+	border-radius: var(--vxh-r);
+	overflow: hidden;
+	aspect-ratio: 16 / 10;
+	background: var(--vxh-card);
+	border: 1px solid var(--vxh-line);
+}
+.vxa-door figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.vxa-door__k { display: block; font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--vxh-blue); }
+.vxa-door__t {
+	display: block;
+	margin-top: 10px;
+	font-family: var(--vxh-display);
+	font-size: clamp(18px, 1.8vw, 24px);
+	font-weight: 500;
+	letter-spacing: -.028em;
+	line-height: 1.2;
+	color: var(--vxh-ink);
+	max-width: 26ch;
+	transition: color .3s ease;
+}
+.vxa-door:hover .vxa-door__t { color: var(--vxh-blue); }
+.vxa-door__go {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 14px;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: .04em;
+	color: var(--vxh-blue);
+}
+.vxa-door__go svg { transition: transform .35s var(--vxh-ease); }
+.vxa-door:hover .vxa-door__go svg { transform: translate(2px, -2px); }
+@media (max-width: 760px) { .vxa-doors__grid { grid-template-columns: minmax(0, 1fr); } }
+
+
+/* ==========================================================================
+   LOCATION (2026-09-07)
+   ========================================================================== */
+
+.vxl-atlas {
+	display: grid;
+	grid-template-columns: minmax(0, .8fr) minmax(0, 1.35fr);
+	gap: clamp(20px, 3vw, 44px);
+	align-items: start;
+}
+.vxl-atlas__side { display: grid; gap: clamp(16px, 2vw, 24px); }
+.vxl-atlas__list { display: grid; gap: 6px; }
+
+/* The kit sheet paints every button on the page, so each of these has to be
+   turned off by name — the same story as the newsletter field. */
+.vxh .vxl-pick {
+	appearance: none;
+	cursor: pointer;
+	text-align: left;
+	display: grid;
+	grid-template-columns: 2.2rem minmax(0, 1fr) 18px;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 16px !important;
+	min-height: 0 !important;
+	height: auto !important;
+	border: 1px solid var(--vxh-line) !important;
+	border-radius: 14px !important;
+	background: #fff !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	font-family: inherit !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0 !important;
+	text-transform: none !important;
+	line-height: 1.3 !important;
+	color: var(--vxh-ink) !important;
+	transition: border-color .25s ease, transform .3s var(--vxh-ease), background-color .25s ease;
+}
+.vxh .vxl-pick:hover { transform: translateX(4px); border-color: rgba(20, 54, 216, .34) !important; }
+.vxh .vxl-pick[aria-selected="true"] {
+	border-color: var(--vxh-blue) !important;
+	background: rgba(20, 54, 216, .04) !important;
+}
+.vxl-pick__n { font-size: 11px !important; font-weight: 700 !important; letter-spacing: .14em; color: var(--vxh-muted) !important; }
+.vxh .vxl-pick[aria-selected="true"] .vxl-pick__n { color: var(--vxh-blue) !important; }
+.vxl-pick__c small { display: block; margin-top: 2px; font-size: 12px !important; font-weight: 500 !important; color: var(--vxh-muted) !important; }
+.vxl-pick svg { justify-self: end; color: var(--vxh-line); }
+.vxh .vxl-pick[aria-selected="true"] svg { color: var(--vxh-blue); }
+
+.vxl-card { margin: 0; display: grid; gap: 14px; padding: clamp(16px, 2vw, 22px); border: 1px solid var(--vxh-line); border-radius: 16px; background: var(--vxh-card); }
+.vxl-card dt { font-size: 10.5px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--vxh-muted); }
+.vxl-card dd { margin: 5px 0 0; font-size: 14px; line-height: 1.55; color: var(--vxh-text); }
+.vxl-card a { color: var(--vxh-ink) !important; }
+.vxl-card a:hover { color: var(--vxh-blue) !important; }
+
+.vxl-atlas__map { display: grid; grid-template-rows: auto 1fr; border-radius: var(--vxh-r); overflow: hidden; border: 1px solid var(--vxh-line); background: var(--vxh-cream); }
+.vxl-atlas__bar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 12px;
+	border-bottom: 1px solid var(--vxh-line);
+	background: #fff;
+}
+.vxl-atlas__where { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--vxh-ink); }
+.vxl-atlas__where svg { color: var(--vxh-blue); }
+.vxl-atlas__views { display: inline-flex; margin-left: auto; padding: 3px; border-radius: 999px; background: var(--vxh-cream); }
+.vxh .vxl-atlas__views button {
+	appearance: none;
+	cursor: pointer;
+	padding: 7px 15px !important;
+	min-height: 0 !important;
+	height: auto !important;
+	border: 0 !important;
+	border-radius: 999px !important;
+	background: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	font-family: inherit !important;
+	font-size: 12px !important;
+	font-weight: 700 !important;
+	letter-spacing: .04em !important;
+	text-transform: none !important;
+	color: var(--vxh-muted) !important;
+	transition: background-color .25s ease, color .25s ease;
+}
+.vxh .vxl-atlas__views button[aria-pressed="true"] { background: var(--vxh-blue) !important; color: #fff !important; }
+.vxl-atlas__go { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: var(--vxh-ink) !important; transition: color .25s ease; }
+.vxl-atlas__go:hover { color: var(--vxh-blue) !important; }
+.vxl-atlas__frame { position: relative; aspect-ratio: 4 / 3; }
+.vxl-atlas__frame iframe { display: block; width: 100%; height: 100%; border: 0; filter: saturate(.9) contrast(1.02); }
+
+/* The plain list under the map — what a reader without the script gets, and
+   what a crawler indexes. */
+.vxl-all { list-style: none; margin: clamp(36px, 5vw, 64px) 0 0; padding: 0; }
+.vxl-all li {
+	display: grid;
+	grid-template-columns: 3rem minmax(0, .9fr) minmax(0, 1.6fr) auto;
+	gap: 10px 20px;
+	align-items: baseline;
+	padding: clamp(16px, 2vw, 24px) 0;
+	border-top: 1px solid var(--vxh-line);
+}
+.vxl-all li:last-child { border-bottom: 1px solid var(--vxh-line); }
+.vxl-all__n { font-size: 12px; font-weight: 700; letter-spacing: .16em; color: var(--vxh-blue); }
+.vxl-all__c { font-family: var(--vxh-display); font-size: clamp(17px, 1.6vw, 21px); font-weight: 500; letter-spacing: -.025em; color: var(--vxh-ink); }
+.vxl-all__c small { display: block; margin-top: 4px; font-family: var(--vxh-display); font-size: 12px; font-weight: 500; letter-spacing: 0; color: var(--vxh-muted); }
+.vxl-all__a { font-style: normal; font-size: 13.5px; line-height: 1.6; color: var(--vxh-muted); }
+.vxl-all__l { display: grid; gap: 4px; justify-items: end; font-size: 13px; }
+.vxl-all__l a { color: var(--vxh-ink) !important; display: inline-flex; align-items: center; gap: 6px; }
+.vxl-all__l a:hover { color: var(--vxh-blue) !important; }
+
+@media (max-width: 1024px) { .vxl-atlas { grid-template-columns: minmax(0, 1fr); } .vxl-atlas__frame { aspect-ratio: 16 / 10; } }
+@media (max-width: 760px) {
+	.vxl-all li { grid-template-columns: 2.4rem minmax(0, 1fr); }
+	.vxl-all__a, .vxl-all__l { grid-column: 2; justify-items: start; }
+}
+
+/* ==========================================================================
+   CAREERS
+   ========================================================================== */
+
+/* Five things in a grid that wraps: each one carries its own rule rather than
+   the grid drawing them in its gaps, because five items in a four-wide row
+   would otherwise leave three ruled-off holes where nothing is. */
+.vxc-look { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0 clamp(20px, 3vw, 44px); }
+.vxc-look li { padding: clamp(20px, 2.4vw, 28px) 0; border-top: 1px solid var(--vxh-line); }
+.vxc-look__n { display: block; font-family: var(--vxh-display); font-size: clamp(30px, 3.4vw, 46px); font-weight: 500; letter-spacing: -.045em; line-height: 1; color: rgba(20, 54, 216, .2); font-variant-numeric: tabular-nums; }
+.vxc-look__t { margin: 16px 0 0; font-family: var(--vxh-display); font-size: clamp(17px, 1.6vw, 21px); font-weight: 500; letter-spacing: -.026em; line-height: 1.2; color: var(--vxh-ink) !important; }
+.vxc-look__d { margin: 10px 0 0; font-size: 14px; line-height: 1.65; color: var(--vxh-muted); }
+
+/* ==========================================================================
+   RESEARCH
+   ========================================================================== */
+
+.vxr-reports { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(20px, 3vw, 40px); }
+.vxr-report { display: block; color: inherit; }
+.vxr-report__fig { margin: 0 0 16px; border-radius: var(--vxh-r); overflow: hidden; aspect-ratio: 16 / 10; background: var(--vxh-card); border: 1px solid var(--vxh-line); }
+.vxr-report__fig img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.vxr-report__meta { display: flex; align-items: center; gap: 10px; font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--vxh-muted); }
+.vxr-report__meta b { color: var(--vxh-blue); }
+.vxr-report__meta i { width: 3px; height: 3px; border-radius: 50%; background: var(--vxh-line); }
+.vxr-report__t {
+	display: block;
+	margin-top: 10px;
+	font-family: var(--vxh-display);
+	font-size: clamp(19px, 1.8vw, 24px);
+	font-weight: 500;
+	letter-spacing: -.03em;
+	line-height: 1.16;
+	color: var(--vxh-ink);
+	text-wrap: balance;
+	transition: color .3s ease;
+}
+.vxr-report:hover .vxr-report__t { color: var(--vxh-blue); }
+.vxr-report__d { display: block; margin-top: 10px; font-size: 14px; line-height: 1.65; color: var(--vxh-muted); }
+.vxr-report__go { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 12.5px; font-weight: 700; letter-spacing: .04em; color: var(--vxh-blue); }
+.vxr-report__go svg { transition: transform .35s var(--vxh-ease); }
+.vxr-report:hover .vxr-report__go svg { transform: translate(2px, -2px); }
+
+/* ==========================================================================
+   CLIENTS
+   ========================================================================== */
+
+.vxk-list { list-style: none; margin: 0; padding: 0; }
+.vxk-list > li {
+	display: grid;
+	grid-template-columns: 4.5rem minmax(0, 1fr) minmax(0, .8fr);
+	gap: 8px clamp(20px, 3vw, 48px);
+	padding: clamp(24px, 3vw, 40px) 0;
+	border-top: 1px solid var(--vxh-line);
+}
+.vxk-list > li:last-child { border-bottom: 1px solid var(--vxh-line); }
+.vxk-list__n {
+	grid-row: 1 / span 4;
+	font-family: var(--vxh-display);
+	font-size: clamp(28px, 3vw, 42px);
+	font-weight: 500;
+	letter-spacing: -.045em;
+	line-height: 1;
+	color: rgba(20, 54, 216, .2);
+	font-variant-numeric: tabular-nums;
+}
+.vxk-list__k { grid-column: 2; font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--vxh-blue); }
+.vxk-list__t {
+	grid-column: 2;
+	margin: 8px 0 0;
+	font-family: var(--vxh-display);
+	font-size: clamp(20px, 2.2vw, 30px);
+	font-weight: 500;
+	letter-spacing: -.032em;
+	line-height: 1.12;
+	color: var(--vxh-ink) !important;
+	text-wrap: balance;
+}
+.vxk-list__d { grid-column: 2; margin: 12px 0 0; font-size: 14.5px; line-height: 1.7; color: var(--vxh-muted); max-width: 54ch; }
+/* The three lines each audience gets sit in their own column on a wide screen
+   and fall under the paragraph on a narrow one — they are a caption on the
+   claim, not a feature list. */
+.vxk-list__gets { grid-column: 3; grid-row: 2 / span 3; list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; align-content: start; }
+.vxk-list__gets li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 13.5px; line-height: 1.45; color: var(--vxh-ink); }
+.vxk-list__gets svg { margin-top: 3px; color: var(--vxh-blue); }
+@media (max-width: 960px) {
+	.vxk-list > li { grid-template-columns: 3rem minmax(0, 1fr); }
+	.vxk-list__n { grid-row: 1 / span 5; }
+	.vxk-list__gets { grid-column: 2; grid-row: auto; margin-top: 16px; }
+}
+
+/* ==========================================================================
+   PARTNERSHIP
+   ========================================================================== */
+
+.vxt-models { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--vxh-line); border: 1px solid var(--vxh-line); }
+.vxt-models li { background: #fff; padding: clamp(22px, 2.6vw, 34px); transition: background-color .3s ease; }
+.vxt-models li:hover { background: var(--vxh-card); }
+.vxt-models__n { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .16em; color: var(--vxh-blue); font-variant-numeric: tabular-nums; }
+.vxt-models__t { margin: 14px 0 0; font-family: var(--vxh-display); font-size: clamp(18px, 1.7vw, 23px); font-weight: 500; letter-spacing: -.028em; line-height: 1.16; color: var(--vxh-ink) !important; text-wrap: balance; }
+.vxt-models__d { margin: 10px 0 0; font-size: 14px; line-height: 1.65; color: var(--vxh-muted); }
+@media (max-width: 1024px) { .vxt-models { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .vxt-models { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   COMMUNITY
+   ========================================================================== */
+
+.vxm-who__list { list-style: none; margin: 0; padding: 0; }
+.vxm-who__list li {
+	display: grid;
+	grid-template-columns: 4rem minmax(0, 1fr);
+	gap: clamp(16px, 3vw, 40px);
+	padding: clamp(24px, 3vw, 40px) 0;
+	border-top: 1px solid var(--vxh-line);
+}
+.vxm-who__list li:last-child { border-bottom: 1px solid var(--vxh-line); }
+.vxm-who__n { font-family: var(--vxh-display); font-size: clamp(24px, 2.6vw, 36px); font-weight: 500; letter-spacing: -.045em; line-height: 1; color: rgba(20, 54, 216, .2); font-variant-numeric: tabular-nums; }
+.vxm-who__k { display: block; font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--vxh-blue); }
+.vxm-who__t { margin: 8px 0 0; font-family: var(--vxh-display); font-size: clamp(20px, 2.2vw, 30px); font-weight: 500; letter-spacing: -.032em; line-height: 1.12; color: var(--vxh-ink) !important; text-wrap: balance; }
+.vxm-who__d { margin: 12px 0 0; font-size: 14.5px; line-height: 1.7; color: var(--vxh-muted); max-width: 62ch; }
+.vxm-who__go { margin-top: 14px; }
+@media (max-width: 640px) { .vxm-who__list li { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
+
+.vxm-shots { padding: 0 0 clamp(40px, 6vw, 80px); background: #fff; }
+.vxm-shots__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); }
+.vxm-shots figure { margin: 0; position: relative; border-radius: var(--vxh-r); overflow: hidden; aspect-ratio: 3 / 2; border: 1px solid var(--vxh-line); }
+.vxm-shots img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.vxm-shots figcaption {
+	position: absolute;
+	left: 14px;
+	bottom: 14px;
+	padding: 8px 13px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .93);
+	color: var(--vxh-ink);
+	font-size: 12.5px;
+	font-weight: 600;
+}
+@media (max-width: 700px) { .vxm-shots__grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   CONTACT
+   ========================================================================== */
+
+.vxn-contact__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: clamp(32px, 5vw, 88px); align-items: start; }
+.vxn-contact__h {
+	margin: 0 0 clamp(24px, 3vw, 36px);
+	font-family: var(--vxh-display);
+	font-size: clamp(24px, 2.8vw, 38px);
+	font-weight: 500;
+	letter-spacing: -.035em;
+	line-height: 1.1;
+	color: var(--vxh-ink) !important;
+}
+.vxn-contact__lines { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--vxh-line); }
+.vxn-contact__lines li { border-bottom: 1px solid var(--vxh-line); }
+.vxn-contact__lines a {
+	display: grid;
+	grid-template-columns: 40px minmax(0, 1fr) 16px;
+	align-items: center;
+	gap: 14px;
+	padding: 18px 0;
+	color: inherit;
+	transition: padding-left .35s var(--vxh-ease);
+}
+.vxn-contact__lines a:hover { padding-left: 8px; }
+.vxn-contact__ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: rgba(20, 54, 216, .07); color: var(--vxh-blue); transition: background-color .25s ease; }
+.vxn-contact__lines a:hover .vxn-contact__ic { background: var(--vxh-blue); color: #fff; }
+.vxn-contact__lines b { display: block; font-size: 15px; font-weight: 600; letter-spacing: -.01em; color: var(--vxh-ink); overflow-wrap: anywhere; }
+.vxn-contact__lines small { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.45; color: var(--vxh-muted); }
+.vxn-contact__lines a > svg:last-child { justify-self: end; color: var(--vxh-line); transition: color .25s ease, transform .35s var(--vxh-ease); }
+.vxn-contact__lines a:hover > svg:last-child { color: var(--vxh-blue); transform: translate(2px, -2px); }
+
+/* Edge to edge, and short: it is an orientation aid, not a feature. */
+.vxn-contact__map { margin-top: clamp(48px, 7vw, 96px); height: clamp(300px, 42vh, 460px); background: var(--vxh-cream); border-top: 1px solid var(--vxh-line); }
+.vxn-contact__map iframe { display: block; width: 100%; height: 100%; border: 0; filter: saturate(.9) contrast(1.02); }
+
+@media (max-width: 900px) { .vxn-contact__grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   FAQ, IN GROUPS
+   ========================================================================== */
+
+.vxp-faq__group + .vxp-faq__group { margin-top: clamp(40px, 5vw, 68px); }
+/* The theme sets type on every h1-h6 it can reach, at a specificity a single
+   class does not clear — the same reason the heading guards at the top of this
+   sheet exist. This is a label, not a heading, so it says so loudly. */
+.vxh .vxp-faq__gh {
+	margin: 0 0 clamp(14px, 1.8vw, 22px);
+	font-family: var(--vxh-display) !important;
+	font-size: 11.5px !important;
+	font-weight: 700 !important;
+	letter-spacing: .16em !important;
+	line-height: 1.3 !important;
+	text-transform: uppercase;
+	color: var(--vxh-muted) !important;
+}

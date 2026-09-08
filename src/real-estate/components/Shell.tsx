@@ -6,12 +6,14 @@
  * rest of the site's — put page content inside it and nothing escapes either
  * way.
  *
- * The motion layer is mounted here rather than per page, so every route gets the
- * scroll behaviour without opting in. See Motion.tsx.
+ * The motion layers are mounted here rather than per page, so every route gets
+ * them without opting in: Motion.tsx reveals things as they arrive, Scroll.tsx
+ * owns the damped scroll, the parallax and the gallery's drift.
  */
 import type { ReactNode } from 'react';
 
 import Motion from './Motion';
+import Scroll from './Scroll';
 import Nav from './Nav';
 import Footer from './Footer';
 import type { Locale } from '../lib/types';
@@ -20,6 +22,7 @@ export default function Shell({ region, children }: { region: Locale; children: 
   return (
     <div className="vxn-re">
       <Motion />
+      <Scroll />
       <Nav region={region} />
       <main>{children}</main>
       <Footer region={region} />

@@ -1,0 +1,2379 @@
+/* ==========================================================================
+   VALUNXT — Dubai real estate, the scene system (2026-09-08)
+
+   The pillar page. Loaded after valunxt-realestate.css, which keeps the
+   navigation, the footer, the forms and the service pages; everything the home
+   page draws is here.
+
+   WHAT THIS REPLACED, and why. The page was a stack of rounded panels on a
+   neutral ground, each one sized by its own content, each one narrower than the
+   screen. Two things were wrong with it: the panels were short, so the page read
+   as a list of cards rather than as a sequence of places, and the gutter down
+   both sides meant no photograph ever reached the edge of the screen — which is
+   the one thing a property page cannot afford, because the picture IS the
+   product.
+
+   THE SYSTEM NOW, in five rules:
+
+     1. A section is a SCENE: exactly one screen tall, edge to edge, and it does
+        not overflow. `height: 100svh` is deliberate rather than `min-height` —
+        a definite height is what lets the pictures inside a scene fill the room
+        left over after the type, at every viewport, without measuring anything
+        in JavaScript.
+     2. Nothing that cannot fit vertically is stacked vertically. The scenes with
+        more content than a screen — properties, communities, reviews — put it on
+        a horizontal rail with arrows, which is what the references do and the
+        reason they can hold a screen without scrolling inside it.
+     3. Type has two registers and no others: a very large, light, uppercase
+        KICKER that names the scene, and a large, light, tightly tracked LINE
+        that makes its argument. Everything else is small.
+     4. Space is the luxury. A scene is mostly empty; the heading sits at the top
+        left, the action at the bottom, and the picture takes whatever is left.
+     5. Photographs bleed. A scene's side padding stops at its type; its images
+        run to the edge of the screen.
+
+   THE HERO DOES NOT SCROLL AWAY. It is pinned, and the rest of the page rises
+   over it on its own rounded edge while the hero collapses underneath — see
+   THE PIN below. That is the one piece of scroll choreography on the page.
+
+   WHAT IS OURS. The blue pair the rest of the site was rebuilt on
+   (#1436D8 → #2F63FF), the navy (#0A1730), the warm sand ground, and DM Sans —
+   the brand's display face, and the same class of grotesque the references set
+   their type in. The references are Swiss and grey-green; none of that colour
+   is here.
+
+   Everything is scoped under `.vxn-re`, the boundary Shell renders.
+   ========================================================================== */
+
+.vxn-re {
+	/* Warm, not grey. Dubai is sand and gold-hour light; a cool grey ground made
+	   every photograph on the page look like it was taken in an office. */
+	--vxr-ground: #F5F2EC;
+	--vxr-sand: #EDE7DC;
+	--vxr-night: #0A1730;
+	--vxr-ink: #0E2166;
+	--vxr-blue: #1436D8;
+	--vxr-blue-2: #2F63FF;
+	--vxr-wash: #E8EFFA;
+
+	/* The scene's own side margin. Wide, and deliberately wider than looks
+	   necessary: on a page where the photographs bleed, the margin is the only
+	   thing holding the type off the edge of the screen, and it is most of what
+	   separates a luxury page from a dense one. */
+	--vxr-edge: clamp(20px, 6vw, 132px);
+	/* The room the fixed bar takes, plus the scene's own breathing space. */
+	--vxr-top: calc(var(--nav-h, 78px) + clamp(18px, 6vh, 88px));
+	--vxr-bot: clamp(24px, 6.5vh, 92px);
+	--vxr-r: clamp(10px, .9vw, 16px);
+	background: var(--vxr-ground);
+}
+
+
+/* ==========================================================================
+   THE PIN — the hero does not scroll, the page rises over it
+
+   The brief: scrolling off the hero must not be a continuous scroll of the whole
+   page. The hero stays where it is and COLLAPSES; the next section comes up from
+   under it.
+
+   How it is done, in two rules and one custom property:
+
+     • `.vxr-mast` is sticky at the top of the document with `z-index: 0`, so it
+       stays on screen for exactly its own height's worth of scrolling.
+     • `.vxr-flow` — everything after it — is `z-index: 2` with an opaque ground
+       and a rounded top edge, so it travels up over the pinned hero and covers
+       it. That edge is the "coming out from below" the brief asks for.
+     • `--collapse` (0 → 1 across the hero's height) is written by HeroStage in
+       one rAF loop. The hero's contents scale down, lift and dim against it, so
+       the hero is receding while the page arrives rather than just being hidden.
+
+   Deliberately NOT a scroll-jacking library. Nothing intercepts the wheel: the
+   scroll is the browser's, at the speed the reader chose, and with the keyboard,
+   a trackpad and a screen reader all behaving normally. The only thing that is
+   unusual is which element is painted on top.
+   ========================================================================== */
+
+.vxn-re .vxr-mast {
+	position: sticky;
+	top: 0;
+	z-index: 0;
+	/* Its own height is the distance the collapse plays over. */
+	height: 100svh;
+	min-height: 560px;
+	overflow: hidden;
+}
+.vxn-re .vxr-mast__in {
+	height: 100%;
+	transform-origin: 50% 34%;
+	/* The collapse. Scale and lift are what make it read as the hero receding
+	   rather than the hero being covered — the difference is small and it is the
+	   whole effect. */
+	transform:
+		scale(calc(1 - var(--collapse, 0) * .12))
+		translateY(calc(var(--collapse, 0) * -7vh));
+	will-change: transform;
+}
+.vxn-re .vxr-mast__shot { height: 100%; min-height: 0; }
+/* Dimmed by the same progress, so the last thing the hero does is go quiet. */
+.vxn-re .vxr-mast__wash::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: var(--vxr-night);
+	opacity: calc(var(--collapse, 0) * .55);
+}
+
+.vxn-re .vxr-flow {
+	position: relative;
+	z-index: 2;
+	background: var(--vxr-ground);
+}
+/* The edge that rises. It belongs to the first scene rather than to the flow,
+   so no `overflow` is needed anywhere to clip it — and `overflow` on an ancestor
+   is exactly what would break the sticky hero above. */
+.vxn-re .vxr-flow > .vxr-scene:first-child {
+	border-radius: clamp(18px, 2.4vw, 40px) clamp(18px, 2.4vw, 40px) 0 0;
+	box-shadow: 0 -40px 90px -30px rgba(10, 23, 48, .5);
+}
+
+/* The hero is the one thing on the page that must not animate in — it is the
+   first paint. Motion.tsx is told so by this attribute in HeroStage. */
+@media (prefers-reduced-motion: reduce) {
+	.vxn-re .vxr-mast__in { transform: none; }
+	.vxn-re .vxr-mast__wash::after { opacity: 0; }
+}
+
+
+/* ==========================================================================
+   THE SCROLL LAYER — inertia, and the parallax that reads it
+
+   `Scroll.tsx` starts Lenis and writes one number, `--par`, onto every scene
+   that asks for it: -1 when the scene's middle is a screen below the fold, +1
+   when it is a screen above, 0 as it passes the centre. Everything below is a
+   consumer of that number. Nothing is positioned from JavaScript.
+
+   THE ONE RULE FOR TRAVEL. A parallax image is 118% of its frame and moves at
+   most ±4.5% of its own height, so the furthest it can travel is comfortably
+   inside the 18% of overflow it has to hide in. That is why no photograph on
+   this page can ever show its own edge, at any viewport, at any scroll speed.
+   Change one of those numbers and you have to change the other.
+   ========================================================================== */
+
+/* Lenis drives the real scroll position rather than transforming a wrapper, so
+   `position: sticky` still works and the pinned masthead is unaffected. These
+   two rules are the library's own requirement. */
+html.vxr-lenis { scroll-behavior: auto !important; }
+html.vxr-lenis, html.vxr-lenis body { height: auto; }
+
+.vxn-re .vxr-par {
+	height: 118% !important;
+	transform: translate3d(0, calc(var(--par, 0) * -4.5%), 0);
+	will-change: transform;
+}
+
+/* The card images carry a hover as well, so both live in one transform — a
+   second `transform` declaration would simply replace the first. */
+.vxn-re .vxr-prop__media img,
+.vxn-re .vxr-place__media img {
+	height: 116%;
+	transform: translate3d(0, calc(var(--par, 0) * -4%), 0);
+}
+.vxn-re .vxr-prop:hover .vxr-prop__media img { transform: translate3d(0, calc(var(--par, 0) * -4%), 0) scale(1.05); }
+.vxn-re .vxr-place:hover .vxr-place__media img { transform: translate3d(0, calc(var(--par, 0) * -4%), 0) scale(1.05); }
+
+@media (prefers-reduced-motion: reduce) {
+	.vxn-re .vxr-par,
+	.vxn-re .vxr-prop__media img,
+	.vxn-re .vxr-place__media img { height: 100% !important; transform: none; }
+	.vxn-re .vxr-living__track { transform: none; }
+}
+
+
+/* ==========================================================================
+   THE SCENE — one screen, edge to edge, no overflow
+   ========================================================================== */
+
+.vxn-re .vxr-scene {
+	position: relative;
+	width: 100%;
+	/* Definite, not a minimum: see rule 1 at the top of this file. The floor is
+	   for short laptop viewports, where one screen is not enough room for a
+	   heading, a paragraph and a photograph and something has to give.
+
+	   THE DISTANCE between scenes is a MARGIN, not padding, and that is the whole
+	   trick: padding would have to come out of the screen the scene already fills,
+	   and every percentage height inside it — the rails, the Ways row, the two
+	   bleeding columns — is measured against that definite height. A margin sits
+	   outside the box and costs the composition nothing. */
+	height: 100svh;
+	min-height: 660px;
+	display: flex;
+	flex-direction: column;
+	padding: var(--vxr-top) var(--vxr-edge) var(--vxr-bot);
+	overflow: hidden;
+	background: transparent;
+	color: var(--body);
+}
+
+/* A scene ends, then there is a fifth of a screen with nothing in it at all,
+   then the next one begins. That empty band is the "time to recover" between
+   two sections, and it is the single thing that stops the page reading as a
+   stack of slides pressed flat against one another. */
+.vxn-re .vxr-flow > .vxr-scene + .vxr-scene { margin-top: clamp(72px, 22vh, 300px); }
+.vxn-re .vxr-flow > .vxr-scene:last-child { margin-bottom: clamp(72px, 18vh, 240px); }
+/* `<figure>` ships with `margin: 1em 40px` from the UA sheet, which is enough
+   to stop a full-bleed photograph 40px short of the screen. Nothing inside a
+   scene wants it; the two columns that need a margin set their own below. */
+.vxn-re .vxr-scene figure,
+.vxn-re .vxr-mast figure { margin: 0; }
+
+/* ONE GROUND, AND ONE PLANE ON IT.
+
+   There were four surfaces on this page — white, sand, navy and brand blue —
+   and alternating them is most of why it read as a mix of other people's
+   designs rather than as one of its own. The ground is now the only surface:
+   every scene sits on it, the photographs supply all the colour, and exactly
+   one scene (the enquiry) is allowed a plane of its own. Two would make it a
+   pattern; one makes it the punctuation.
+
+   These two are kept as no-ops so a scene still asking for them does not fall
+   through to a colour that no longer exists. */
+.vxn-re .vxr-scene--tint,
+.vxn-re .vxr-scene--paper { background: transparent; }
+.vxn-re .vxr-scene--ink { background: var(--vxr-night); color: rgba(255, 255, 255, .74); }
+.vxn-re .vxr-scene--blue {
+	background: linear-gradient(150deg, #1436D8 0%, #2F63FF 100%);
+	color: rgba(255, 255, 255, .8);
+}
+/* For scenes whose content reaches the screen's edge — the rails, and the
+   service scene's image column. Their type re-applies the padding itself. */
+.vxn-re .vxr-scene--flush { padding-inline: 0; }
+.vxn-re .vxr-pad { padding-inline: var(--vxr-edge); }
+
+/* The body of a scene: everything under the heading, taking the room that is
+   left. `min-height: 0` is what allows a child to be smaller than its content
+   and scroll or crop instead of pushing the scene past one screen. */
+.vxn-re .vxr-scene__body {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+/* The heading row: name at the left, one action at the right, on the same
+   baseline — the arrangement all three references share. */
+.vxn-re .vxr-scene__head {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: clamp(20px, 4vw, 72px);
+	margin-bottom: clamp(24px, 5.4vh, 76px);
+}
+.vxn-re .vxr-scene__foot {
+	flex: none;
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: clamp(16px, 3vw, 48px);
+	margin-top: clamp(10px, 1.6vh, 20px);
+}
+
+
+/* ==========================================================================
+   THE TWO TYPE REGISTERS, and the small parts
+   ========================================================================== */
+
+/* The kicker — very large, light, uppercase. This names the scene. It is the
+   references' one loud gesture and it works because nothing else on the screen
+   competes with it. Sized in vw so it holds the same share of the screen at
+   every width, and in vh as well so it cannot eat a short viewport. */
+.vxn-re .vxr-kicker {
+	margin: 0;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 300;
+	font-size: clamp(1.7rem, min(5vw, 7vh), 4.6rem);
+	line-height: 1.0;
+	letter-spacing: .012em;
+	text-transform: uppercase;
+	color: var(--vxr-ink);
+	text-wrap: balance;
+}
+.vxn-re .vxr-scene--ink .vxr-kicker,
+.vxn-re .vxr-scene--blue .vxr-kicker { color: #fff; }
+
+/* On a rail scene the kicker is a label over the goods, not the argument — so it
+   is set down a register and the room goes to the photographs instead. */
+.vxn-re .vxr-props .vxr-kicker,
+.vxn-re .vxr-says .vxr-kicker,
+.vxn-re .vxr-faq .vxr-kicker,
+.vxn-re .vxr-cloud .vxr-kicker { font-size: clamp(1.4rem, min(3.4vw, 4.6vh), 2.9rem); }
+.vxn-re .vxr-props .vxr-scene__head,
+.vxn-re .vxr-says .vxr-scene__head { margin-bottom: clamp(12px, 1.8vh, 22px); }
+
+/* The line — large, light, tightly tracked, sentence case. This makes the
+   argument. One emphasis per line, in the accent; three is a heading nobody
+   reads as a sentence. */
+.vxn-re .vxr-line {
+	margin: 0;
+	max-width: 18ch;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 300;
+	font-size: clamp(1.7rem, min(3.7vw, 5.6vh), 3.5rem);
+	line-height: 1.12;
+	letter-spacing: -.028em;
+	color: var(--vxr-ink);
+	text-wrap: balance;
+}
+.vxn-re .vxr-line em { font-style: normal; color: var(--vxr-blue-2); }
+.vxn-re .vxr-line--wide { max-width: 24ch; }
+.vxn-re .vxr-line--mid { max-width: 22ch; margin-inline: auto; text-align: center; }
+.vxn-re .vxr-scene--ink .vxr-line,
+.vxn-re .vxr-scene--blue .vxr-line { color: #fff; }
+.vxn-re .vxr-scene--ink .vxr-line em,
+.vxn-re .vxr-scene--blue .vxr-line em { color: rgba(255, 255, 255, .58); }
+
+/* Body copy. Small, and there is never much of it. */
+.vxn-re .vxr-copy {
+	margin: 0;
+	max-width: 42ch;
+	font-size: clamp(13px, .95vw, 15px);
+	line-height: 1.85;
+	color: var(--muted);
+	text-wrap: pretty;
+}
+.vxn-re .vxr-copy + .vxr-copy { margin-top: 1em; }
+.vxn-re .vxr-copy--mid { margin-inline: auto; text-align: center; }
+.vxn-re .vxr-copy b { display: block; margin-bottom: .7em; font-weight: 600; color: var(--vxr-ink); }
+.vxn-re .vxr-scene--ink .vxr-copy { color: rgba(255, 255, 255, .68); }
+.vxn-re .vxr-scene--blue .vxr-copy { color: rgba(255, 255, 255, .82); }
+.vxn-re .vxr-scene--ink .vxr-copy b,
+.vxn-re .vxr-scene--blue .vxr-copy b { color: #fff; }
+
+/* The small tracked label. Used for eyebrows, list items and specs — anywhere
+   a word needs to be quiet and legible at 11px. */
+.vxn-re .vxr-tag {
+	display: block;
+	margin-bottom: clamp(14px, 2.2vh, 26px);
+	font-size: clamp(10px, .78vw, 11.5px);
+	font-weight: 600;
+	letter-spacing: .22em;
+	text-transform: uppercase;
+	color: var(--vxr-blue);
+}
+.vxn-re .vxr-scene--ink .vxr-tag,
+.vxn-re .vxr-scene--blue .vxr-tag { color: rgba(255, 255, 255, .62); }
+
+/* The chip — kept from the panel system for the scenes that still label
+   themselves twice (a kicker plus a category). */
+.vxn-re .vxr-chip {
+	display: block;
+	width: fit-content;
+	margin: 0 0 clamp(14px, 1.8vh, 24px);
+	padding: 6px 15px;
+	border: 1px solid rgba(20, 54, 216, .3);
+	border-radius: 999px;
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+	color: var(--vxr-blue);
+}
+.vxn-re .vxr-scene--ink .vxr-chip,
+.vxn-re .vxr-scene--blue .vxr-chip { border-color: rgba(255, 255, 255, .34); color: rgba(255, 255, 255, .88); }
+.vxn-re .vxr-chip--mid { margin-inline: auto; }
+
+/* --- The actions ---------------------------------------------------------- */
+
+/* The rectangle. The references put a black one at the corner of every scene;
+   ours is the brand navy, which is the same gesture in this palette. */
+.vxn-re .vxr-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	flex: none;
+	padding: 15px 24px;
+	background: var(--vxr-night);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+	text-decoration: none;
+	white-space: nowrap;
+	border: 0;
+	cursor: pointer;
+	font-family: inherit;
+	transition: background-color .35s var(--ease), transform .35s var(--ease);
+}
+.vxn-re .vxr-btn:hover { background: var(--vxr-blue); transform: translateY(-2px); }
+.vxn-re .vxr-btn svg { width: 15px; height: 15px; transition: transform .35s var(--ease); }
+.vxn-re .vxr-btn:hover svg { transform: translateX(4px); }
+.vxn-re .vxr-btn i { font-style: normal; opacity: .5; letter-spacing: .06em; }
+.vxn-re .vxr-btn--light { background: #fff; color: var(--vxr-ink); }
+.vxn-re .vxr-btn--light:hover { background: var(--vxr-blue); color: #fff; }
+
+/* The pill, with the arrow in its own disc — kept from the panel system for the
+   two scenes that sit on blue. */
+.vxn-re .vxr-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	padding: 6px 6px 6px 22px;
+	border-radius: 999px;
+	background: #fff;
+	color: var(--vxr-ink);
+	font-size: 13px;
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: transform .3s var(--ease), box-shadow .3s ease;
+}
+.vxn-re .vxr-pill:hover { transform: translateY(-2px); box-shadow: 0 16px 30px -16px rgba(10, 23, 48, .5); }
+.vxn-re .vxr-pill > span {
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	background: var(--vxr-wash);
+	color: var(--vxr-blue);
+	transition: background-color .3s var(--ease), color .3s var(--ease);
+}
+.vxn-re .vxr-pill:hover > span { background: var(--vxr-blue); color: #fff; }
+.vxn-re .vxr-pill svg { width: 15px; height: 15px; }
+.vxn-re .vxr-pill--blue { background: var(--vxr-blue); color: #fff; }
+.vxn-re .vxr-pill--blue > span { background: rgba(255, 255, 255, .18); color: #fff; }
+.vxn-re .vxr-pill--blue:hover > span { background: #fff; color: var(--vxr-blue); }
+
+/* --- The rail's arrows ---------------------------------------------------- */
+
+.vxn-re .vxr-arrows { display: flex; gap: 10px; flex: none; }
+.vxn-re .vxr-arrow {
+	display: grid;
+	place-items: center;
+	width: clamp(44px, 3.4vw, 54px);
+	height: clamp(44px, 3.4vw, 54px);
+	border: 1px solid rgba(14, 33, 102, .28);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--vxr-ink);
+	cursor: pointer;
+	transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+}
+.vxn-re .vxr-arrow:hover { background: var(--vxr-night); border-color: var(--vxr-night); color: #fff; }
+.vxn-re .vxr-arrow svg { width: 17px; height: 17px; }
+.vxn-re .vxr-arrow--back svg { transform: rotate(180deg); }
+/* Nothing left to scroll to. Kept visible and inert rather than removed, so the
+   pair does not jump about as the rail moves. */
+.vxn-re .vxr-arrow[disabled] { opacity: .28; pointer-events: none; }
+.vxn-re .vxr-scene--ink .vxr-arrow,
+.vxn-re .vxr-scene--blue .vxr-arrow { border-color: rgba(255, 255, 255, .34); color: #fff; }
+.vxn-re .vxr-scene--ink .vxr-arrow:hover,
+.vxn-re .vxr-scene--blue .vxr-arrow:hover { background: #fff; color: var(--vxr-ink); border-color: #fff; }
+
+/* --- The rail ------------------------------------------------------------
+   Rule 2: what will not fit down the screen goes across it. The rail takes the
+   room the heading left, so its children can be `height: 100%` and fill the
+   scene exactly — which is what makes these screens look composed rather than
+   like a grid that happened to be cropped.
+   -------------------------------------------------------------------------- */
+
+.vxn-re .vxr-rail {
+	flex: 1;
+	min-height: 0;
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: max-content;
+	/* One explicit row, sized to the rail itself. Without it the row is auto,
+	   every `height: 100%` inside a card resolves to nothing, and the tiles fall
+	   back to their images' intrinsic height and overflow the screen. */
+	grid-template-rows: minmax(0, 1fr);
+	align-items: stretch;
+	gap: clamp(14px, 2vw, 40px);
+	overflow-x: auto;
+	overflow-y: hidden;
+	scroll-behavior: smooth;
+	scroll-snap-type: x proximity;
+	scroll-padding-inline: var(--vxr-edge);
+	padding-inline: var(--vxr-edge);
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	overscroll-behavior-x: contain;
+}
+.vxn-re .vxr-rail::-webkit-scrollbar { display: none; }
+.vxn-re .vxr-rail > * { scroll-snap-align: start; }
+@media (prefers-reduced-motion: reduce) {
+	.vxn-re .vxr-rail { scroll-behavior: auto; }
+}
+
+
+/* ==========================================================================
+   WAYS — Buy, Sell and Rent, as one screen
+
+   Unchanged in arrangement from the version signed off: a large uppercase line
+   centred over three photographs, the middle one taller, all three whole. What
+   changed is that it is now a scene — the row takes the room left under the
+   type rather than a fixed aspect ratio, so the three pictures are as tall as
+   the screen allows and the section ends exactly at the fold.
+
+   THE TYPE IS AN EXCEPTION, and stays one: this is the only centred scene on
+   the page. Every other kicker sits at the top left.
+   ========================================================================== */
+
+.vxn-re .vxr-ways { background: transparent; }
+
+.vxn-re .vxr-ways__mark {
+	position: absolute;
+	top: calc(var(--vxr-top) + clamp(30px, 6vh, 90px));
+	width: 15px;
+	height: 15px;
+	pointer-events: none;
+	background:
+		linear-gradient(to right, transparent calc(50% - .5px), rgba(14, 33, 102, .3) calc(50% - .5px), rgba(14, 33, 102, .3) calc(50% + .5px), transparent calc(50% + .5px)),
+		linear-gradient(to bottom, transparent calc(50% - .5px), rgba(14, 33, 102, .3) calc(50% - .5px), rgba(14, 33, 102, .3) calc(50% + .5px), transparent calc(50% + .5px));
+}
+.vxn-re .vxr-ways__mark--l { left: clamp(14px, 2vw, 30px); }
+.vxn-re .vxr-ways__mark--r { right: clamp(14px, 2vw, 30px); }
+
+/* The screen: the section's own title at rest, the name and description of
+   whichever card is hovered otherwise. Its height is held so the row below
+   cannot move when the text swaps. */
+.vxn-re .vxr-ways__head {
+	display: grid;
+	justify-items: center;
+	flex: none;
+	max-width: 1120px;
+	margin: 0 auto clamp(20px, 3.6vh, 52px);
+	text-align: center;
+}
+.vxn-re .vxr-ways__h {
+	margin: 0;
+	min-height: 2.05em;
+	max-width: 16ch;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 300;
+	font-size: clamp(1.8rem, min(4.8vw, 7vh), 4.2rem);
+	line-height: 1.03;
+	letter-spacing: .008em;
+	text-transform: uppercase;
+	color: var(--vxr-ink);
+	text-wrap: balance;
+	animation: vxr-ways-in .5s var(--ease) both;
+}
+.vxn-re .vxr-ways__p {
+	margin: clamp(12px, 1.8vh, 24px) 0 0;
+	min-height: 3.4em;
+	max-width: 52ch;
+	font-size: clamp(13px, 1.05vw, 16px);
+	line-height: 1.64;
+	color: var(--muted);
+	text-wrap: pretty;
+	animation: vxr-ways-in .5s var(--ease) .04s both;
+}
+@keyframes vxr-ways-in {
+	from { opacity: 0; transform: translateY(12px); }
+	to { opacity: 1; transform: none; }
+}
+
+.vxn-re .vxr-ways__all { margin-top: clamp(14px, 2.2vh, 28px); }
+
+/* Three columns, bottom-aligned, the middle one taller. `align-items: end` is
+   what drops the outer two rather than a margin — so the three bottoms line up
+   at every width and only the tops step. Heights are percentages of the room
+   left, which resolve because the scene's height is definite. */
+.vxn-re .vxr-ways__row {
+	flex: 1;
+	min-height: 0;
+	display: grid;
+	grid-template-columns: minmax(0, .84fr) minmax(0, 1.16fr) minmax(0, .84fr);
+	/* Definite, for the same reason as the rail above. The step between the
+	   middle card and the outer two is made inside each card, not here. */
+	grid-template-rows: minmax(0, 1fr);
+	align-items: stretch;
+	gap: clamp(12px, 2.2vw, 40px);
+	width: min(100%, 1240px);
+	margin-inline: auto;
+}
+
+.vxn-re .vxr-way {
+	appearance: none;
+	cursor: pointer;
+	/* Two rows: the label takes what it needs at the top, the picture takes the
+	   rest. A flex column with a percentage-height child cannot do this — the
+	   label would be pushed out of the box by a 100%-tall frame. */
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr);
+	height: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font-family: inherit;
+	text-align: center;
+}
+
+/* Above the picture, and only while this card is the one being looked at — the
+   label answers "what am I hovering", which is a question nobody has until they
+   hover. */
+.vxn-re .vxr-way__tag {
+	display: block;
+	flex: none;
+	margin-bottom: 12px;
+	font-size: clamp(10.5px, .92vw, 13px);
+	font-weight: 600;
+	letter-spacing: .24em;
+	text-transform: uppercase;
+	color: var(--vxr-ink);
+	opacity: 0;
+	transform: translateY(8px);
+	transition: opacity .35s var(--ease), transform .45s var(--ease);
+}
+.vxn-re .vxr-way[data-on="true"] .vxr-way__tag { opacity: 1; transform: none; }
+
+.vxn-re .vxr-way__frame {
+	display: block;
+	overflow: hidden;
+	background: var(--vxr-ground);
+	transition: transform .55s var(--ease), box-shadow .55s ease;
+}
+/* The step the reference makes: the middle card is full height, the outer two
+   are held back. */
+.vxn-re .vxr-way__frame { align-self: end; }
+.vxn-re .vxr-way--buy .vxr-way__frame { height: 100%; }
+.vxn-re .vxr-way--sell .vxr-way__frame,
+.vxn-re .vxr-way--rent .vxr-way__frame { height: 84%; }
+.vxn-re .vxr-way__frame img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	/* At rest the row is held back a little, so the pictures read as one field
+	   and the hovered one steps out of it. */
+	filter: saturate(.88);
+	transition: transform .9s var(--ease), filter .55s ease;
+}
+.vxn-re .vxr-way[data-on="true"] .vxr-way__frame { transform: translateY(-10px); box-shadow: 0 40px 70px -40px rgba(14, 33, 102, .45); }
+.vxn-re .vxr-way[data-on="true"] .vxr-way__frame img { transform: scale(1.06); filter: saturate(1.04); }
+
+
+/* ==========================================================================
+   LIVING — the lifestyle gallery, on the client's carousel reference
+
+   THE GEOMETRY, measured off the reference rather than guessed. Three frames,
+   all roughly the SAME HEIGHT (~563 of an 820px stage, so 69%), each one stepped
+   UP from the one before it by about 130px (16% of the stage). Their widths
+   differ — wide, wider, narrower — and the row runs off BOTH edges of the
+   screen: the first frame is cropped by the left edge, the last by the right.
+
+   So the arrangement is a staircase, not a scatter: equal heights, equal steps,
+   unequal widths. That is what makes it read as one moving band rather than as
+   three photographs that happen to be near each other.
+
+   NO CAPTIONS. The reference has none, and the earlier version's gradient
+   overlays were doing the one thing this section must not: explaining. The
+   pictures are the argument.
+
+   IT DRIFTS. The track is translated by `--drift` (-1 → 1 across the viewport)
+   while the arrows page the rail's own `scrollLeft` — a transform and a scroll
+   offset, so they compose instead of fighting for the same property.
+   ========================================================================== */
+
+.vxn-re .vxr-living { padding-inline: 0; }
+.vxn-re .vxr-living .vxr-scene__head {
+	padding-inline: var(--vxr-edge);
+	margin-bottom: clamp(12px, 2vh, 24px);
+}
+/* One line, and small: this section is photographs, and every pixel the heading
+   takes comes straight off them. */
+.vxn-re .vxr-living .vxr-kicker { font-size: clamp(1.3rem, min(2.8vw, 3.8vh), 2.3rem); }
+
+.vxn-re .vxr-living__rail {
+	flex: 1;
+	min-height: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scroll-behavior: smooth;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	/* Horizontal only. Vertical wheel over this element must still scroll the
+	   page — see the note on `data-lenis-prevent` in sections/panels.tsx. */
+	overscroll-behavior-x: contain;
+}
+.vxn-re .vxr-living__rail::-webkit-scrollbar { display: none; }
+
+/* The track carries the drift so the rail's own scrollLeft stays untouched.
+   `align-items: end` puts every frame on the floor of the stage; the step is
+   then a bottom margin, which is what builds the staircase. */
+.vxn-re .vxr-living__track {
+	display: flex;
+	align-items: flex-end;
+	height: 100%;
+	gap: clamp(14px, 1.8vw, 34px);
+	/* Half a gutter, so the first frame is CROPPED by the left edge exactly as
+	   the reference's is, rather than sitting politely inside the margin. */
+	padding-left: 0;
+	padding-right: var(--vxr-edge);
+	transform: translate3d(calc(var(--drift, 0) * -3vw), 0, 0);
+	will-change: transform;
+}
+
+.vxn-re .vxr-frame {
+	position: relative;
+	display: block;
+	flex: none;
+	/* Same height for every frame — the reference's are within five pixels of
+	   each other. The variation is in the width and the step, not the size.
+	   68% of the stage plus two 8.5vh steps just fits the stage, which is what
+	   keeps the third frame on screen instead of clipped above it. */
+	height: 68%;
+	overflow: hidden;
+	background: var(--vxr-sand);
+}
+.vxn-re .vxr-frame img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 1.2s var(--ease);
+}
+.vxn-re .vxr-frame:hover img { transform: scale(1.04); }
+
+/* The staircase: every frame sits one step higher than the one to its left,
+   resetting every third so the rhythm repeats along a rail of any length. */
+.vxn-re .vxr-frame:nth-child(3n + 1) { margin-bottom: 0; width: clamp(240px, 34vw, 660px); }
+.vxn-re .vxr-frame:nth-child(3n + 2) { margin-bottom: 8.5vh; width: clamp(280px, 41vw, 800px); }
+.vxn-re .vxr-frame:nth-child(3n + 3) { margin-bottom: 17vh; width: clamp(220px, 29vw, 560px); }
+
+/* --- The controls --------------------------------------------------------
+   The reference stacks them at the bottom right: the pair of circular arrows on
+   one line, the action on the line under it. Both clear of the pictures.
+   -------------------------------------------------------------------------- */
+
+.vxn-re .vxr-living__foot {
+	flex: none;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: clamp(12px, 1.6vw, 22px);
+	padding-inline: var(--vxr-edge);
+	margin-top: clamp(12px, 2vh, 26px);
+}
+.vxn-re .vxr-living__act { display: flex; align-items: stretch; gap: 10px; }
+/* White with a hairline, as the reference has it — the navy rectangle would be
+   the loudest thing on a screen that is meant to be photographs. */
+.vxn-re .vxr-living__act .vxr-btn {
+	border: 1px solid rgba(14, 33, 102, .22);
+	background: transparent;
+	color: var(--vxr-ink);
+}
+.vxn-re .vxr-living__act .vxr-btn:hover { background: var(--vxr-ink); border-color: var(--vxr-ink); color: #fff; }
+/* The square beside it. It is a link to the full set, not an ornament. */
+.vxn-re .vxr-living__all {
+	display: grid;
+	place-items: center;
+	width: clamp(44px, 3.4vw, 54px);
+	border: 0;
+	background: var(--vxr-night);
+	color: #fff;
+	transition: background-color .3s var(--ease);
+}
+.vxn-re .vxr-living__all:hover { background: var(--vxr-blue); }
+.vxn-re .vxr-living__all svg { width: 16px; height: 16px; }
+
+@media (max-width: 1000px) {
+	.vxn-re .vxr-frame:nth-child(3n + 1),
+	.vxn-re .vxr-frame:nth-child(3n + 2),
+	.vxn-re .vxr-frame:nth-child(3n + 3) { margin-bottom: 0; width: clamp(240px, 78vw, 520px); }
+	.vxn-re .vxr-frame { height: 100%; }
+	.vxn-re .vxr-living__track { transform: none; padding-left: var(--vxr-edge); }
+}
+
+
+/* ==========================================================================
+   REST — one photograph, one sentence, and a screen of nothing else
+
+   THE POINT OF THIS SECTION IS THE EMPTINESS. Everything around it is working:
+   three ways in, a firm introducing itself, four services, twelve properties.
+   This one sells nothing and asks for nothing. It is where the page stops
+   talking for a moment, which is the only reason the rest of it reads as
+   composed rather than as a brochure.
+
+   On the client's reference exactly: a photograph cut off by the top of the
+   screen, a hairline dropped out of it, and one very large sentence centred in
+   the room underneath with a short paragraph under that. No pill, no button, no
+   list, no arrows. Nothing is allowed into this scene that could be clicked.
+
+   THE FACE IS THE EXCEPTION. This is the only thing on the page set in Forum —
+   the brand's serif, already self-hosted at /real-estate/fonts/ and used across
+   the rest of the site. The reference's impact is a serif at four times the size
+   of anything near it, and DM Sans at that size reads as a headline rather than
+   as a statement. It stays the only serif here: two would make it a style.
+   ========================================================================== */
+
+.vxn-re .vxr-rest { padding: 0; background: transparent; }
+
+/* Cut off by the top of the screen, and full bleed. The crop matters more than
+   the height: it has to read as a window, not as a banner. */
+.vxn-re .vxr-rest__band {
+	position: relative;
+	flex: none;
+	height: 30%;
+	min-height: 0;
+	overflow: hidden;
+	background: var(--vxr-sand);
+}
+.vxn-re .vxr-rest__band img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: 50% 62%;
+}
+
+.vxn-re .vxr-rest__say {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: clamp(18px, 3.4vh, 46px);
+	padding: clamp(20px, 4vh, 64px) var(--vxr-edge) var(--vxr-bot);
+	text-align: center;
+}
+
+/* The hairline the reference drops out of the photograph into the sentence. It
+   is the only mark on the screen besides the words. */
+.vxn-re .vxr-rest__rule {
+	flex: none;
+	width: 1px;
+	height: clamp(28px, 6vh, 76px);
+	background: linear-gradient(180deg, rgba(14, 33, 102, .38), rgba(14, 33, 102, 0));
+}
+
+.vxn-re .vxr-rest__h {
+	margin: 0;
+	max-width: 15ch;
+	/* ONE FAMILY ON THE PAGE. This was set in Forum, the brand's serif, for one
+	   scene only — and a second typeface used once is not a flourish, it is the
+	   seam where a design stops being its own. The distinction here comes from
+	   scale and from the space around it, which is where it should have come from
+	   in the first place. */
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 200;
+	/* Four times the body size. That ratio is the whole effect. */
+	font-size: clamp(2.2rem, min(6vw, 9.4vh), 5.8rem);
+	line-height: 1.08;
+	letter-spacing: -.038em;
+	color: var(--vxr-ink);
+	text-wrap: balance;
+}
+.vxn-re .vxr-rest__h em { font-style: normal; color: var(--vxr-blue-2); }
+
+.vxn-re .vxr-rest__p {
+	margin: 0;
+	max-width: 44ch;
+	font-size: clamp(13px, .95vw, 15px);
+	line-height: 1.9;
+	color: var(--muted);
+	text-wrap: pretty;
+}
+
+@media (max-width: 1000px) {
+	.vxn-re .vxr-rest__band { height: clamp(180px, 26vh, 300px); }
+}
+
+
+/* ==========================================================================
+   ABOUT — the split: the argument at the left, one tall photograph at the right
+
+   The fourth reference, in this palette. A very large light line, a short
+   paragraph under it, the three figures as a quiet row at the bottom of the
+   column, and a single portrait photograph holding the right half floor to
+   ceiling. Nothing else on the screen.
+   ========================================================================== */
+
+.vxn-re .vxr-about { background: transparent; }
+.vxn-re .vxr-about .vxr-scene__body {
+	display: grid;
+	grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
+	align-items: stretch;
+	gap: clamp(28px, 6.5vw, 140px);
+}
+/* Two rows. The argument centres itself in the first; the figures sit on the
+   floor of the column with everything between them left empty. Stacking all
+   four blocks in one centred column is what made this scene read as dense. */
+.vxn-re .vxr-about__say {
+	display: grid;
+	grid-template-rows: minmax(0, 1fr) auto;
+	height: 100%;
+}
+.vxn-re .vxr-about__lead { align-self: center; }
+.vxn-re .vxr-about__say .vxr-line { max-width: 15ch; }
+.vxn-re .vxr-about__say .vxr-copy { margin-top: clamp(18px, 3vh, 34px); }
+.vxn-re .vxr-about__act { margin-top: clamp(22px, 4vh, 48px); }
+
+/* The figures. A row of three, hairline-separated, at the foot of the column —
+   the evidence under the claim, not a band of its own. */
+.vxn-re .vxr-figs {
+	align-self: end;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: clamp(14px, 2.4vw, 40px);
+	margin-top: clamp(30px, 6vh, 76px);
+	padding-top: clamp(18px, 3vh, 34px);
+	border-top: 1px solid rgba(14, 33, 102, .16);
+}
+.vxn-re .vxr-fig__v {
+	margin: 0;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 300;
+	font-size: clamp(1.5rem, 2.4vw, 2.4rem);
+	line-height: 1;
+	letter-spacing: -.03em;
+	color: var(--vxr-blue);
+}
+.vxn-re .vxr-fig__k {
+	margin: 8px 0 0;
+	font-size: clamp(10px, .78vw, 11.5px);
+	font-weight: 600;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+	color: var(--vxr-ink);
+}
+
+/* The photograph. It bleeds off the right edge of the screen, which is what
+   stops the scene reading as two boxes side by side. */
+/* The parent class is on this selector so it out-specifies the `figure`
+   margin reset in the scene core, which is (0,2,1) to this rule's (0,2,0) —
+   without it the reset wins and the photograph loses the negative margins that
+   take it to the edges of the screen. */
+.vxn-re .vxr-about .vxr-about__shot {
+	position: relative;
+	align-self: stretch;
+	margin: calc(var(--vxr-top) * -1) calc(var(--vxr-edge) * -1) calc(var(--vxr-bot) * -1) 0;
+	overflow: hidden;
+	background: var(--vxr-sand);
+}
+.vxn-re .vxr-about .vxr-about__shot img { width: 100%; height: 100%; object-fit: cover; }
+
+
+/* ==========================================================================
+   SERVE — the services, on the second reference ("OUR EXPERTISE")
+
+   Panel for panel: the kicker at the top left, the four service names listed
+   small and tracked beneath it, then a long drop of empty space, then the
+   argument and its action at the bottom left. The right half is one full-height
+   column of photographs.
+
+   THE INTERACTION. Pointing at a service name brings its photograph forward in
+   the column. The reference's column is a still life of four printed pieces;
+   ours is the four services, and making them respond is what turns a decorative
+   column into the section's own navigation.
+   ========================================================================== */
+
+.vxn-re .vxr-serve { padding-right: 0; background: transparent; }
+.vxn-re .vxr-serve .vxr-scene__body {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, .82fr);
+	gap: clamp(24px, 5.5vw, 120px);
+	min-height: 0;
+}
+
+.vxn-re .vxr-serve__col {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	padding-bottom: clamp(4px, 1vh, 14px);
+}
+/* The list of names, immediately under the kicker, as the reference has it. */
+.vxn-re .vxr-serve__list {
+	list-style: none;
+	margin: clamp(20px, 3.4vh, 44px) 0 0;
+	padding: 0;
+	display: grid;
+	gap: clamp(8px, 1.3vh, 15px);
+}
+.vxn-re .vxr-serve__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	width: fit-content;
+	border: 0;
+	padding: 0;
+	background: none;
+	font-family: inherit;
+	font-size: clamp(11px, .88vw, 13px);
+	font-weight: 600;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+	color: var(--vxr-ink);
+	text-decoration: none;
+	cursor: pointer;
+	transition: color .3s var(--ease);
+}
+/* The rule that grows out of the word — the whole hover, and enough of one. */
+.vxn-re .vxr-serve__link::after {
+	content: "";
+	width: 0;
+	height: 1px;
+	background: var(--vxr-blue);
+	transition: width .45s var(--ease);
+}
+.vxn-re .vxr-serve__link[data-on="true"] { color: var(--vxr-blue); }
+.vxn-re .vxr-serve__link[data-on="true"]::after { width: clamp(24px, 3vw, 54px); }
+
+/* The drop. This is the reference's composition: the argument is at the FOOT of
+   the column, a long way under the list, and the emptiness between them is the
+   point. */
+.vxn-re .vxr-serve__gap { flex: 1; min-height: clamp(20px, 6vh, 90px); }
+.vxn-re .vxr-serve__say { max-width: 44ch; }
+.vxn-re .vxr-serve__act { margin-top: clamp(18px, 2.8vh, 34px); align-self: flex-start; }
+
+/* The column of photographs. Full height, bleeding off the right edge. */
+.vxn-re .vxr-serve__stack {
+	position: relative;
+	align-self: stretch;
+	min-height: 0;
+	margin: calc(var(--vxr-top) * -1) 0 calc(var(--vxr-bot) * -1);
+	overflow: hidden;
+	background: var(--vxr-sand);
+}
+.vxn-re .vxr-serve__shot {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transition: opacity .7s var(--ease), transform 1.1s var(--ease);
+	transform: scale(1.06);
+}
+.vxn-re .vxr-serve__shot[data-on="true"] { opacity: 1; transform: none; }
+.vxn-re .vxr-serve__shot img { width: 100%; height: 100%; object-fit: cover; }
+/* The name of whatever is showing, over the foot of the column. */
+.vxn-re .vxr-serve__cap {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: clamp(40px, 6vh, 90px) clamp(20px, 2.4vw, 40px) clamp(18px, 2.4vh, 30px);
+	background: linear-gradient(to top, rgba(10, 23, 48, .78), rgba(10, 23, 48, 0));
+	color: #fff;
+	pointer-events: none;
+}
+.vxn-re .vxr-serve__cap b {
+	display: block;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 400;
+	font-size: clamp(1rem, 1.5vw, 1.5rem);
+	letter-spacing: -.02em;
+}
+.vxn-re .vxr-serve__cap span {
+	display: block;
+	margin-top: 6px;
+	max-width: 40ch;
+	font-size: clamp(12px, .9vw, 14px);
+	line-height: 1.55;
+	color: rgba(255, 255, 255, .8);
+}
+
+
+/* ==========================================================================
+   PROPS — the properties, on the first reference
+
+   A rail rather than a grid: one large card at the left running the full height
+   of the scene, then smaller cards whose picture stops short and whose facts sit
+   under it. Arrows at the bottom right. This is how the reference holds a screen
+   without scrolling inside it, and it is why the section can now be one screen.
+
+   The filters stay — they are the only thing on this page that does work rather
+   than describes it — but they are one quiet row in the heading now rather than
+   a search panel of their own.
+   ========================================================================== */
+
+.vxn-re .vxr-props { background: transparent; }
+.vxn-re .vxr-props .vxr-scene__head { padding-inline: var(--vxr-edge); }
+.vxn-re .vxr-props .vxr-scene__foot { padding-inline: var(--vxr-edge); margin-top: clamp(8px, 1.2vh, 14px); }
+.vxn-re .vxr-props__meta { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.vxn-re .vxr-props__count { margin: 0; font-size: 12.5px; color: var(--muted); }
+.vxn-re .vxr-props__note { margin: 0; max-width: 82ch; font-size: 10.5px; line-height: 1.6; color: var(--muted); opacity: .82; }
+
+/* One card. The large one is the rail's first child and takes the whole height;
+   the rest are the reference's smaller card — picture, then the facts under it
+   in one line, then the title and the place. */
+.vxn-re .vxr-prop {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: clamp(230px, 22vw, 330px);
+	text-decoration: none;
+}
+.vxn-re .vxr-prop--lead { width: clamp(300px, 32vw, 520px); }
+.vxn-re .vxr-prop__media {
+	position: relative;
+	flex: 1;
+	min-height: 0;
+	overflow: hidden;
+	background: var(--vxr-sand);
+}
+/* The smaller cards stop short of the floor so their facts have a place to sit —
+   the reference's exact arrangement, and what makes the first card read as the
+   subject. */
+.vxn-re .vxr-prop:not(.vxr-prop--lead) .vxr-prop__media { flex: 0 0 74%; }
+.vxn-re .vxr-prop__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease); }
+.vxn-re .vxr-prop:hover .vxr-prop__media img { transform: scale(1.05); }
+.vxn-re .vxr-prop__flag {
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	padding: 5px 11px;
+	background: rgba(255, 255, 255, .92);
+	color: var(--vxr-ink);
+	font-size: 9.5px;
+	font-weight: 600;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+}
+
+/* The facts line: price first, then the three numbers, all on one row in the
+   reference's manner. */
+.vxn-re .vxr-prop__facts {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 5px 16px;
+	margin: clamp(10px, 1.4vh, 16px) 0 0;
+	font-size: clamp(10.5px, .8vw, 12px);
+	color: var(--muted);
+}
+.vxn-re .vxr-prop__price {
+	font-weight: 600;
+	font-size: clamp(12px, .95vw, 14px);
+	letter-spacing: .02em;
+	color: var(--vxr-ink);
+}
+.vxn-re .vxr-prop__price i { font-style: normal; font-weight: 500; color: var(--vxr-blue); }
+.vxn-re .vxr-prop__title {
+	margin: 7px 0 0;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 400;
+	font-size: clamp(15px, 1.25vw, 20px);
+	line-height: 1.24;
+	letter-spacing: -.02em;
+	color: var(--vxr-ink);
+	transition: color .3s var(--ease);
+}
+.vxn-re .vxr-prop--lead .vxr-prop__title { font-size: clamp(17px, 1.6vw, 26px); }
+.vxn-re .vxr-prop:hover .vxr-prop__title { color: var(--vxr-blue); }
+.vxn-re .vxr-prop__where { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+
+/* Nothing matched. A real state: it says what is on, and offers both ways out. */
+.vxn-re .vxr-props__empty {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 16px;
+	max-width: 52ch;
+	padding-inline: var(--vxr-edge);
+}
+
+
+/* ==========================================================================
+   PLACES — the communities, on the sixth reference
+
+   Photographs at different sizes and different heights on a rail, with the
+   heading held at the left. The offsets are the composition: three tiles of the
+   same size in a row is a grid, and a grid of places is a directory.
+   ========================================================================== */
+
+.vxn-re .vxr-places { background: transparent; }
+.vxn-re .vxr-places .vxr-scene__head,
+.vxn-re .vxr-places .vxr-scene__foot { padding-inline: var(--vxr-edge); }
+.vxn-re .vxr-places__rail { align-items: stretch; }
+
+.vxn-re .vxr-place {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	width: clamp(220px, 26vw, 420px);
+	height: 100%;
+	text-decoration: none;
+}
+/* The step. Every third tile is short and dropped, every second is tall — so the
+   rail has a rhythm rather than a ruler. */
+.vxn-re .vxr-place:nth-child(3n + 1) .vxr-place__media { height: 78%; }
+.vxn-re .vxr-place:nth-child(3n + 2) .vxr-place__media { height: 100%; }
+.vxn-re .vxr-place:nth-child(3n + 3) .vxr-place__media { height: 62%; }
+.vxn-re .vxr-place:nth-child(3n + 3) { width: clamp(190px, 20vw, 320px); }
+
+.vxn-re .vxr-place__media {
+	position: relative;
+	overflow: hidden;
+	background: var(--vxr-ground);
+}
+.vxn-re .vxr-place__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+.vxn-re .vxr-place:hover .vxr-place__media img { transform: scale(1.06); }
+/* The name over the foot of the picture, which is where it belongs on a
+   photograph that is the whole tile. */
+.vxn-re .vxr-place__body {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: clamp(36px, 6vh, 76px) clamp(14px, 1.4vw, 24px) clamp(14px, 1.8vh, 22px);
+	background: linear-gradient(to top, rgba(10, 23, 48, .8), rgba(10, 23, 48, 0));
+	color: #fff;
+}
+.vxn-re .vxr-place__name {
+	display: block;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 400;
+	font-size: clamp(15px, 1.35vw, 22px);
+	letter-spacing: -.02em;
+}
+.vxn-re .vxr-place__stock {
+	display: block;
+	margin-top: 5px;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, .66);
+}
+.vxn-re .vxr-place__blurb {
+	display: block;
+	margin-top: 8px;
+	max-width: 34ch;
+	font-size: 12.5px;
+	line-height: 1.5;
+	color: rgba(255, 255, 255, .82);
+	opacity: 0;
+	transform: translateY(6px);
+	transition: opacity .4s var(--ease), transform .4s var(--ease);
+}
+.vxn-re .vxr-place:hover .vxr-place__blurb { opacity: 1; transform: none; }
+
+
+/* ==========================================================================
+   LAUNCHES — off-plan, on the third reference ("THE JOURNAL")
+
+   The kicker at the top left, its one action at the top right, then two
+   photographs offset against each other at the bottom left and a list of rows
+   at the right, each row a hairline apart with its category above the name and
+   its link at the far right.
+   ========================================================================== */
+
+.vxn-re .vxr-launch { background: transparent; }
+.vxn-re .vxr-launch .vxr-scene__body {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	align-items: stretch;
+	gap: clamp(26px, 4vw, 84px);
+	min-height: 0;
+}
+
+/* The two pictures, offset — the reference's exact arrangement: a tall one at
+   the left, a smaller one dropped and overlapped at the right. */
+.vxn-re .vxr-launch__pics { position: relative; height: 100%; min-height: 0; }
+.vxn-re .vxr-launch__pic {
+	position: absolute;
+	overflow: hidden;
+	background: var(--vxr-sand);
+}
+.vxn-re .vxr-launch__pic img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+.vxn-re .vxr-launch__pic:hover img { transform: scale(1.05); }
+.vxn-re .vxr-launch__pic--a { left: 0; bottom: 0; width: 62%; height: 92%; }
+.vxn-re .vxr-launch__pic--b { right: 0; bottom: 0; width: 50%; height: 62%; }
+
+/* The rows. */
+.vxn-re .vxr-launch__rows {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	min-height: 0;
+	overflow: hidden;
+}
+.vxn-re .vxr-launch__row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 20px;
+	padding: clamp(12px, 2vh, 22px) 0;
+	border-top: 1px solid rgba(14, 33, 102, .14);
+	text-decoration: none;
+}
+.vxn-re .vxr-launch__row:last-child { border-bottom: 1px solid rgba(14, 33, 102, .14); }
+.vxn-re .vxr-launch__k {
+	display: block;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+.vxn-re .vxr-launch__n {
+	display: block;
+	margin-top: 8px;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 400;
+	font-size: clamp(15px, 1.4vw, 22px);
+	line-height: 1.2;
+	letter-spacing: -.022em;
+	color: var(--vxr-ink);
+	transition: color .3s var(--ease);
+}
+.vxn-re .vxr-launch__row:hover .vxr-launch__n { color: var(--vxr-blue); }
+.vxn-re .vxr-launch__go {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+	color: var(--muted);
+	transition: color .3s var(--ease);
+}
+.vxn-re .vxr-launch__row:hover .vxr-launch__go { color: var(--vxr-blue); }
+.vxn-re .vxr-launch__go svg { width: 13px; height: 13px; transition: transform .3s var(--ease); }
+.vxn-re .vxr-launch__row:hover .vxr-launch__go svg { transform: translate(2px, -2px); }
+
+
+/* ==========================================================================
+   SELL — the argument at the left, what it buys you at the right
+
+   THIS USED TO BE the photograph-band-then-statement layout. REST now owns that
+   arrangement, and owning it is the point: a scene whose whole job is to be the
+   quiet one cannot also be the template for a section that wants a valuation
+   request. So Selling became a plain split — two columns of type, no picture —
+   which is the only scene on the page built out of nothing but words, and reads
+   as the businesslike moment it is.
+   ========================================================================== */
+
+.vxn-re .vxr-sell { background: transparent; }
+.vxn-re .vxr-sell .vxr-scene__body {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(28px, 7vw, 140px);
+	min-height: 0;
+}
+.vxn-re .vxr-sell__say { display: flex; flex-direction: column; justify-content: center; }
+.vxn-re .vxr-sell__say .vxr-copy { margin-top: clamp(18px, 3vh, 34px); }
+.vxn-re .vxr-sell__act { margin-top: clamp(22px, 4vh, 48px); align-self: flex-start; }
+
+/* The four promises, hairline-ruled down the right column with a great deal of
+   air between them — a list you can read at a glance, not a specification. */
+.vxn-re .vxr-sell__items {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+}
+.vxn-re .vxr-sell__items li {
+	display: grid;
+	gap: 8px;
+	padding: clamp(14px, 2.6vh, 30px) 0;
+	border-top: 1px solid rgba(14, 33, 102, .16);
+}
+.vxn-re .vxr-sell__items li:last-child { border-bottom: 1px solid rgba(14, 33, 102, .16); }
+.vxn-re .vxr-sell__items b {
+	font-size: clamp(11px, .82vw, 12.5px);
+	font-weight: 600;
+	letter-spacing: .18em;
+	text-transform: uppercase;
+	color: var(--vxr-ink);
+}
+.vxn-re .vxr-sell__items span {
+	max-width: 44ch;
+	font-size: clamp(12px, .88vw, 13.5px);
+	line-height: 1.75;
+	color: var(--muted);
+}
+
+
+/* ==========================================================================
+   SAYS — the reviews on a rail, the developers as the floor of the same screen
+
+   Two things that were each too small to hold a screen of their own, and belong
+   together anyway: what clients said, over the names of whose buildings they
+   said it about.
+   ========================================================================== */
+
+.vxn-re .vxr-says { background: transparent; }
+.vxn-re .vxr-says .vxr-scene__head,
+.vxn-re .vxr-says .vxr-scene__foot { padding-inline: var(--vxr-edge); }
+.vxn-re .vxr-says__rail { align-items: stretch; }
+
+.vxn-re .vxr-said {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(12px, 1.8vh, 20px);
+	width: clamp(250px, 25vw, 400px);
+	height: 100%;
+	margin: 0;
+	padding: clamp(20px, 2.2vw, 34px);
+	background: #fff;
+}
+.vxn-re .vxr-said blockquote {
+	flex: 1;
+	min-height: 0;
+	overflow: hidden;
+	margin: 0;
+	font-size: clamp(13px, 1vw, 15.5px);
+	line-height: 1.62;
+	color: var(--body);
+}
+.vxn-re .vxr-said figcaption { display: flex; flex-direction: column; gap: 3px; }
+.vxn-re .vxr-said figcaption b { font-size: 13.5px; font-weight: 600; color: var(--vxr-ink); }
+.vxn-re .vxr-said figcaption span { font-size: 11.5px; color: var(--muted); }
+.vxn-re .vxr-said .vxn-re-stars svg,
+.vxn-re .vxr-said svg { color: #E8A33D; }
+
+/* The developer strip: the floor of the reviews screen. */
+.vxn-re .vxr-devs {
+	flex: none;
+	margin-top: clamp(16px, 2.6vh, 34px);
+	padding: clamp(18px, 3vh, 34px) var(--vxr-edge) 0;
+	border-top: 1px solid rgba(14, 33, 102, .16);
+}
+.vxn-re .vxr-devs__t {
+	margin: 0 0 clamp(10px, 1.6vh, 18px);
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+/* THEY LOOP, and they are legible.
+
+   Ten logos at 26px and half opacity were a grey smear at the bottom of the
+   reviews screen — the developers whose buildings this practice sells, rendered
+   smaller than the small print under them. They are twice the size now, at full
+   strength, and the row runs continuously: the set is rendered twice and the
+   track is translated by exactly half its width, so the seam between the last
+   logo and the first one never lands anywhere a reader can see it. */
+.vxn-re .vxr-devs__row {
+	display: flex;
+	overflow: hidden;
+	/* Fade both ends so the logos arrive and leave rather than being cut. */
+	-webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+	mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+.vxn-re .vxr-devs__track {
+	display: flex;
+	align-items: center;
+	flex: none;
+	gap: clamp(30px, 4.5vw, 84px);
+	padding-right: clamp(30px, 4.5vw, 84px);
+	animation: vxr-devs-run 38s linear infinite;
+}
+.vxn-re .vxr-devs__row:hover .vxr-devs__track { animation-play-state: paused; }
+@keyframes vxr-devs-run {
+	from { transform: translate3d(0, 0, 0); }
+	to { transform: translate3d(-50%, 0, 0); }
+}
+.vxn-re .vxr-devs__track img {
+	height: clamp(28px, 3.2vw, 52px);
+	width: auto;
+	flex: none;
+	opacity: .78;
+	transition: opacity .3s ease;
+}
+.vxn-re .vxr-devs__track img:hover { opacity: 1; }
+.vxn-re .vxr-devs__track span { flex: none; font-size: clamp(13px, 1.1vw, 17px); font-weight: 500; color: var(--vxr-ink); white-space: nowrap; }
+
+/* A row that moves on its own is exactly the kind of motion the flag is for. */
+@media (prefers-reduced-motion: reduce) {
+	.vxn-re .vxr-devs__track { animation: none; }
+	.vxn-re .vxr-devs__row { overflow-x: auto; scrollbar-width: none; }
+}
+
+
+/* ==========================================================================
+   ASK — the enquiry, on blue
+
+   The argument at the left, the form at the right. The form is the only place
+   on the page a field appears, so it takes a white card; and it is the one thing
+   here that is allowed to scroll inside its own box, because a form that is
+   cropped is a form that cannot be sent.
+   ========================================================================== */
+
+.vxn-re .vxr-ask { background: linear-gradient(150deg, #1436D8 0%, #2F63FF 100%); }
+.vxn-re .vxr-ask .vxr-scene__body {
+	display: grid;
+	grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+	align-items: stretch;
+	gap: clamp(26px, 6vw, 130px);
+	min-height: 0;
+}
+.vxn-re .vxr-ask__say { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+.vxn-re .vxr-ask__why {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: clamp(12px, 2.2vh, 22px) clamp(18px, 2.6vw, 40px);
+	margin: clamp(26px, 4.4vh, 52px) 0 0;
+	padding: clamp(22px, 3.4vh, 38px) 0 0;
+	border-top: 1px solid rgba(255, 255, 255, .26);
+}
+.vxn-re .vxr-ask__why li {
+	position: relative;
+	padding-left: 20px;
+	font-size: clamp(12px, .92vw, 14px);
+	line-height: 1.45;
+	color: rgba(255, 255, 255, .88);
+}
+.vxn-re .vxr-ask__why li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: .55em;
+	width: 9px;
+	height: 1px;
+	background: rgba(255, 255, 255, .7);
+}
+/* The form IS the card — the wrapper only supplies the scroll. Wrapping the
+   component in a second white box gave a card inside a card, and the component's
+   own type is white because it was built to sit directly on the blue. */
+.vxn-re .vxr-ask__form {
+	max-height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background: transparent;
+	scrollbar-width: thin;
+	/* Centred against the argument in the other column. `safe` is the point of
+	   this declaration: plain `center` puts the top of an overflowing form above
+	   the scroll container's start edge, where it cannot be scrolled back to.
+	   Where `safe` is not understood the whole line is dropped and the form is
+	   top-aligned, which is the behaviour this replaces. */
+	display: flex;
+	flex-direction: column;
+	justify-content: safe center;
+}
+
+/* --- The lead form, on white ---------------------------------------------
+   Everything below re-colours a component that was designed for a dark panel:
+   white labels, white text and a glass fill, all of which vanish on a white
+   card. The markup is untouched — the field names are load-bearing (the handler
+   matches them by suffix) and so is the hidden form_id.
+   -------------------------------------------------------------------------- */
+
+.vxn-re .vxr-ask .vxn-re-form {
+	padding: clamp(24px, 3.2vw, 64px);
+	border: 0;
+	border-radius: 0;
+	background: #fff;
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+}
+.vxn-re .vxr-ask .vxn-re-form__title {
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-weight: 400;
+	font-size: clamp(1.1rem, 1.6vw, 1.6rem);
+	letter-spacing: -.025em;
+	color: var(--vxr-ink);
+}
+.vxn-re .vxr-ask .vxn-re-form__note { color: var(--muted); margin-bottom: clamp(14px, 2vh, 22px); }
+.vxn-re .vxr-ask .vxn-re-form__field { margin-bottom: clamp(16px, 2.4vh, 26px); }
+.vxn-re .vxr-ask .vxn-re-form__row { gap: clamp(16px, 2vw, 30px); }
+.vxn-re .vxr-ask .vxn-re-form__field span {
+	margin-bottom: 9px;
+	font-size: 9.5px;
+	letter-spacing: .2em;
+	font-weight: 600;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+/* Hairline-ruled rather than boxed, so the form matches the search row at the
+   other end of the page. */
+.vxn-re .vxr-ask .vxn-re-form input,
+.vxn-re .vxr-ask .vxn-re-form select {
+	padding: 10px 0 12px;
+	font-size: 15px;
+	border: 0;
+	border-bottom: 1px solid rgba(14, 33, 102, .18);
+	border-radius: 0;
+	background: transparent;
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+	color: var(--vxr-ink);
+}
+.vxn-re .vxr-ask .vxn-re-form input::placeholder { color: rgba(14, 33, 102, .38); }
+.vxn-re .vxr-ask .vxn-re-form input:focus,
+.vxn-re .vxr-ask .vxn-re-form select:focus { outline: 2px solid var(--vxr-blue); outline-offset: 2px; }
+.vxn-re .vxr-ask .vxn-re-form__legal { color: var(--muted); }
+.vxn-re .vxr-ask .vxn-re-form .vxn-re__btn {
+	justify-content: center;
+	border: 0;
+	border-radius: 0;
+	margin-top: clamp(10px, 1.8vh, 20px);
+	padding: 17px 24px;
+	background: var(--vxr-night);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+}
+.vxn-re .vxr-ask .vxn-re-form .vxn-re__btn:hover { background: var(--vxr-blue); }
+.vxn-re .vxr-ask .vxn-re-form__status[data-state="sent"] {
+	color: #0B4A2F;
+	background: #E6F4EC;
+	border: 1px solid #B9DFC9;
+}
+.vxn-re .vxr-ask .vxn-re-form__status[data-state="error"] {
+	color: #7A1A16;
+	background: #FBE9E8;
+	border: 1px solid #F0C2BF;
+}
+
+
+/* ==========================================================================
+   FAQ — the questions at the right, the heading held at the left
+
+   The list is the one part of a scene that changes height while you look at it,
+   so it scrolls inside its own column rather than pushing the screen open.
+   ========================================================================== */
+
+.vxn-re .vxr-faq { background: transparent; }
+.vxn-re .vxr-faq .vxr-scene__body {
+	display: grid;
+	grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+	gap: clamp(28px, 7vw, 150px);
+	min-height: 0;
+}
+.vxn-re .vxr-faq__say { display: flex; flex-direction: column; justify-content: center; }
+.vxn-re .vxr-faq__say .vxr-copy { margin-top: clamp(18px, 2.6vh, 32px); }
+.vxn-re .vxr-faq__act { margin-top: clamp(18px, 2.8vh, 34px); align-self: flex-start; }
+.vxn-re .vxr-faq__list {
+	max-width: none;
+	margin: 0;
+	min-height: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	/* NOT `overscroll-behavior: contain`. When the answers are long enough to
+	   scroll, containing them means the page stops dead while the pointer is over
+	   the list, and the reader has to move the mouse to carry on down the page. */
+	scrollbar-width: thin;
+	padding-right: 6px;
+}
+
+
+/* ==========================================================================
+   CLOUD — the closing screen: where people actually search
+
+   Kept because it is the section's SEO surface, and given a screen of its own
+   rather than being a footnote under the FAQ.
+   ========================================================================== */
+
+.vxn-re .vxr-cloud { background: transparent; }
+.vxn-re .vxr-cloud .vxr-scene__body { min-height: 0; overflow-y: auto; scrollbar-width: thin; }
+.vxn-re .vxr-cloud .vxn-re-pop__cols { gap: clamp(24px, 4vw, 72px) !important; }
+.vxn-re .vxr-cloud .vxn-re-pop__col li + li { margin-top: 9px; }
+
+
+/* ==========================================================================
+   NARROW — where one screen stops being the right unit
+
+   Below this width the two-column scenes have nowhere to put their second
+   column, and a screen's height is barely a heading and a picture. So the rule
+   is relaxed: a scene keeps a screen as its FLOOR and grows past it. The rails
+   stay rails — they are the one thing that works better on a phone than a grid.
+   ========================================================================== */
+
+@media (max-width: 1000px) {
+	.vxn-re .vxr-scene {
+		height: auto;
+		min-height: 100svh;
+		padding-bottom: clamp(48px, 9vh, 90px);
+	}
+	.vxn-re .vxr-about .vxr-scene__body,
+	.vxn-re .vxr-serve .vxr-scene__body,
+	.vxn-re .vxr-launch .vxr-scene__body,
+	.vxn-re .vxr-ask .vxr-scene__body,
+	.vxn-re .vxr-faq .vxr-scene__body {
+		grid-template-columns: minmax(0, 1fr);
+		gap: clamp(28px, 6vh, 56px);
+	}
+	.vxn-re .vxr-about .vxr-about__shot,
+	.vxn-re .vxr-serve__stack {
+		height: clamp(300px, 52vh, 460px);
+		margin: 0 calc(var(--vxr-edge) * -1);
+	}
+	.vxn-re .vxr-serve { padding-right: var(--vxr-edge); }
+	.vxn-re .vxr-serve__gap { display: none; }
+	.vxn-re .vxr-launch__pics { height: clamp(280px, 46vh, 420px); }
+	.vxn-re .vxr-ask__form { max-height: none; overflow: visible; }
+	.vxn-re .vxr-faq__list { overflow: visible; }
+	.vxn-re .vxr-rail { min-height: clamp(340px, 56vh, 520px); }
+	.vxn-re .vxr-sell .vxr-scene__body { grid-template-columns: minmax(0, 1fr); gap: clamp(24px, 5vh, 48px); }
+	/* The pinned hero is a large-screen effect. On a phone the collapse costs a
+	   screen's worth of scrolling to say something the first screen already
+	   said, so the hero simply scrolls. */
+	.vxn-re .vxr-mast { position: relative; }
+	.vxn-re .vxr-mast__in { transform: none; }
+	.vxn-re .vxr-mast__wash::after { opacity: 0; }
+}
+
+@media (max-width: 760px) {
+	.vxn-re .vxr-ways__row {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: none;
+		align-items: stretch;
+		gap: 14px;
+	}
+	.vxn-re .vxr-way { grid-template-rows: auto auto; height: auto; }
+	.vxn-re .vxr-way--buy .vxr-way__frame,
+	.vxn-re .vxr-way--sell .vxr-way__frame,
+	.vxn-re .vxr-way--rent .vxr-way__frame { height: auto; aspect-ratio: 4 / 3; }
+	.vxn-re .vxr-ways__h,
+	.vxn-re .vxr-ways__p { min-height: 0; }
+	.vxn-re .vxr-ways__mark { display: none; }
+	.vxn-re .vxr-figs { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+	.vxn-re .vxr-ask__why { grid-template-columns: minmax(0, 1fr); }
+	.vxn-re .vxr-launch__pic--a { width: 66%; height: 84%; }
+	.vxn-re .vxr-launch__pic--b { width: 44%; height: 52%; }
+	.vxn-re .vxr-scene__head,
+	.vxn-re .vxr-scene__foot { flex-wrap: wrap; align-items: flex-start; }
+}
+
+/* Without a pointer there is nothing to hover, so everything that is revealed on
+   hover is simply on. */
+@media (hover: none) {
+	.vxn-re .vxr-way__tag,
+	.vxn-re .vxr-place__blurb { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   THE PAGE TEMPLATE — the same system, minus the pin
+
+   Every page under /real-estate/ except the pillar. It reuses the pillar's own
+   scenes (rest, services split, journal rows, communities, FAQ, ask, cloud); all
+   that is needed here is what differs: a masthead that does not pin, a statement
+   scene with no photograph over it, and the process rows carrying a paragraph
+   instead of a price.
+   ========================================================================== */
+
+/* Not sticky, and no collapse — only the pillar page pins. A service page has to
+   get to the substance, and a screen that must be scrolled past twice before it
+   moves is a screen in the way. */
+.vxn-re .vxr-mast--page { position: relative; height: 92svh; min-height: 540px; }
+.vxn-re .vxr-mast--page .vxr-mast__in { transform: none; }
+.vxn-re .vxr-mast--page .vxr-mast__wash::after { opacity: 0; }
+.vxn-re .vxr-mast__kick {
+	display: block;
+	margin-bottom: clamp(14px, 2vh, 22px);
+	font-size: clamp(10px, .8vw, 11.5px);
+	font-weight: 600;
+	letter-spacing: .24em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, .72);
+}
+
+/* The statement scene without its band: the page's own argument, alone on a
+   screen, with the three figures under it as evidence. */
+.vxn-re .vxr-rest--plain .vxr-rest__say { padding-top: var(--vxr-top); }
+.vxn-re .vxr-figs--mid {
+	width: min(100%, 760px);
+	margin-inline: auto;
+	text-align: center;
+}
+
+/* The process rows: two columns, the step at the left and what happens in it at
+   the right, on the same hairlines the off-plan list uses. */
+.vxn-re .vxr-launch__rows--full { justify-content: center; }
+.vxn-re .vxr-launch--steps .vxr-scene__body { display: block; }
+.vxn-re .vxr-launch--steps .vxr-launch__row {
+	grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+	align-items: start;
+	gap: clamp(20px, 5vw, 90px);
+}
+.vxn-re .vxr-step__body { max-width: 70ch; }
+
+/* The services split reused for "what is included": every name is on, because
+   there is one photograph behind them rather than one each. */
+.vxn-re .vxr-serve__list .vxr-serve__link[data-on="true"] { cursor: default; }
+
+
+/* ==========================================================================
+   THE PARTS THAT KEPT THEIR COMPONENTS
+
+   The search, the accordion, the navigation and the footer are behaviour, not
+   decoration: URL-synced filter state, a disclosure widget with its own focus
+   handling, a dropdown, a newsletter. Rewriting the markup to fit the scene
+   system would have meant rewriting that logic too, for a class name.
+
+   So they keep their components and take their appearance from here.
+   ========================================================================== */
+
+/* --- The search ----------------------------------------------------------
+   Fourth pass. The first was a white card costing a third of a screen; the
+   second was a single hairline row that was small rather than minimal; the third
+   made it legible but kept three habits that were wrong on a page like this one:
+
+     - A BOX-SHADOW doing the work of a rule. The active intent was underlined
+       with `box-shadow: inset 0 -2px`, which is a shadow pretending to be a
+       border. On a page with no shadows anywhere else, it was the only one.
+     - ACCENT BLUE ON EVERY PART. The underline, the four chevrons and the reset
+       were all brand blue at once, which made a filter row the most colourful
+       thing on a screen full of photographs.
+     - NO ROOM. Sixteen pixels between a label and its value, and fields packed
+       edge to edge, on a page whose whole argument is space.
+
+   So: no shadows at all, one accent (the active intent, in ink), grey chevrons,
+   and roughly double the padding everywhere.
+   -------------------------------------------------------------------------- */
+
+.vxn-re .vxr-props__filters {
+	flex: none;
+	margin-top: clamp(10px, 1.6vh, 20px);
+	padding-inline: var(--vxr-edge);
+}
+
+.vxn-re .vxr-props .vxn-re-search {
+	display: block;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+/* --- Row one: the intent -------------------------------------------------- */
+
+.vxn-re .vxr-props .vxn-re-search__tabs {
+	display: flex;
+	gap: clamp(22px, 3.2vw, 56px);
+	margin: 0 0 clamp(18px, 3vh, 36px) !important;
+	padding: 0 !important;
+	border: 0 !important;
+	background: transparent !important;
+}
+.vxn-re .vxr-props .vxn-re-search__tab {
+	position: relative;
+	padding: 0 0 10px !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	color: var(--muted) !important;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-size: clamp(15px, 1.5vw, 21px) !important;
+	font-weight: 400 !important;
+	letter-spacing: -.015em !important;
+	text-transform: none;
+	/* No shadow. There is not one anywhere else on this page. */
+	box-shadow: none !important;
+	transition: color .3s var(--ease);
+}
+.vxn-re .vxr-props .vxn-re-search__tab::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 1px;
+	background: var(--vxr-ink);
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: transform .4s var(--ease);
+}
+.vxn-re .vxr-props .vxn-re-search__tab:hover { color: var(--vxr-ink) !important; }
+.vxn-re .vxr-props .vxn-re-search__tab[aria-selected="true"] { color: var(--vxr-ink) !important; }
+.vxn-re .vxr-props .vxn-re-search__tab[aria-selected="true"]::after { transform: scaleX(1); }
+
+/* On a page that IS an intent, the tabs are already answered by the URL and by
+   the heading above them - leaving them would let a visitor put the Rent page
+   into Buy mode and read a heading that disagrees with the results. */
+.vxn-re .vxr-props.vxr-props--locked .vxn-re-search__tabs { display: none; }
+
+/* --- Row two: the filters ------------------------------------------------- */
+
+.vxn-re .vxr-props .vxn-re-search__row {
+	display: flex;
+	align-items: flex-end;
+	flex-wrap: wrap;
+	gap: 0 !important;
+	margin: 0 !important;
+	padding: clamp(22px, 3.4vh, 40px) 0 clamp(22px, 3.4vh, 40px) !important;
+	border: 0 !important;
+	border-top: 1px solid rgba(14, 33, 102, .13) !important;
+	border-bottom: 1px solid rgba(14, 33, 102, .13) !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+}
+.vxn-re .vxr-props .vxn-re-search__field {
+	position: relative;
+	flex: 1 1 170px;
+	min-width: 0;
+	padding: 0 clamp(22px, 3.2vw, 60px) !important;
+	border: 0 !important;
+	background: transparent !important;
+	cursor: pointer;
+}
+.vxn-re .vxr-props .vxn-re-search__field:first-child { padding-left: 0 !important; }
+.vxn-re .vxr-props .vxn-re-search__field + .vxn-re-search__field {
+	border-left: 1px solid rgba(14, 33, 102, .13) !important;
+}
+/* Grey, not blue. It is an affordance, not an accent. */
+.vxn-re .vxr-props .vxn-re-search__field::after {
+	content: "";
+	position: absolute;
+	right: clamp(22px, 3.2vw, 60px);
+	bottom: .62em;
+	width: 7px;
+	height: 7px;
+	border-right: 1.5px solid rgba(14, 33, 102, .45);
+	border-bottom: 1.5px solid rgba(14, 33, 102, .45);
+	transform: rotate(45deg);
+	pointer-events: none;
+	transition: transform .3s var(--ease), border-color .3s var(--ease);
+}
+.vxn-re .vxr-props .vxn-re-search__field:hover::after {
+	border-color: var(--vxr-ink);
+	transform: rotate(45deg) translate(2px, 2px);
+}
+.vxn-re .vxr-props .vxn-re-search__field:last-of-type::after { right: 0; }
+
+.vxn-re .vxr-props .vxn-re-search__field > span {
+	display: block;
+	margin: 0 0 clamp(10px, 1.6vh, 16px) !important;
+	font-size: 9.5px !important;
+	font-weight: 600 !important;
+	letter-spacing: .22em !important;
+	text-transform: uppercase;
+	color: var(--muted) !important;
+}
+.vxn-re .vxr-props .vxn-re-search__field select {
+	width: 100%;
+	padding: 0 24px 0 0 !important;
+	border: 0 !important;
+	background: transparent !important;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-size: clamp(14px, 1.15vw, 17px) !important;
+	font-weight: 400 !important;
+	letter-spacing: -.015em;
+	color: var(--vxr-ink) !important;
+	cursor: pointer;
+	appearance: none;
+	-webkit-appearance: none;
+	box-shadow: none !important;
+}
+
+.vxn-re .vxr-props .vxn-re-search__go {
+	flex: none;
+	align-self: flex-end;
+	display: inline-flex !important;
+	align-items: center;
+	gap: 12px !important;
+	width: auto !important;
+	height: auto !important;
+	margin-inline-start: clamp(22px, 3.2vw, 60px);
+	padding: 17px 30px !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: var(--vxr-night) !important;
+	color: #fff !important;
+	font-family: inherit;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	letter-spacing: .16em !important;
+	text-transform: uppercase;
+	box-shadow: none !important;
+	transition: background-color .3s var(--ease);
+}
+.vxn-re .vxr-props .vxn-re-search__go:hover {
+	background: var(--vxr-blue) !important;
+	color: #fff !important;
+	transform: none !important;
+	box-shadow: none !important;
+}
+.vxn-re .vxr-props .vxn-re-search__go::before { display: none; }
+.vxn-re .vxr-props .vxn-re-search__go svg { width: 15px; height: 15px; }
+
+/* --- The foot ------------------------------------------------------------- */
+
+.vxn-re .vxr-props .vxn-re-search__foot {
+	display: flex;
+	justify-content: flex-end;
+	margin: clamp(12px, 1.8vh, 18px) 0 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+}
+/* The hint said what the filters do; the scene's own count line says what they
+   did, which is the more useful of the two. */
+.vxn-re .vxr-props .vxn-re-search__hint { display: none; }
+.vxn-re .vxr-props .vxn-re-search__reset {
+	color: var(--muted) !important;
+	font-size: 10px !important;
+	font-weight: 600 !important;
+	letter-spacing: .18em !important;
+	text-transform: uppercase;
+	box-shadow: none !important;
+	transition: color .3s var(--ease);
+}
+.vxn-re .vxr-props .vxn-re-search__reset:hover { color: var(--vxr-ink) !important; }
+
+@media (max-width: 900px) {
+	.vxn-re .vxr-props .vxn-re-search__field {
+		flex-basis: 45%;
+		padding: 0 0 18px !important;
+	}
+	.vxn-re .vxr-props .vxn-re-search__field + .vxn-re-search__field { border-left: 0 !important; }
+	.vxn-re .vxr-props .vxn-re-search__field::after,
+	.vxn-re .vxr-props .vxn-re-search__field:last-of-type::after { right: 0; bottom: 1.5em; }
+	.vxn-re .vxr-props .vxn-re-search__go { margin-inline-start: 0; }
+}
+
+/* --- The accordion -------------------------------------------------------- */
+
+.vxn-re .vxr-faq__list .vxn-re-faq {
+	border: 0;
+	border-top: 1px solid var(--line);
+	border-radius: 0;
+	background: transparent;
+}
+.vxn-re .vxr-faq__list .vxn-re-faq:last-child { border-bottom: 1px solid var(--line); }
+/* THE CEILING IS GONE. The base sheet animates the panel with
+   `max-height: 0 → 420px`, which is the old way and carries a bug: an answer
+   taller than the guess is silently cut off, and because the panel also has
+   `overflow: hidden` there is no scrollbar to say so. Interpolating a grid row
+   from 0fr to 1fr animates to the content's own height, whatever it is — so a
+   longer answer written later cannot be truncated by a number nobody remembers
+   is here. */
+.vxn-re .vxr-faq__list .vxn-re-faq__body {
+	display: grid;
+	grid-template-rows: 0fr;
+	max-height: none !important;
+	transition: grid-template-rows .42s var(--ease);
+}
+.vxn-re .vxr-faq__list .vxn-re-faq[data-open="true"] .vxn-re-faq__body { grid-template-rows: 1fr; }
+/* Padding rather than margin: a margin sits outside the box `overflow: hidden`
+   clips, so it would keep the collapsed row a few pixels tall. And no side
+   inset — the rows are hairline-ruled now, not carded, so the question and the
+   answer align with the rule. */
+.vxn-re .vxr-faq__list .vxn-re-faq__body > p {
+	min-height: 0;
+	overflow: hidden;
+	margin: 0;
+	padding: 0 40px 24px 0;
+	font-size: 14.5px;
+	line-height: 1.72;
+}
+
+.vxn-re .vxr-faq__list .vxn-re-faq__btn {
+	padding: clamp(18px, 2vw, 24px) 0;
+	font-family: "DM Sans", system-ui, sans-serif;
+	font-size: clamp(15px, 1.2vw, 17.5px);
+	font-weight: 500;
+	letter-spacing: -.015em;
+	color: var(--vxr-ink);
+}
+.vxn-re .vxr-faq__list .vxn-re-faq__btn:hover { color: var(--vxr-blue); }
+.vxn-re .vxr-faq__list .vxn-re-faq[data-open="true"] { box-shadow: none; border-color: var(--line); }
+.vxn-re .vxr-faq__list .vxn-re-faq__sign { color: var(--vxr-blue); }
+
+/* --- The link cloud ------------------------------------------------------- */
+
+.vxn-re .vxr-cloud .vxn-re__sec { padding: 0; }
+.vxn-re .vxr-cloud .vxn-re__wrap { max-width: none; padding: 0; }
+.vxn-re .vxr-cloud .vxn-re-pop__col a { color: var(--body); }
+.vxn-re .vxr-cloud .vxn-re-pop__col a:hover { color: var(--vxr-blue); }
+
+
+/* ==========================================================================
+   THE BAR
+
+   On the reference's arrangement: a white bar of its own ABOVE the page rather
+   than a transparent one laid over the hero. Brand at the left, a Services
+   dropdown immediately beside it, the main links in the middle, two quiet links
+   at the right, then the search and the one action.
+
+   These rules override the bar in valunxt-realestate.css, which was built for a
+   transparent-over-a-video bar. What is left of that file's version is the
+   drawer, which is unchanged.
+   ========================================================================== */
+
+.vxn-re .vxn-re-nav {
+	position: fixed;
+	background: #fff;
+	border-bottom: 1px solid var(--line);
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+	box-shadow: none;
+}
+.vxn-re .vxn-re-nav__inner { gap: clamp(14px, 1.8vw, 30px); }
+
+.vxn-re .vxn-re-nav__brand img { height: 26px; }
+.vxn-re .vxn-re-nav__lockup {
+	padding-inline-start: 12px;
+	border-inline-start: 1px solid var(--line);
+	color: var(--muted);
+	font-size: 9.5px;
+	letter-spacing: .22em;
+}
+
+/* --- Services, the one dropdown ------------------------------------------- */
+
+.vxn-re .vxn-re-nav__drop { position: relative; flex: 0 0 auto; }
+.vxn-re .vxn-re-nav__droptop {
+	appearance: none;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 0 !important;
+	min-height: 0 !important;
+	border: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	font-family: inherit !important;
+	font-size: 13px !important;
+	font-weight: 500 !important;
+	letter-spacing: .02em !important;
+	text-transform: none !important;
+	color: var(--body) !important;
+	transition: color .2s ease;
+}
+.vxn-re .vxn-re-nav__droptop:hover { color: var(--vxr-blue) !important; }
+/* The caret, drawn rather than iconised: two borders and a rotation. */
+.vxn-re .vxn-re-nav__droptop i {
+	width: 6px;
+	height: 6px;
+	border-right: 1.4px solid currentColor;
+	border-bottom: 1.4px solid currentColor;
+	transform: translateY(-2px) rotate(45deg);
+	transition: transform .3s var(--ease);
+}
+.vxn-re .vxn-re-nav__droptop[aria-expanded="true"] i { transform: translateY(1px) rotate(-135deg); }
+
+.vxn-re .vxn-re-nav__drops {
+	position: absolute;
+	top: calc(100% + 14px);
+	left: -18px;
+	z-index: 10;
+	display: grid;
+	gap: 2px;
+	width: 320px;
+	padding: 10px;
+	border-radius: 16px;
+	background: #fff;
+	box-shadow: 0 30px 70px -30px rgba(14, 33, 102, .45), 0 0 0 1px var(--line);
+}
+.vxn-re .vxn-re-nav__drops[hidden] { display: none; }
+.vxn-re .vxn-re-nav__drops a {
+	display: block;
+	padding: 11px 14px;
+	border-radius: 10px;
+	color: inherit;
+	text-decoration: none;
+	transition: background-color .2s ease;
+}
+.vxn-re .vxn-re-nav__drops a:hover { background: var(--vxr-ground); }
+.vxn-re .vxn-re-nav__drops b {
+	display: block;
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: -.015em;
+	color: var(--vxr-ink);
+}
+.vxn-re .vxn-re-nav__drops small { display: block; margin-top: 3px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+
+/* --- The links ------------------------------------------------------------ */
+
+.vxn-re .vxn-re-nav__menu { gap: clamp(16px, 2vw, 32px); }
+.vxn-re .vxn-re-nav__menu a { font-weight: 500; letter-spacing: .02em; color: var(--body); }
+.vxn-re .vxn-re-nav__menu a:hover { color: var(--vxr-blue); }
+
+.vxn-re .vxn-re-nav__side { gap: clamp(12px, 1.6vw, 24px); }
+.vxn-re .vxn-re-nav__quiet {
+	font-size: 13px;
+	font-weight: 500;
+	letter-spacing: .02em;
+	color: var(--body);
+	white-space: nowrap;
+	transition: color .2s ease;
+}
+.vxn-re .vxn-re-nav__quiet:hover { color: var(--vxr-blue); }
+
+.vxn-re .vxn-re-nav__find {
+	appearance: none;
+	cursor: pointer;
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	padding: 0 !important;
+	min-height: 0 !important;
+	border: 0 !important;
+	border-radius: 50% !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	color: var(--vxr-ink) !important;
+	transition: background-color .25s ease, color .25s ease;
+}
+.vxn-re .vxn-re-nav__find:hover { background: var(--vxr-ground) !important; color: var(--vxr-blue) !important; }
+.vxn-re .vxn-re-nav__find svg { width: 17px; height: 17px; }
+
+.vxn-re .vxn-re-nav__cta { font-size: 12px; }
+
+/* The telephone that used to sit here is in the footer and on the contact
+   panel; the bar carries one action, as the reference's does. */
+
+@media (max-width: 1180px) {
+	.vxn-re .vxn-re-nav__drop,
+	.vxn-re .vxn-re-nav__quiet { display: none; }
+}
+/* --- The bar and the pinned hero ------------------------------------------
+   The hero is `position: sticky` now (see THE PIN at the top of this file), so
+   it cannot be pushed down by the bar with a padding — a padded sticky element
+   sticks with its padding and leaves a gap. The bar is fixed and the hero is
+   full-bleed underneath it, which is what the reference does anyway: the white
+   bar sits ON the photograph's top edge rather than above it.
+   -------------------------------------------------------------------------- */
+
+.vxn-re .vxr-mast__copy { top: calc(var(--nav-h) + clamp(20px, 5vh, 70px)); }
+
+
+/* ==========================================================================
+   THE FOOTER
+
+   It was DAMAC's shape on a navy gradient: a newsletter band, four columns, a
+   legal bar — a different object from every other section on the page, in a
+   different typeface, with a gradient nothing else used.
+
+   Now it is the last panel in the stack. Same radius, same gutter, the brand
+   blue the other blue panels use, and the same rules: one statement, one field
+   on a line, links on hairlines. The only thing it does that no other panel
+   does is end, so it is the one that carries the legal line.
+
+   These rules override the footer in valunxt-realestate.css rather than
+   replacing it, because the service pages render the same component and must
+   keep working.
+   ========================================================================== */
+
+.vxn-re .vxn-re-foot {
+	/* Edge to edge, like every scene above it. It was the last panel in the stack
+	   — 1280px wide with a radius — which is the one shape nothing else on the
+	   page has any more. */
+	max-width: none;
+	margin: 0;
+	padding: 0 0 clamp(16px, 2vw, 26px);
+	border-radius: 0;
+	background: linear-gradient(150deg, #1436D8 0%, #2F63FF 100%);
+	background-image: linear-gradient(150deg, #1436D8 0%, #2F63FF 100%);
+	color: rgba(255, 255, 255, .78);
+	overflow: hidden;
+}
+.vxn-re .vxn-re-foot .vxn-re__wrap { max-width: none; padding: 0 var(--vxr-edge); }
+
+/* --- The newsletter ------------------------------------------------------- */
+
+.vxn-re .vxn-re-foot__news {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(26px, 4vw, 72px);
+	align-items: end;
+	padding: clamp(32px, 4.4vh, 64px) 0 clamp(24px, 3.2vh, 40px);
+	border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+.vxn-re .vxn-re-foot__news h2 {
+	margin: 0;
+	max-width: 18ch;
+	font-family: "DM Sans", system-ui, sans-serif !important;
+	font-weight: 400 !important;
+	font-size: clamp(1.7rem, 2.9vw, 2.9rem) !important;
+	line-height: 1.1 !important;
+	letter-spacing: -.03em;
+	color: #fff;
+}
+.vxn-re .vxn-re-foot__news p { margin: 14px 0 0; max-width: 46ch; font-size: 14px; line-height: 1.62; color: rgba(255, 255, 255, .76); }
+
+/* One field on a rule, as everywhere else on the site that asks for an email. */
+.vxn-re .vxn-re-foot__form {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding-bottom: 12px;
+	border-bottom: 1.5px solid rgba(255, 255, 255, .55);
+}
+.vxn-re .vxn-re-foot__form input {
+	flex: 1 1 auto;
+	min-width: 0;
+	padding: 0 !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	font-family: "DM Sans", system-ui, sans-serif !important;
+	font-size: clamp(15px, 1.3vw, 18px) !important;
+	color: #fff !important;
+}
+.vxn-re .vxn-re-foot__form input::placeholder { color: rgba(255, 255, 255, .5); }
+.vxn-re .vxn-re-foot__form input:focus { outline: none; }
+.vxn-re .vxn-re-foot__form:focus-within { border-bottom-color: #fff; }
+.vxn-re .vxn-re-foot__form .vxn-re__btn {
+	flex: 0 0 auto;
+	padding: 12px 22px !important;
+	border-radius: 999px !important;
+	background: #fff !important;
+	background-image: none !important;
+	color: var(--vxr-blue) !important;
+	font-size: 12.5px !important;
+	letter-spacing: .08em !important;
+}
+.vxn-re .vxn-re-foot__form .vxn-re__btn::before { display: none; }
+
+/* --- The columns ---------------------------------------------------------- */
+
+.vxn-re .vxn-re-foot__cols {
+	display: grid;
+	grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+	gap: clamp(26px, 4vw, 56px);
+	padding: clamp(38px, 4.6vw, 64px) 0;
+}
+.vxn-re .vxn-re-foot__brand img { height: 28px; margin-bottom: 18px; }
+.vxn-re .vxn-re-foot__brand p { font-size: 14px; line-height: 1.66; max-width: 38ch; color: rgba(255, 255, 255, .78); }
+.vxn-re .vxn-re-foot__contact { gap: 14px; margin-top: 26px; }
+.vxn-re .vxn-re-foot__contact span { color: rgba(255, 255, 255, .58); letter-spacing: .16em; }
+.vxn-re .vxn-re-foot__contact a { color: #fff; }
+.vxn-re .vxn-re-foot__col h4 { margin-bottom: 18px; font-size: 10.5px; letter-spacing: .18em; color: rgba(255, 255, 255, .58); }
+.vxn-re .vxn-re-foot__col ul { gap: 0; }
+/* Hairlines, like every other list on the page. */
+.vxn-re .vxn-re-foot__col li { border-top: 1px solid rgba(255, 255, 255, .14); }
+.vxn-re .vxn-re-foot__col li:last-child { border-bottom: 1px solid rgba(255, 255, 255, .14); }
+.vxn-re .vxn-re-foot__col a {
+	display: block;
+	padding: 11px 0;
+	font-size: 13.5px;
+	color: rgba(255, 255, 255, .8);
+}
+.vxn-re .vxn-re-foot__col a:hover { color: #fff; padding-inline-start: 8px; }
+
+/* --- The legal line ------------------------------------------------------- */
+
+.vxn-re .vxn-re-foot__bottom {
+	padding: clamp(20px, 2.4vw, 28px) 0 0;
+	border-top: 1px solid rgba(255, 255, 255, .2);
+	font-size: 12px;
+	color: rgba(255, 255, 255, .66);
+}
+.vxn-re .vxn-re-foot__bottom p { max-width: 76ch; line-height: 1.6; }
+.vxn-re .vxn-re-foot__social a {
+	width: 36px;
+	height: 36px;
+	border-color: rgba(255, 255, 255, .28);
+	color: rgba(255, 255, 255, .85);
+}
+.vxn-re .vxn-re-foot__social a:hover { background: #fff; border-color: #fff; color: var(--vxr-blue); }
+
+@media (max-width: 1000px) {
+	.vxn-re .vxn-re-foot__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+	.vxn-re .vxn-re-foot__news { grid-template-columns: minmax(0, 1fr); align-items: start; }
+	.vxn-re .vxn-re-foot__cols { grid-template-columns: minmax(0, 1fr); }
+}
+
+

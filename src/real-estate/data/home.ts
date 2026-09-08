@@ -75,7 +75,20 @@ export const ABOUT = {
 };
 
 /* -------------------------------------------------------------------------- */
-/* Services */
+/* Services
+ *
+ * ON THE PHOTOGRAPHS, 2026-09-08. These were a handshake, a glowing data chart,
+ * a keychain and a man in front of a neon "CAPITAL MARKET" graph — stock that
+ * could belong to any advisory firm in any city. On the home page the services
+ * column is now 45% of a full screen, which made them the most conspicuous thing
+ * on a page whose whole brief is to sell Dubai. They are Dubai property now:
+ * a villa on the Palm, an atrium, a pool between townhouses, towers over the
+ * water — cropped to portrait from img/types at native resolution, in
+ * img/services/.
+ *
+ * The four service DETAIL pages still carry the old stock as their `heroImg`
+ * (see service-pages-2.ts). Same problem, different surface, not touched here.
+ */
 
 export const SERVICES_HEAD = {
   eyebrow: 'Our Services',
@@ -90,7 +103,7 @@ export const SERVICES: FeatureCard[] = [
     bullets: ['Luxury apartments & villas', 'Family homes & beach houses', 'End-to-end buying support'],
     cta: 'Explore Service',
     href: '/residential/',
-    img: '/real-estate/img/service-residential.webp',
+    img: '/real-estate/img/services/residential.webp',
   },
   {
     title: 'Commercial',
@@ -98,7 +111,7 @@ export const SERVICES: FeatureCard[] = [
     bullets: ['Offices & retail spaces', 'Warehouses & industrial units', 'Leasing & acquisition advisory'],
     cta: 'Explore Service',
     href: '/commercial/',
-    img: '/real-estate/img/service-commercial.webp',
+    img: '/real-estate/img/services/commercial.webp',
   },
   {
     title: 'Mortgage Services',
@@ -106,7 +119,7 @@ export const SERVICES: FeatureCard[] = [
     bullets: ['Access to leading UAE lenders', 'Competitive financing options', 'End-to-end mortgage assistance'],
     cta: 'Explore Service',
     href: '/mortgage-services/',
-    img: '/real-estate/img/service-mortgage.webp',
+    img: '/real-estate/img/services/mortgage.webp',
   },
   {
     title: 'Investment',
@@ -114,7 +127,7 @@ export const SERVICES: FeatureCard[] = [
     bullets: ['ROI-focused opportunities', 'Portfolio advisory', 'Off-plan investments'],
     cta: 'Explore Service',
     href: '/investment-advisory/',
-    img: '/real-estate/img/service-investment.webp',
+    img: '/real-estate/img/services/investment.webp',
   },
 ];
 

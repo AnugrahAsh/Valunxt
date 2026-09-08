@@ -1,238 +1,144 @@
-/* Location page body.
-   Two sections — Our Locations and Our Group Companies — both driven by
-   src/lib/site-data.ts so the office list, addresses and the one published
-   phone line stay identical here, in the footer and on the Contact page.
-
-   Port of location/index.php. */
-import { BASE, rurl } from '@/lib/region';
+/**
+ * /location/ — where the group actually is.
+ *
+ * It used to be eight cards: four offices and four group companies, each a
+ * stock photograph of a city with the address printed over it, and not one map
+ * — so the single question the page exists to answer took a trip to Google.
+ *
+ * Now it is one map with four pins (see location/OfficeAtlas), an aerial toggle
+ * for the surroundings, and the group companies as a list rather than a second
+ * grid of photographs. Every office is still listed in full in the markup, so
+ * the page answers the question with the script blocked.
+ *
+ * The office list, the addresses and the two published phone lines come from
+ * lib/site-data, which is also what the footer and the Contact page read.
+ */
+import { rurl, vxnRegionData, vxnRegionPhone } from '@/lib/region';
 import { vxnCompanyList, vxnMarkets, vxnOffices } from '@/lib/site-data';
-import SubscribeSection from '@/components/sections/SubscribeSection';
-import type { PageConfig } from '@/lib/page-config';
+import { Ico } from '@/components/vxh/kit';
+import { Faq, Head, Newsletter, PageHero, Ready, type FaqItem } from '@/components/vxh/PageKit';
+import OfficeAtlas from '@/components/pages/location/OfficeAtlas';
 
-const LOCATION_IMG: Record<string, string> = {
-  mumbai: 'mumbai.webp',
-  noida: 'noida.webp',
-  abudhabi: 'abudhabi.webp',
-  dubai: 'dubai.webp',
-};
+const FAQ: FaqItem[] = [
+  {
+    q: 'Which office should I contact?',
+    a: '<p>Whichever is closest to the asset or the entity in question. Dubai answers the UAE line and Noida the India line; both reach the same team, so a message to either will find the right person.</p>',
+  },
+  {
+    q: 'Can I visit without an appointment?',
+    a: '<p>Please book first. Advisory work is done off-site as often as in the office, and a scheduled conversation means the person you need is there and has read your file.</p>',
+  },
+  {
+    q: 'Do you work outside these four cities?',
+    a: `<p>Yes. The offices are where our people sit, not the limit of where we act — a large share of the work is cross-border between ${vxnMarkets(
+      'short',
+    )}, and mandates elsewhere are taken where we can serve them properly.</p>`,
+  },
+  {
+    q: 'Why does each office name a different company?',
+    a: '<p>Because the group is four regulated firms rather than one. The entity named at each address is the one that contracts there; you deal with one team regardless.</p>',
+  },
+];
 
-export default function LocationBody({ page, region }: { page: PageConfig; region: string }) {
+export default function LocationBody({ region }: { region: string }) {
+  const reg = vxnRegionData(region);
+  const phone = vxnRegionPhone(region);
+  const offices = Object.entries(vxnOffices());
+  const companies = vxnCompanyList();
+
   return (
     <div id="main-content">
       <div id="main" role="main" className="vamtam-main layout-full">
-        <article id="post-9001" className="full post-9001 page type-page status-publish hentry">
-          <div
-            data-elementor-type="single-page"
-            data-elementor-id="3752"
-            className="elementor elementor-3752 elementor-location-single post-9001 page type-page status-publish hentry"
-            data-elementor-post-type="elementor_library"
-          >
-            <div
-              className="elementor-element elementor-element-c4d353f e-flex e-con-boxed e-con e-parent"
-              data-id="c4d353f"
-              data-element_type="container"
-              data-e-type="container"
-              data-settings='{"background_background":"classic"}'
-            >
-              <div className="e-con-inner">
-                <div
-                  className="elementor-element elementor-element-6200b41 e-con-full e-flex e-con e-child"
-                  data-id="6200b41"
-                  data-element_type="container"
-                  data-e-type="container"
-                >
-                  <div
-                    className="elementor-element elementor-element-7b36cfb e-con-full e-flex e-con e-child"
-                    data-id="7b36cfb"
-                    data-element_type="container"
-                    data-e-type="container"
-                  >
-                    <div
-                      className="elementor-element elementor-element-c739b5b elementor-widget elementor-widget-heading"
-                      data-id="c739b5b"
-                      data-element_type="widget"
-                      data-e-type="widget"
-                      data-widget_type="heading.default"
-                    >
-                      <div className="elementor-widget-container">
-                        <span className="elementor-heading-title elementor-size-default">
-                          <a href={rurl(region, '/')}>Home</a>
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      className="elementor-element elementor-element-1707a75 elementor-widget elementor-widget-theme-post-title elementor-page-title elementor-widget-heading"
-                      data-id="1707a75"
-                      data-element_type="widget"
-                      data-e-type="widget"
-                      data-widget_type="theme-post-title.default"
-                    >
-                      <div className="elementor-widget-container">
-                        <span className="elementor-heading-title elementor-size-default">
-                          &gt; Location
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="elementor-element elementor-element-3f5733d elementor-widget-divider--view-line elementor-widget elementor-widget-divider"
-                    data-id="3f5733d"
-                    data-element_type="widget"
-                    data-e-type="widget"
-                    data-widget_type="divider.default"
-                  >
-                    <div className="elementor-widget-container">
-                      <div className="elementor-divider">
-                        <span className="elementor-divider-separator" />
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="elementor-element elementor-element-8c0b074 e-con-full e-flex e-con e-child"
-                    data-id="8c0b074"
-                    data-element_type="container"
-                    data-e-type="container"
-                  >
-                    <div
-                      className="elementor-element elementor-element-16f0cb0 elementor-invisible animated-fast elementor-widget elementor-widget-heading"
-                      data-id="16f0cb0"
-                      data-element_type="widget"
-                      data-e-type="widget"
-                      data-settings='{"_animation":"slideInUp"}'
-                      data-widget_type="heading.default"
-                    >
-                      <div className="elementor-widget-container">
-                        <h1 className="elementor-heading-title elementor-size-default">Location</h1>
-                      </div>
-                    </div>
-                    <div
-                      className="elementor-element elementor-element-44a505e elementor-invisible animated-fast elementor-hidden-desktop elementor-hidden-tablet elementor-hidden-mobile elementor-widget elementor-widget-theme-post-title elementor-page-title elementor-widget-heading"
-                      data-id="44a505e"
-                      data-element_type="widget"
-                      data-e-type="widget"
-                      data-settings='{"_animation":"slideInUp"}'
-                      data-widget_type="theme-post-title.default"
-                    >
-                      <div className="elementor-widget-container">
-                        <h2 className="elementor-heading-title elementor-size-default">Location</h2>
-                      </div>
-                    </div>
-                    <div
-                      className="elementor-element elementor-element-44a2511 elementor-invisible animated-fast elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-widget elementor-widget-theme-post-excerpt"
-                      data-id="44a2511"
-                      data-element_type="widget"
-                      data-e-type="widget"
-                      data-settings='{"_animation":"slideInUp","_animation_delay":50}'
-                      data-widget_type="theme-post-excerpt.default"
-                    >
-                      <div className="elementor-widget-container">
-                        Connect with VALUNXT Capital in Dubai, Abu Dhabi and across India. Find the
-                        office nearest to you and start a conversation with our advisory team.{' '}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </article>
+        <div className="vxh vxp">
+          <PageHero
+            region={region}
+            crumb={[['About', '/about/'], ['Location']]}
+            eyebrow="Where We Are"
+            title={`${offices.length} offices. Two markets. <span class="vxh-grad">One team.</span>`}
+            lede={`${vxnMarkets(
+              'cities',
+            )} &mdash; find the office nearest to you, see what is around it, and start a conversation with the people who work there.`}
+            action={{ label: 'Talk to an adviser', href: rurl(region, '/contact/') }}
+            bg={{ field: 'mist' }}
+            par="slide"
+            meta={offices.slice(0, 4).map(([, o]) => [o.city, o.note || o.country] as [string, string])}
+          />
 
-        {/* Our Locations — driven by src/lib/site-data.ts so the office list,
-            addresses and the one published phone line stay identical here, in
-            the footer and on the Contact page. */}
-        <section className="vxn-loc">
-          <div className="vxn-loc__head">
-            <div className="vxn-loc__head-left">
-              <span className="vxn-loc__chip">Our Locations</span>
-              <h2 className="vxn-loc__title">Four Offices. One Integrated Platform.</h2>
-            </div>
-            <p className="vxn-loc__desc">
-              {vxnMarkets('cities')} &#8212; find the office nearest to you and start a conversation
-              with our advisory team.
-            </p>
-          </div>
-          <div className="vxn-loc__grid">
-            {Object.entries(vxnOffices()).map(([k, o]) => (
-              <div className="vxn-loc__card" key={k}>
-                <div className="vxn-loc__media">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`${BASE}/assets/content/uploads/new-folder/${LOCATION_IMG[k] ?? 'mumbai.webp'}`}
-                    alt={`${o.city} office`}
-                    loading="lazy"
-                  />
-                  <div className="vxn-loc__panel">
-                    <h5 className="vxn-loc__city">
+          {/* The map. Every office is in the markup below it, so the page still
+              answers the question with the script blocked. */}
+          <section className="vxl-sec vxp-sec" aria-labelledby="vxl-off-h">
+            <div className="vxh__in">
+              <Head
+                split
+                eyebrow="The Offices"
+                title="Pick one and look around it."
+                id="vxl-off-h"
+                lede="Switch to the aerial view to see the building and what surrounds it before you set out."
+              />
+              <OfficeAtlas offices={offices} />
+
+              {/* The plain list. It is what a reader without the map gets, and
+                  what a crawler indexes — four addresses, marked up as such. */}
+              <ol className="vxl-all">
+                {offices.map(([key, o], i) => (
+                  <li key={key} data-vxn-in="up">
+                    <span className="vxl-all__n">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="vxl-all__c">
                       {o.city}
-                      {o.note !== '' ? <span> ({o.note})</span> : null}
-                    </h5>
-                    <div className="vxn-loc__company">{o.entity}</div>
-                    <p className="vxn-loc__addr">
+                      <small>{o.entity}</small>
+                    </span>
+                    <address className="vxl-all__a">{o.address}</address>
+                    <span className="vxl-all__l">
+                      <a href={`tel:${o.tel}`}>{o.phone}</a>
                       <a href={o.map} target="_blank" rel="noopener">
-                        {o.address}
+                        Directions <Ico name="ne" size={13} />
                       </a>
-                    </p>
-                    <p className="vxn-loc__meta">
-                      <strong>Hours:</strong> {o.hours}
-                    </p>
-                    {o.phone !== '' ? (
-                      <p className="vxn-loc__meta">
-                        <strong>Phone:</strong> <a href={`tel:${o.tel}`}>{o.phone}</a>
-                      </p>
-                    ) : null}
-                    <p className="vxn-loc__meta">
-                      <strong>E-mail:</strong> <a href={`mailto:${o.email}`}>{o.email}</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Our Group Company — the four operating companies, from the same
-            canonical list the navigation and Our Group page use. Each card
-            links to its own page rather than repeating an office address it
-            does not trade from. */}
-        <section className="vxn-loc vxn-loc--group">
-          <div className="vxn-loc__head">
-            <div className="vxn-loc__head-left">
-              <span className="vxn-loc__chip">Our Ecosystem</span>
-              <h2 className="vxn-loc__title">Our Group Companies</h2>
+                    </span>
+                  </li>
+                ))}
+              </ol>
             </div>
-            <p className="vxn-loc__desc">
-              Four specialist firms within the VALUNXT group &#8212; spanning valuation, real estate,
-              mortgage and corporate services across {vxnMarkets('short')}.
-            </p>
-          </div>
-          <div className="vxn-loc__grid">
-            {vxnCompanyList().map((c) => (
-              <div className="vxn-loc__card" key={c.url}>
-                <div className="vxn-loc__media">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={BASE + c.img} alt={c.name} loading="lazy" />
-                  <div className="vxn-loc__panel">
-                    <h5 className="vxn-loc__city">{c.name}</h5>
-                    <div className="vxn-loc__company">{c.discipline}</div>
-                    <p className="vxn-loc__addr">{c.blurb}</p>
-                    <p className="vxn-loc__meta">
-                      <a href={rurl(region, c.url)}>About {c.name} &rarr;</a>
-                    </p>
-                    <p className="vxn-loc__meta">
-                      <a href={c.site} target="_blank" rel="noopener">
-                        {c.site.replace(/^https?:\/\//, '')}
-                      </a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+          </section>
 
-        <SubscribeSection page={page} region={region} />
+          {/* The group companies — a list, because that is what they are. */}
+          <section className="vxp-sec vxp-sec--cream" aria-labelledby="vxl-grp-h">
+            <div className="vxh__in">
+              <Head
+                split
+                eyebrow="Our Ecosystem"
+                title="Four firms behind the four addresses."
+                id="vxl-grp-h"
+                lede={`Valuation, real estate, mortgage and corporate services across ${vxnMarkets('short')}.`}
+              />
+              <ol className="vxp-rows">
+                {companies.map((c, i) => (
+                  <li key={c.url} data-vxn-in="up">
+                    <a className="vxp-row" href={rurl(region, c.url)}>
+                      <span className="vxp-row__n">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="vxp-row__t">{c.name}</span>
+                      <span className="vxp-row__d">
+                        {c.discipline} &mdash; {c.blurb}
+                      </span>
+                      <Ico name="ne" size={16} />
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </section>
+
+          <Faq items={FAQ} title="Before you set out." />
+
+          <Ready
+            region={region}
+            phone={phone}
+            tel={reg.tel}
+            hours={`${reg.hours} · ${reg.cities}`}
+            abs="arcs"
+          />
+          <Newsletter region={region} />
+        </div>
       </div>
-      {/* #main */}
     </div>
   );
 }

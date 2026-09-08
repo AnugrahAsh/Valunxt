@@ -11,9 +11,11 @@
  */
 import type { ServicePage } from '../lib/types';
 import { SECTOR_PAGES } from './service-pages-2';
+import { PORTAL_PAGES } from './pages-3';
 
 const BUY: ServicePage = {
   slug: 'buy-property',
+  listingKind: 'buy',
   eyebrow: 'Buy Property',
   title: 'Find the Right Property,',
   titleAccent: 'Backed by Real Evidence.',
@@ -142,6 +144,7 @@ const SELL: ServicePage = {
 
 const OFFPLAN: ServicePage = {
   slug: 'off-plan-properties',
+  listingKind: 'offplan',
   eyebrow: 'Off-Plan Properties',
   title: 'Off-Plan, Assessed',
   titleAccent: 'Before You Commit.',
@@ -205,11 +208,18 @@ const OFFPLAN: ServicePage = {
 };
 
 /**
- * The three transaction pages above, plus the five sector and advisory pages in
- * service-pages-2.ts. Eight in all, one per service the landing page names.
+ * The three transaction pages above, the five sector and advisory pages in
+ * service-pages-2.ts, and the three added in pages-3.ts (renting, communities,
+ * consultation). Eleven in all.
  * SERVICE_SLUGS in lib/routes.ts must list the same slugs.
  */
-export const SERVICE_PAGE_LIST: ServicePage[] = [BUY, SELL, OFFPLAN, ...SECTOR_PAGES];
+export const SERVICE_PAGE_LIST: ServicePage[] = [
+  BUY,
+  SELL,
+  OFFPLAN,
+  ...SECTOR_PAGES,
+  ...PORTAL_PAGES,
+];
 
 export const SERVICE_PAGES: Record<string, ServicePage> = Object.fromEntries(
   SERVICE_PAGE_LIST.map((p) => [p.slug, p]),

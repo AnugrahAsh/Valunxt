@@ -1795,11 +1795,15 @@ a.vxc-ways__v:hover { color: var(--vxh-blue); }
 	text-transform: uppercase;
 	color: var(--vxh-muted);
 }
-/* The kit sheet styles `.elementor-kit-5 input:not([type=button]):not([type=submit])`
+/* Scoped to .vxh rather than to the home page's own .vxc section: the same form
+   is now the Contact page's, and it has to look the same in both. Both are
+   inside .vxh, so this widens the match without changing the home page.
+
+   The kit sheet styles `.elementor-kit-5 input:not([type=button]):not([type=submit])`
    at a specificity these have to clear — it reaches every input on the page, not
    only Elementor's own. Hence the element in the selector. */
-.vxc .vxc-form input.vxc-field__input,
-.vxc .vxc-form .iti input[type="tel"] {
+.vxh .vxc-form input.vxc-field__input,
+.vxh .vxc-form .iti input[type="tel"] {
 	display: block;
 	width: 100%;
 	padding: 8px 0 12px;
@@ -1813,14 +1817,14 @@ a.vxc-ways__v:hover { color: var(--vxh-blue); }
 	transition: border-color .25s ease;
 	box-shadow: none;
 }
-.vxc .vxc-form input.vxc-field__input:focus,
-.vxc .vxc-form .iti input[type="tel"]:focus {
+.vxh .vxc-form input.vxc-field__input:focus,
+.vxh .vxc-form .iti input[type="tel"]:focus {
 	outline: none;
 	border-bottom-color: var(--vxh-blue);
 	box-shadow: 0 1px 0 0 var(--vxh-blue);
 }
-.vxc .vxc-form .vxc-field.vxn-invalid input.vxc-field__input,
-.vxc .vxc-form .vxc-field.vxn-invalid .iti input[type="tel"] {
+.vxh .vxc-form .vxc-field.vxn-invalid input.vxc-field__input,
+.vxh .vxc-form .vxc-field.vxn-invalid .iti input[type="tel"] {
 	border-bottom-color: #d9534f;
 	box-shadow: 0 1px 0 0 #d9534f;
 }
@@ -1835,7 +1839,7 @@ a.vxc-ways__v:hover { color: var(--vxh-blue); }
 }
 /* Same story as the fields: `.elementor-kit-5 button` paints every button on the
    page in the theme's accent. */
-.vxc .vxc-form button.vxc-send {
+.vxh .vxc-form button.vxc-send {
 	display: inline-flex;
 	align-items: center;
 	gap: 10px;
@@ -1851,10 +1855,10 @@ a.vxc-ways__v:hover { color: var(--vxh-blue); }
 	cursor: pointer;
 	transition: background-color .25s ease, transform .25s var(--vxh-ease);
 }
-.vxc .vxc-form button.vxc-send:hover:not(:disabled) { background: var(--vxh-blue); transform: translateY(-1px); }
-.vxc .vxc-form button.vxc-send:disabled { opacity: .55; cursor: default; }
-.vxc .vxc-form button.vxc-send svg { transition: transform .25s var(--vxh-ease); }
-.vxc .vxc-form button.vxc-send:hover:not(:disabled) svg { transform: translate(2px, -2px); }
+.vxh .vxc-form button.vxc-send:hover:not(:disabled) { background: var(--vxh-blue); transform: translateY(-1px); }
+.vxh .vxc-form button.vxc-send:disabled { opacity: .55; cursor: default; }
+.vxh .vxc-form button.vxc-send svg { transition: transform .25s var(--vxh-ease); }
+.vxh .vxc-form button.vxc-send:hover:not(:disabled) svg { transform: translate(2px, -2px); }
 .vxc-fine { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--vxh-muted); max-width: 34ch; }
 .vxc-fine a { color: var(--vxh-ink); text-decoration: underline; text-underline-offset: 2px; }
 
@@ -1870,8 +1874,8 @@ a.vxc-ways__v:hover { color: var(--vxh-blue); }
 
 /* On cream, the hairline the fields are ruled with needs a touch more weight to
    read as a line rather than as a smudge. */
-.vxc .vxc-form input.vxc-field__input,
-.vxc .vxc-form .iti input[type="tel"] { border-bottom-color: rgba(14, 36, 110, .2); }
+.vxh .vxc-form input.vxc-field__input,
+.vxh .vxc-form .iti input[type="tel"] { border-bottom-color: rgba(14, 36, 110, .2); }
 
 @media (max-width: 900px) {
 	.vxc__grid { grid-template-columns: 1fr; gap: clamp(36px, 8vw, 56px); }

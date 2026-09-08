@@ -1401,3 +1401,160 @@
 .vxd-fam a { color: var(--vxh-ink); font-size: 13.5px; font-weight: 600; border-bottom: 1px solid transparent; transition: color .25s ease, border-color .25s ease; }
 .vxd-fam a:hover, .vxd-fam a:focus-visible { color: var(--vxh-blue); border-bottom-color: currentColor; }
 .vxd-fam a[aria-current="page"] { color: var(--vxh-blue); }
+
+
+/* ==========================================================================
+   THE SERVICES INDEX (2026-09-07)
+
+   A list, set as one. The photographs are not in the list — they stack in a
+   sticky frame beside it and the one on top is the practice being read, which
+   is what lets every row be four lines of type instead of a card.
+
+   The switch is components/pages/uae-services/PracticeIndex, and it does one
+   thing: move `.is-on`. The first shot carries it from the server, so with no
+   script the page is the list plus one photograph, which is a page.
+   ========================================================================== */
+
+.vxs-idx__grid {
+	display: grid;
+	grid-template-columns: minmax(0, .78fr) minmax(0, 1.35fr);
+	gap: clamp(28px, 5vw, 88px);
+	align-items: start;
+}
+
+/* --- The frame ------------------------------------------------------------ */
+
+.vxs-idx__frame {
+	position: sticky;
+	/* Clear of the sticky header, and a little below the top of the reading
+	   band the observer uses, so the picture is beside the row it belongs to. */
+	top: calc(var(--vxn-navh, 94px) + clamp(20px, 4vh, 48px));
+	margin: 0;
+	aspect-ratio: 4 / 5;
+	border-radius: var(--vxh-r);
+	overflow: hidden;
+	background: var(--vxh-card);
+	border: 1px solid var(--vxh-line);
+}
+.vxs-idx__shot {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	/* Each one is a touch over-size while it waits, and settles as it arrives —
+	   a cross-fade between two identically framed photographs reads as a glitch
+	   without it. */
+	transform: scale(1.06);
+	transition: opacity .7s var(--vxh-ease), transform 1.1s var(--vxh-ease);
+}
+.vxs-idx__shot.is-on { opacity: 1; transform: none; }
+.vxs-idx__shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* One wash of the brand blue, so six different photographs read as one family. */
+.vxs-idx__frame::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: linear-gradient(160deg, rgba(20, 54, 216, .16) 0%, rgba(7, 26, 77, .04) 42%, rgba(7, 26, 77, .46) 100%);
+}
+.vxs-idx__cap {
+	position: absolute;
+	left: 14px;
+	bottom: 14px;
+	z-index: 1;
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 7px 12px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .92);
+	color: var(--vxh-ink);
+	font-size: 12px;
+	font-weight: 600;
+}
+.vxs-idx__cap svg { color: var(--vxh-blue); }
+
+/* --- The rows ------------------------------------------------------------- */
+
+.vxs-idx__list { list-style: none; margin: 0; padding: 0; }
+.vxs-idx__list > li {
+	padding: clamp(20px, 2.6vw, 32px) 0;
+	border-top: 1px solid var(--vxh-line);
+	transition: padding-left .5s var(--vxh-ease);
+}
+.vxs-idx__list > li:last-child { border-bottom: 1px solid var(--vxh-line); }
+/* The row being read steps in a little and takes the accent. Nothing else
+   changes — a highlighted background would make the list a stack of cards
+   again, which is the thing this replaced. */
+.vxs-idx__list > li.is-on { padding-left: 12px; }
+
+.vxs-idx__row {
+	display: grid;
+	grid-template-columns: 3.4rem minmax(0, 1fr) 22px;
+	align-items: baseline;
+	gap: 16px;
+	color: inherit;
+}
+.vxs-idx__n {
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: .16em;
+	color: var(--vxh-muted);
+	font-variant-numeric: tabular-nums;
+	transition: color .3s ease;
+}
+.is-on > .vxs-idx__row .vxs-idx__n { color: var(--vxh-blue); }
+.vxs-idx__t {
+	font-family: var(--vxh-display);
+	font-size: clamp(22px, 2.6vw, 36px);
+	font-weight: 500;
+	letter-spacing: -.035em;
+	line-height: 1.08;
+	color: var(--vxh-ink);
+	text-wrap: balance;
+	transition: color .3s ease;
+}
+.vxs-idx__row:hover .vxs-idx__t, .is-on > .vxs-idx__row .vxs-idx__t { color: var(--vxh-blue); }
+.vxs-idx__row > svg { align-self: center; justify-self: end; color: var(--vxh-line); transition: color .3s ease, transform .35s var(--vxh-ease); }
+.vxs-idx__row:hover > svg { color: var(--vxh-blue); transform: translate(2px, -2px); }
+
+.vxs-idx__d {
+	margin: 12px 0 0 calc(3.4rem + 16px);
+	max-width: 58ch;
+	font-size: 14.5px;
+	line-height: 1.65;
+	color: var(--vxh-muted);
+	text-wrap: pretty;
+}
+/* The catalogue under a practice. Small and inline: it is a list of pages, and
+   a page-per-card is what made the old index thirty-eight cards long. */
+.vxs-idx__subs {
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 8px;
+	margin: 16px 0 0 calc(3.4rem + 16px);
+	padding: 0;
+}
+.vxs-idx__subs a {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 999px;
+	border: 1px solid var(--vxh-line);
+	font-size: 12.5px;
+	line-height: 1.3;
+	color: var(--vxh-text) !important;
+	transition: border-color .25s ease, color .25s ease, background-color .25s ease;
+}
+.vxs-idx__subs a:hover { border-color: var(--vxh-blue); color: var(--vxh-blue) !important; background: rgba(20, 54, 216, .04); }
+
+@media (max-width: 1024px) {
+	/* Below this the frame would be a thumbnail beside a paragraph, which is
+	   worth less than the room it costs — so the list takes the full measure. */
+	.vxs-idx__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+	.vxs-idx__frame { position: relative; top: auto; aspect-ratio: 16 / 9; }
+	.vxs-idx__list > li.is-on { padding-left: 0; }
+}
+@media (max-width: 640px) {
+	.vxs-idx__row { grid-template-columns: 2.4rem minmax(0, 1fr) 18px; gap: 10px; }
+	.vxs-idx__d, .vxs-idx__subs { margin-left: calc(2.4rem + 10px); }
+}

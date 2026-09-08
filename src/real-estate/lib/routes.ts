@@ -23,6 +23,9 @@
  *   L2  /en-ae/real-estate/buy-property/               /en-in/…
  *   L2  /en-ae/real-estate/sell-rent-lease-property/   /en-in/…
  *   L2  /en-ae/real-estate/off-plan-properties/        /en-in/…
+ *   L2  /en-ae/real-estate/rent-property/               /en-in/…
+ *   L2  /en-ae/real-estate/communities/                 /en-in/…
+ *   L2  /en-ae/real-estate/consultation/                /en-in/…
  *   L2  …and residential, commercial, mortgage-services,
  *        investment-advisory, valuations-advisory
  *
@@ -124,8 +127,11 @@ export function url(locale: Locale, path = '/'): string {
  */
 export const SERVICE_SLUGS = [
   'buy-property',
+  'rent-property',
   'sell-rent-lease-property',
   'off-plan-properties',
+  'communities',
+  'consultation',
   'residential',
   'commercial',
   'mortgage-services',

@@ -63,11 +63,41 @@ const GROUPS: { sel: string; variant: string; stagger?: boolean }[] = [
   { sel: '.vxn-re-rev', variant: 'up', stagger: true },
   { sel: '.vxn-re-faq', variant: 'up', stagger: true },
   { sel: '.vxn-re-partner', variant: 'scale', stagger: true },
+  /* The pillar page's scene system. Every scene names itself first, makes its
+     statement second, and lets whatever it is showing arrive behind the two —
+     so a section is read in the order it was written rather than appearing at
+     once. Nothing here is preloaded: an element is hidden only once this file
+     has marked it, and only while it is still below the fold. */
+  { sel: '.vxr-scene__head', variant: 'up' },
+  { sel: '.vxr-tag', variant: 'up' },
+  { sel: '.vxr-chip', variant: 'up' },
+  { sel: '.vxr-kicker', variant: 'up' },
+  { sel: '.vxr-line', variant: 'up' },
+  { sel: '.vxr-rest__h', variant: 'up' },
+  { sel: '.vxr-rest__p', variant: 'up' },
+  { sel: '.vxr-rest__band', variant: 'mask' },
+  { sel: '.vxr-way', variant: 'up', stagger: true },
+  { sel: '.vxr-frame', variant: 'up', stagger: true },
+  { sel: '.vxr-place', variant: 'up', stagger: true },
+  { sel: '.vxr-prop', variant: 'up', stagger: true },
+  { sel: '.vxr-launch__pic', variant: 'mask', stagger: true },
+  { sel: '.vxr-launch__row', variant: 'right', stagger: true },
+  { sel: '.vxr-serve__list li', variant: 'left', stagger: true },
+  { sel: '.vxr-serve__say', variant: 'up' },
+  { sel: '.vxr-said', variant: 'up', stagger: true },
+  { sel: '.vxr-figs', variant: 'up' },
+  { sel: '.vxr-about__shot', variant: 'mask' },
+  { sel: '.vxr-serve__stack', variant: 'mask' },
+  { sel: '.vxr-sell__items li', variant: 'right', stagger: true },
+  { sel: '.vxr-ask__why li', variant: 'left', stagger: true },
+  { sel: '.vxr-ask__form', variant: 'right' },
+  { sel: '.vxr-devs__row', variant: 'up' },
+
   /* Portal sections */
   { sel: '.vxn-re-search', variant: 'up' },
   { sel: '.vxn-re-cat', variant: 'up', stagger: true },
   { sel: '.vxn-re-stat', variant: 'up', stagger: true },
-  { sel: '.vxn-re-prop', variant: 'up', stagger: true },
+  { sel: '.vxr-prop', variant: 'up', stagger: true },
   { sel: '.vxn-re-launch', variant: 'up', stagger: true },
   { sel: '.vxn-re-whycard', variant: 'up', stagger: true },
   { sel: '.vxn-re-svctile', variant: 'scale', stagger: true },
@@ -220,16 +250,26 @@ export default function Motion() {
         }
       }
 
-      /* The safety net: reveal anything still pending that is ON SCREEN.
+      /* The safety net: reveal anything HIDDEN that is ON SCREEN.
          Deliberately not a blanket reveal — that would play the whole page to
          someone who has not scrolled there yet, so content below the fold stays
-         for the observer however long they take to reach it. */
+         for the observer however long they take to reach it.
+
+         'out' IS IN THIS SELECTOR, and that was a real bug rather than caution.
+         An element that leaves through the top is parked at 'out', which is a
+         hidden state; if it comes back on screen without the observer firing —
+         a jump to an anchor, a restored scroll position, a big programmatic
+         scroll — it stays invisible, and 'out' was outside the net that is
+         supposed to catch exactly that. An element marked 'out' while it is on
+         screen is wrong by definition, whatever the observer thinks. */
       const rescue = () => {
         const vh = window.innerHeight;
-        root.querySelectorAll<HTMLElement>('[data-anim="pending"]').forEach((el) => {
-          const r = el.getBoundingClientRect();
-          if (r.top < vh && r.bottom > 0) el.dataset.anim = 'in';
-        });
+        root
+          .querySelectorAll<HTMLElement>('[data-anim="pending"], [data-anim="out"]')
+          .forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (r.top < vh && r.bottom > 0) el.dataset.anim = 'in';
+          });
       };
       timers.push(window.setTimeout(rescue, 2200));
 
@@ -238,8 +278,8 @@ export default function Motion() {
          timestamp rather than requestAnimationFrame on purpose: the case this
          guards against is an environment where the rendering pipeline is not
          running, and in one of those rAF does not fire either — which would
-         make the guard as dead as the thing it is guarding. It only walks the
-         shrinking set of still-pending nodes, so it is cheap. */
+         make the guard as dead as the thing it is guarding. It walks only the
+         nodes still in a hidden state, so it is cheap. */
       let last = 0;
       const onRescue = () => {
         const now = Date.now();

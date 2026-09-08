@@ -29,8 +29,16 @@ import { UAE_SERVICES, uaeServicePath, type UaeService, type UaeSubService } fro
  */
 const POST_CSS = ['5', '3837', '2094', '3752', '4557'];
 
-/** The vxh kit sheets: tokens, buttons and the abstract layer, then the services components. */
-const CSS = ['/assets/css/vxn-home-ae.css', '/assets/css/vxn-services-ae.css'];
+/**
+ * The vxh kit sheets: tokens, buttons and the abstract layer, then the
+ * services components, then the shared page furniture (the opening, section
+ * heads, the FAQ, the newsletter) these pages build their bookends from.
+ */
+const CSS = [
+  '/assets/css/vxn-home-ae.css',
+  '/assets/css/vxn-services-ae.css',
+  '/assets/css/vxn-pages.css',
+];
 
 /** Behaviour for the rail, the explorer, the tools and the counters. */
 const JS = ['/assets/js/vxn-services-ae.js'];

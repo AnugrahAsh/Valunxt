@@ -58,11 +58,11 @@ export const BRAND = {
  */
 
 export const NAV: Link[] = [
-  { label: 'Buy', href: '/?kind=buy#listings' },
-  { label: 'Rent', href: '/?kind=rent#listings' },
-  { label: 'Off-Plan', href: '/?kind=offplan#listings' },
-  { label: 'Communities', href: '/#communities' },
-  { label: 'Sell & Let', href: '/#sell' },
+  { label: 'Buy', href: '/buy-property/' },
+  { label: 'Rent', href: '/rent-property/' },
+  { label: 'Off-Plan', href: '/off-plan-properties/' },
+  { label: 'Communities', href: '/communities/' },
+  { label: 'Sell & Let', href: '/sell-rent-lease-property/' },
   { label: 'Services', href: '/#services' },
 ];
 
@@ -71,6 +71,7 @@ export const FOOTER_COLUMNS: { title: string; links: Link[] }[] = [
     title: 'Transact',
     links: [
       { label: 'Buy Property', href: '/buy-property/' },
+      { label: 'Rent a Property', href: '/rent-property/' },
       { label: 'Sell, Rent & Lease', href: '/sell-rent-lease-property/' },
       { label: 'Off-Plan Properties', href: '/off-plan-properties/' },
       { label: 'Residential', href: '/residential/' },
@@ -83,13 +84,14 @@ export const FOOTER_COLUMNS: { title: string; links: Link[] }[] = [
       { label: 'Mortgage Services', href: '/mortgage-services/' },
       { label: 'Investment Advisory', href: '/investment-advisory/' },
       { label: 'Valuations & Advisory', href: '/valuations-advisory/' },
-      { label: 'Our Process', href: '/#process' },
+      { label: 'Book a Consultation', href: '/consultation/' },
     ],
   },
   {
     title: 'The Group',
     links: [
       { label: 'About VALUNXT', href: '/#about' },
+      { label: 'Communities', href: '/communities/' },
       { label: 'Property Gallery', href: '/#gallery' },
       { label: 'Client Reviews', href: '/#reviews' },
       { label: 'FAQs', href: '/#faqs' },

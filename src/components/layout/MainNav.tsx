@@ -12,6 +12,7 @@
  */
 import { rurl } from '@/lib/region';
 import MegaMenu from './MegaMenu';
+import { MenuButton } from './VxnMenu';
 
 export interface NavIds {
   /** menu-item-<n> on the About parent. */
@@ -148,20 +149,16 @@ export default function MainNav({
   );
 }
 
-/** The burger button rendered between the two <nav>s in every header. */
+/**
+ * The burger, in every header.
+ *
+ * It was Elementor's toggle, which opened Elementor's dropdown — the desktop
+ * list re-rendered as a white stack under the bar. Both are gone: this opens the
+ * blue card panel PageShell mounts (see layout/VxnMenu), and the dropdown
+ * `<nav>` beside it is hidden in vxn-mega.css. The captured `<nav>` markup is
+ * still emitted because the theme's per-post stylesheets address the widget
+ * through it.
+ */
 export function MenuToggle() {
-  return (
-    <div className="elementor-menu-toggle" role="button" tabIndex={0} aria-label="Menu Toggle" aria-expanded="false">
-      <i
-        aria-hidden="true"
-        role="presentation"
-        className="elementor-menu-toggle__icon--open vamtamtheme- vamtam-theme-menu"
-      />
-      <i
-        aria-hidden="true"
-        role="presentation"
-        className="elementor-menu-toggle__icon--close vamtamtheme- vamtam-theme-close"
-      />
-    </div>
-  );
+  return <MenuButton />;
 }

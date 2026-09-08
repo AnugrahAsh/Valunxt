@@ -25,6 +25,8 @@ import Header139 from './Header139';
 import Header3134 from './Header3134';
 import Header3837 from './Header3837';
 import SmoothScroll from './SmoothScroll';
+import { MenuPanel } from './VxnMenu';
+import Parallax from '@/components/vxh/Parallax';
 import Footer2094 from './Footer2094';
 import Footer3425 from './Footer3425';
 import CookieConsent from './CookieConsent';
@@ -64,8 +66,12 @@ export default function PageShell({
   return (
     <>
       <SmoothScroll />
+      <Parallax />
       <Preloader />
       <SiteHeader which={page.header} region={region} />
+      {/* One panel for the document: the headers render their bar more than
+          once, and the burgers in them all address this. */}
+      <MenuPanel region={region} />
       <div id="page" className="main-container">
         {children}
         {page.canvas ? null : <SiteFooter which={page.footer} region={region} />}

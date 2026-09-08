@@ -44,7 +44,12 @@
       "/about/careers/"
     ],
     "inline_css": "<style>body{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/careers.webp\") !important}</style>",
-    "path": "/about/careers/"
+    "path": "/about/careers/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/about/": {
     "title": "About | VALUNXT Capital",
@@ -244,7 +249,12 @@
       "/clients/"
     ],
     "inline_css": "<style>body{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/clients.webp\") !important}</style>",
-    "path": "/clients/"
+    "path": "/clients/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/community/": {
     "title": "Community | VALUNXT Capital",
@@ -270,7 +280,12 @@
     "inline_css": "",
     "hero_title": "Community",
     "hero_image": "/assets/content/uploads/banners/community.webp",
-    "path": "/community/"
+    "path": "/community/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/contact/": {
     "title": "Contact Us | VALUNXT Capital",
@@ -295,7 +310,12 @@
       "/contact/"
     ],
     "inline_css": "<style>body{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/contact.webp\") !important}</style>",
-    "path": "/contact/"
+    "path": "/contact/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/disclaimer/": {
     "title": "Disclaimer | VALUNXT Capital",
@@ -400,7 +420,12 @@
     "inline_css": "",
     "hero_title": "Frequently Asked Questions",
     "hero_image": "/assets/content/uploads/banners/about-us.webp",
-    "path": "/faq/"
+    "path": "/faq/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/free-consultation/": {
     "title": "Book a Consultation | VALUNXT Capital",
@@ -478,7 +503,12 @@
       "/location/"
     ],
     "inline_css": "<style>body{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/location.webp\") !important}</style>",
-    "path": "/location/"
+    "path": "/location/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/network/": {
     "title": "Network | VALUNXT Capital",
@@ -692,7 +722,12 @@
     "post_excerpt": "Partner with VALUNXT Capital to connect capital, real estate, research, and technology into opportunities that build lasting wealth.",
     "active_nav": [],
     "inline_css": "<style id=\"elementor-frontend-inline-css\">\nbody{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/partnership.webp\") !important;}\n.elementor-2281 .elementor-element.elementor-element-577ba48b:not(.elementor-motion-effects-element-type-background), .elementor-2281 .elementor-element.elementor-element-577ba48b > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-image:url(\"{{BASE}}/assets/content/uploads/2025/03/GettyImages-1522377398.jpg\");}\n/*# sourceURL=elementor-frontend-inline-css */\n</style>\n",
-    "path": "/services/tax-planning/"
+    "path": "/services/tax-planning/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/privacy-policy/": {
     "title": "Privacy Policy | VALUNXT Capital",
@@ -828,7 +863,12 @@
       "/research/"
     ],
     "inline_css": "<style id=\"vxn-research-tweaks\">.elementor-9230 .e-loop__load-more,.elementor-9230 .e-load-more-spinner,.elementor-9230 .e-load-more-anchor,.elementor-9230 .e-load-more-message{display:none !important;}body{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/reseach-and-reports.webp\")}</style>",
-    "path": "/research/"
+    "path": "/research/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/research/india-real-estate-outlook-2026/": {
     "title": "India Real Estate Outlook 2026 | VALUNXT Capital",
@@ -1012,7 +1052,12 @@
       "/services/"
     ],
     "inline_css": "<style>body{--vxn-hero-img:url(\"{{BASE}}/assets/content/uploads/banners/service-main.webp\") !important}.elementor-248 .elementor-element.elementor-element-cee6c01:not(.elementor-motion-effects-element-type-background){background-image:url(\"{{BASE}}/assets/content/uploads/services/technology-and-ai-1.webp\") !important;background-position:center center !important;background-size:cover !important}</style>",
-    "path": "/services/"
+    "path": "/services/",
+    "css": [
+      "/assets/css/vxn-home-ae.css",
+      "/assets/css/vxn-services-ae.css",
+      "/assets/css/vxn-pages.css"
+    ]
   },
   "/services/real-estate-investment-advisory/": {
     "title": "Real Estate Investment Advisory | VALUNXT Capital",

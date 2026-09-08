@@ -27,6 +27,14 @@
  * number matters, the copy describes the mechanism and says the current figure
  * is confirmed in writing. Do not "helpfully" fill these in without a source.
  */
+/*
+ * ON THE HERO PHOTOGRAPHS, 2026-09-08. These four opened on the stock the home
+ * page dropped — a handshake, a glowing data chart, a keychain and a man in
+ * front of a neon "CAPITAL MARKET" graph. It mattered more here than it did
+ * there: the rebuilt template gives every page a FULL-SCREEN masthead, so that
+ * stock was the first and largest thing a visitor saw on four of eleven pages.
+ * They are Dubai property now, from img/services/.
+ */
 import type { ServicePage } from '../lib/types';
 
 const RESIDENTIAL: ServicePage = {
@@ -35,7 +43,7 @@ const RESIDENTIAL: ServicePage = {
   title: 'The Right Home,',
   titleAccent: 'In the Right Community.',
   lede: 'Choosing where to live in Dubai is a decision about schools, commutes, service charges and how a building is actually run — not just about the apartment. We start with the household, not the listing.',
-  heroImg: '/real-estate/img/service-residential.webp',
+  heroImg: '/real-estate/img/services/residential.webp',
   highlights: [
     { value: 'Community', label: 'First, not last', detail: 'The building matters less than the neighbourhood you wake up in.' },
     { value: 'Handover', label: 'Quality checked', detail: 'We inspect what the developer actually delivered, not the brochure.' },
@@ -115,7 +123,7 @@ const COMMERCIAL: ServicePage = {
   title: 'Premises That Fit',
   titleAccent: 'How You Actually Operate.',
   lede: 'Offices, retail, F&B, warehousing and light industrial across Dubai — advised on the things that decide whether a space works: permitted use, fit-out terms, licensing and the real cost of occupation.',
-  heroImg: '/real-estate/img/service-commercial.webp',
+  heroImg: '/real-estate/img/services/commercial.webp',
   highlights: [
     { value: 'Permitted use', label: 'Verified first', detail: 'A unit your licence cannot occupy is not an option.' },
     { value: 'Fit-out', label: 'Terms negotiated', detail: 'Rent-free periods are part of the price, not a favour.' },
@@ -191,7 +199,7 @@ const MORTGAGE: ServicePage = {
   title: 'Financing Compared,',
   titleAccent: 'Not Just Arranged.',
   lede: 'We approach the market as a whole rather than one lender, put the offers side by side, and manage the process from pre-approval through to the bank’s valuation and drawdown.',
-  heroImg: '/real-estate/img/service-mortgage.webp',
+  heroImg: '/real-estate/img/services/mortgage.webp',
   highlights: [
     { value: 'Whole market', label: 'Not one bank', detail: 'Offers compared across UAE lenders on like-for-like terms.' },
     { value: 'Reversion', label: 'Rate modelled', detail: 'The rate after the fixed period, not just the headline.' },
@@ -271,7 +279,7 @@ const INVESTMENT: ServicePage = {
   title: 'Yield You Keep,',
   titleAccent: 'Not Yield on Paper.',
   lede: 'Gross yield is a marketing number. We model what a property actually returns after service charges, voids, management and the cost of getting in and out — then build a portfolio around it.',
-  heroImg: '/real-estate/img/service-investment.webp',
+  heroImg: '/real-estate/img/services/investment.webp',
   highlights: [
     { value: 'Net', label: 'Not gross', detail: 'Modelled after charges, voids and management.' },
     { value: 'Exit', label: 'Planned at entry', detail: 'How you leave decides what the holding was worth.' },
