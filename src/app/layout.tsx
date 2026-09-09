@@ -166,7 +166,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           {/* The pillar page's panel system, on top of the sheet above — which
               keeps the navigation, the footer, the forms and the service
               pages. See valunxt-re-panels.css. */}
-          <link rel="stylesheet" href="/assets/css/valunxt-re-panels.css?v=29" media="all" />
+          <link rel="stylesheet" href="/assets/css/valunxt-re-panels.css?v=30" media="all" />
           <style dangerouslySetInnerHTML={{ __html: RE_DOCUMENT_CSS }} />
         </head>
         <body>

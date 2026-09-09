@@ -55,21 +55,21 @@ interface Way {
 const WAYS: Way[] = [
   {
     key: 'sell',
-    name: 'Sell',
+    name: 'Villas & estates',
     title: 'Sell it for what it is worth',
     body: 'A valuation on the evidence first, then a buyer list before the portals ever see it. You will know the honest number before anyone else does.',
     img: '/real-estate/img/ways/sell.webp',
   },
   {
     key: 'buy',
-    name: 'Buy',
+    name: 'Penthouses',
     title: 'Buy the address, not the floor area',
     body: 'Freehold homes across the communities people actually want to live in — beachfront, canal-side and the quiet green streets in between.',
     img: '/real-estate/img/ways/buy.webp',
   },
   {
     key: 'rent',
-    name: 'Rent',
+    name: 'Waterfront',
     title: 'Rent the life before you commit',
     body: 'Furnished or empty, one cheque to twelve. The fastest way to find out whether a community is yours before you buy into it.',
     img: '/real-estate/img/ways/rent.webp',
@@ -77,8 +77,8 @@ const WAYS: Way[] = [
 ];
 
 const HEAD = {
-  title: 'Properties of luxury in Dubai',
-  body: 'Three ways in, and one team behind all of them. Hover to see what each one means.',
+  title: 'Dubai\'s most coveted settings',
+  body: 'Explore the addresses that define luxury living in the city, handpicked by our real estate experts.',
 };
 
 export default function Ways({ region }: { region: Locale }) {
@@ -105,7 +105,7 @@ export default function Ways({ region }: { region: Locale }) {
       <div className="vxr-ways__head">
         {/* Keyed on what is showing, so React replaces the node and the entry
             animation plays again on every change rather than only the first. */}
-        <h2 className="vxr-ways__h" id="vxr-ways-h" key={at ? at.key : 'head'}>
+        <h2 className="vxr-ways__h" id="vxr-ways-h" >
           {shown.title}
         </h2>
         <p className="vxr-ways__p" key={at ? `${at.key}-p` : 'head-p'}>

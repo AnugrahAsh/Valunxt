@@ -9,7 +9,7 @@
  *     uppercase — and puts its one action at the top right or the bottom left.
  *     Nothing is centred except Ways and Sell, which are centred on purpose.
  *   • Anything that will not fit down the screen goes across it, on a rail.
- *     Communities and reviews are rails; so are the properties.
+ *     COMMUNITIES and reviews are rails; so are the properties.
  *
  * WHAT THIS REPLACED. A stack of rounded white panels, each sized by its own
  * content and each held inside a gutter. It read as a list of cards, and no
@@ -19,7 +19,7 @@
  * The layouts are the client's three references, in this brand's colours: the
  * "OUR EXPERTISE" split for Services, the "THE JOURNAL" split for off-plan, the
  * photograph-band-then-statement for Selling, the offset gallery for
- * Communities, and the tall-portrait split for About.
+ * COMMUNITIES, and the tall-portrait split for About.
  *
  * The content did not change. Every word and figure below is the same record in
  * ../../data it was before.
@@ -168,9 +168,15 @@ export function Living({ region }: { region: Locale }) {
       {/* Kicker only. The eyebrow above it was a second line of chrome on a
           section whose whole job is to be photographs. */}
       <div className="vxr-scene__head">
-        <h2 className="vxr-kicker" id="vxr-living-h">
-          What Dubai is actually like
+        <span className="vxr-kicker" id="vxr-living-h">
+          THE VALUNXT STANDARD
+        </span>
+        <h2 className="vxr-mast__h" style={{ marginTop: "1rem", color: 'black' }}>
+          See not only what a home is, but what life there becomes
         </h2>
+        <p className="vxr-mast__lede" style={{ marginTop: "1.5rem", maxWidth: "60ch", color: 'black' }}>
+          A property is more than its floor plan and location. It's the lifestyle it enables, the community it sits in, and the future it promises. <br /><br />Let our experts guide you to the perfect home, matched precisely to your lifestyle aspirations.
+        </p>
       </div>
 
       {/* NO `data-lenis-prevent` HERE, and it is worth saying why: it tells Lenis
@@ -256,12 +262,10 @@ export function Rest() {
       <div className="vxr-rest__say">
         <i className="vxr-rest__rule" aria-hidden="true" />
         <h2 className="vxr-rest__h" id="vxr-rest-h">
-          Sea, sand and skyline, <em>twenty minutes apart</em>
+          Sea, sky and privacy—without leaving the city behind
         </h2>
         <p className="vxr-rest__p">
-          Dubai is the rare city where the water, the dunes and the towers are a short drive from
-          one another. That closeness is the luxury &mdash; and the address is what decides how much
-          of it is yours.
+          Dubai is the rare city where the water, the dunes and the towers are a short drive from one another.
         </p>
       </div>
     </section>
@@ -359,7 +363,7 @@ export function Places({ region }: { region: Locale }) {
     <section className="vxr-scene vxr-scene--flush vxr-places" aria-labelledby="vxr-places-h" data-par>
       <div className="vxr-scene__head">
         <div>
-          <span className="vxr-tag">Communities</span>
+          <span className="vxr-tag">COMMUNITIES</span>
           <h2 className="vxr-kicker" id="vxr-places-h">
             Every one a different life
           </h2>

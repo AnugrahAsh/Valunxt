@@ -125,9 +125,7 @@ export default function HeroStage({ region }: { region: Locale }) {
             </h1>
 
             <p className="vxr-mast__lede">
-              Beachfront villas on the Palm. Sky homes over the Marina. The quiet, green streets of
-              the Hills. The addresses people move to this city for &mdash; and the advice to buy one
-              well.
+              Discover the city's finest properties, from waterfront villas to sky-high penthouses.
             </p>
           </div>
 

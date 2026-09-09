@@ -11,10 +11,10 @@ import type { Faq, FeatureCard, ProcessStep, Review, Stat } from '../lib/types';
 /* Hero — the wireframe: title block + offer card, then video, then buy/sell/rent */
 
 export const HERO = {
-  eyebrow: 'Real Estate',
-  title: 'Luxury Living.',
-  titleAccent: 'Smarter Investing.',
-  lede: "Discover Dubai's most sought-after properties through expert advisory, curated opportunities, and strategic guidance tailored to your ambitions.",
+  eyebrow: 'VALUNXT REAL ESTATE',
+  title: 'Live where Dubai',
+titleAccent: 'is at its best',
+  lede: 'Discover the city\'s finest properties, from waterfront villas to sky-high penthouses.',
   card: {
     stat: '50,000+',
     title: 'Curated Property Opportunities',
@@ -55,10 +55,9 @@ export const PILLARS_NOTE =
 /* About */
 
 export const ABOUT = {
-  eyebrow: 'About Us',
-  title:
-    "VALUNXT is your trusted partner in Dubai's luxury real estate journey, delivering curated properties, expert advisory, and seamless experiences from first search to final handover.",
-  body: "VALUNXT is your trusted partner in Dubai's luxury real estate market, combining curated opportunities, strategic market insight, and personalised advisory to create exceptional property experiences.",
+  eyebrow: 'THE VALUNXT STANDARD',
+  title: 'See not only what a home is, but what life there becomes',
+  body: 'A property is more than its floor plan and location. It\'s the lifestyle it enables, the community it sits in, and the future it promises.',
   cta: 'Discover VALUNXT',
   href: '/#services',
   img: '/real-estate/img/about.webp',
@@ -91,8 +90,8 @@ export const ABOUT = {
  */
 
 export const SERVICES_HEAD = {
-  eyebrow: 'Our Services',
-  title: 'Expert Advisory for Every Property Decision',
+  eyebrow: 'CURATED SELECTION',
+  title: 'Architecture that belongs to its setting',
   lede: 'Curated real estate solutions backed by expertise, insight, and trusted guidance.',
 };
 
@@ -135,9 +134,9 @@ export const SERVICES: FeatureCard[] = [
 /* Valuations */
 
 export const VALUATIONS = {
-  eyebrow: 'Valuations & Advisory',
-  title: 'Property Valuations Backed by Precision, Trusted by Experts',
-  body: "Whether you're buying, selling, refinancing or investing, our RICS & RERA-aligned valuation reports deliver accurate, independent property assessments across residential, commercial and industrial assets, helping you make every real estate decision with confidence.",
+  eyebrow: 'MARKET INSIGHTS',
+  title: 'A global city entering its next chapter',
+  body: 'Dubai\'s real estate market continues to mature, offering unparalleled opportunities for lifestyle and investment.',
   img: '/real-estate/img/valuation.webp',
   stat: {
     value: 'AED 250B+',
@@ -169,8 +168,8 @@ export const VALUATIONS = {
 /* Process */
 
 export const PROCESS_HEAD = {
-  eyebrow: 'Our Process',
-  title: 'Your Property Journey, Simplified',
+  eyebrow: 'OUR APPROACH',
+  title: 'Our relationship, from first conversation to final key',
   lede: 'From your first consultation to successful ownership, every step is guided with expertise, transparency, and personalised support.',
   img: '/real-estate/img/process.webp',
   cardTitle: 'Ready to Find Your Perfect Property?',
@@ -248,7 +247,7 @@ export const INSIGHTS = {
 
 export const CONTACT = {
   eyebrow: 'Contact',
-  title: 'Tell us what you’re looking for.',
+  title: 'Tell us what would make a property right for you',
   lede: 'Budget, area and timing. We come back with what is available and what it costs to own.',
   img: '/real-estate/img/cta.webp',
   whyTitle: 'Why Choose VALUNXT?',

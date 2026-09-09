@@ -27,6 +27,7 @@ import { useEffect } from 'react';
 
 import { useSearch, setSearch, resetSearch, filterListings, LISTINGS_ANCHOR } from '../lib/search';
 import type { ListingKind } from '../data/listings';
+import { useParams } from 'next/navigation';
 import { LISTINGS, LISTINGS_NOTE, type PortalListing } from '../data/listings';
 import SearchBar from './SearchBar';
 import { Arrows, useRail } from './rail';
@@ -41,8 +42,10 @@ const HEADING = {
 } as const;
 
 function Card({ l, lead }: { l: PortalListing; lead?: boolean }) {
+  const params = useParams();
+  const region = typeof params?.region === 'string' ? params.region : 'en-ae';
   return (
-    <a className={`vxr-prop${lead ? ' vxr-prop--lead' : ''}`} href="#contact">
+    <a className={`vxr-prop${lead ? ' vxr-prop--lead' : ''}`} href={`/${region}/real-estate/listings/${l.id}`}>
       <span className="vxr-prop__media">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={l.img} alt="" loading="lazy" />
@@ -54,9 +57,11 @@ function Card({ l, lead }: { l: PortalListing; lead?: boolean }) {
         <span className="vxr-prop__price">
           {l.price} <i>{l.priceNote}</i>
         </span>
+        {/* The data already carries the unit — `beds` is "2 bed", not "2" — so
+            appending one here printed "2 bed bed" on every card. */}
         <span>{l.area}</span>
-        <span>{l.beds} bed</span>
-        <span>{l.baths} bath</span>
+        <span>{l.beds}</span>
+        <span>{l.baths}</span>
       </span>
 
       <span className="vxr-prop__title">{l.title}</span>

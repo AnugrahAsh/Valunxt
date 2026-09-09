@@ -102,6 +102,7 @@
 	min-height: 560px;
 	overflow: hidden;
 }
+
 .vxn-re .vxr-mast__in {
 	height: 100%;
 	transform-origin: 50% 34%;
@@ -109,11 +110,15 @@
 	   rather than the hero being covered — the difference is small and it is the
 	   whole effect. */
 	transform:
-		scale(calc(1 - var(--collapse, 0) * .12))
-		translateY(calc(var(--collapse, 0) * -7vh));
+		scale(calc(1 - var(--collapse, 0) * .12)) translateY(calc(var(--collapse, 0) * -7vh));
 	will-change: transform;
 }
-.vxn-re .vxr-mast__shot { height: 100%; min-height: 0; }
+
+.vxn-re .vxr-mast__shot {
+	height: 100%;
+	min-height: 0;
+}
+
 /* Dimmed by the same progress, so the last thing the hero does is go quiet. */
 .vxn-re .vxr-mast__wash::after {
 	content: "";
@@ -128,10 +133,11 @@
 	z-index: 2;
 	background: var(--vxr-ground);
 }
+
 /* The edge that rises. It belongs to the first scene rather than to the flow,
    so no `overflow` is needed anywhere to clip it — and `overflow` on an ancestor
    is exactly what would break the sticky hero above. */
-.vxn-re .vxr-flow > .vxr-scene:first-child {
+.vxn-re .vxr-flow>.vxr-scene:first-child {
 	border-radius: clamp(18px, 2.4vw, 40px) clamp(18px, 2.4vw, 40px) 0 0;
 	box-shadow: 0 -40px 90px -30px rgba(10, 23, 48, .5);
 }
@@ -139,8 +145,13 @@
 /* The hero is the one thing on the page that must not animate in — it is the
    first paint. Motion.tsx is told so by this attribute in HeroStage. */
 @media (prefers-reduced-motion: reduce) {
-	.vxn-re .vxr-mast__in { transform: none; }
-	.vxn-re .vxr-mast__wash::after { opacity: 0; }
+	.vxn-re .vxr-mast__in {
+		transform: none;
+	}
+
+	.vxn-re .vxr-mast__wash::after {
+		opacity: 0;
+	}
 }
 
 
@@ -162,8 +173,14 @@
 /* Lenis drives the real scroll position rather than transforming a wrapper, so
    `position: sticky` still works and the pinned masthead is unaffected. These
    two rules are the library's own requirement. */
-html.vxr-lenis { scroll-behavior: auto !important; }
-html.vxr-lenis, html.vxr-lenis body { height: auto; }
+html.vxr-lenis {
+	scroll-behavior: auto !important;
+}
+
+html.vxr-lenis,
+html.vxr-lenis body {
+	height: auto;
+}
 
 .vxn-re .vxr-par {
 	height: 118% !important;
@@ -178,14 +195,27 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	height: 116%;
 	transform: translate3d(0, calc(var(--par, 0) * -4%), 0);
 }
-.vxn-re .vxr-prop:hover .vxr-prop__media img { transform: translate3d(0, calc(var(--par, 0) * -4%), 0) scale(1.05); }
-.vxn-re .vxr-place:hover .vxr-place__media img { transform: translate3d(0, calc(var(--par, 0) * -4%), 0) scale(1.05); }
+
+.vxn-re .vxr-prop:hover .vxr-prop__media img {
+	transform: translate3d(0, calc(var(--par, 0) * -4%), 0) scale(1.05);
+}
+
+.vxn-re .vxr-place:hover .vxr-place__media img {
+	transform: translate3d(0, calc(var(--par, 0) * -4%), 0) scale(1.05);
+}
 
 @media (prefers-reduced-motion: reduce) {
+
 	.vxn-re .vxr-par,
 	.vxn-re .vxr-prop__media img,
-	.vxn-re .vxr-place__media img { height: 100% !important; transform: none; }
-	.vxn-re .vxr-living__track { transform: none; }
+	.vxn-re .vxr-place__media img {
+		height: 100% !important;
+		transform: none;
+	}
+
+	.vxn-re .vxr-living__track {
+		transform: none;
+	}
 }
 
 
@@ -219,13 +249,21 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    then the next one begins. That empty band is the "time to recover" between
    two sections, and it is the single thing that stops the page reading as a
    stack of slides pressed flat against one another. */
-.vxn-re .vxr-flow > .vxr-scene + .vxr-scene { margin-top: clamp(72px, 22vh, 300px); }
-.vxn-re .vxr-flow > .vxr-scene:last-child { margin-bottom: clamp(72px, 18vh, 240px); }
+.vxn-re .vxr-flow>.vxr-scene+.vxr-scene {
+	margin-top: clamp(72px, 22vh, 300px);
+}
+
+.vxn-re .vxr-flow>.vxr-scene:last-child {
+	margin-bottom: clamp(72px, 18vh, 240px);
+}
+
 /* `<figure>` ships with `margin: 1em 40px` from the UA sheet, which is enough
    to stop a full-bleed photograph 40px short of the screen. Nothing inside a
    scene wants it; the two columns that need a margin set their own below. */
 .vxn-re .vxr-scene figure,
-.vxn-re .vxr-mast figure { margin: 0; }
+.vxn-re .vxr-mast figure {
+	margin: 0;
+}
 
 /* ONE GROUND, AND ONE PLANE ON IT.
 
@@ -239,16 +277,29 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    These two are kept as no-ops so a scene still asking for them does not fall
    through to a colour that no longer exists. */
 .vxn-re .vxr-scene--tint,
-.vxn-re .vxr-scene--paper { background: transparent; }
-.vxn-re .vxr-scene--ink { background: var(--vxr-night); color: rgba(255, 255, 255, .74); }
+.vxn-re .vxr-scene--paper {
+	background: transparent;
+}
+
+.vxn-re .vxr-scene--ink {
+	background: var(--vxr-night);
+	color: rgba(255, 255, 255, .74);
+}
+
 .vxn-re .vxr-scene--blue {
 	background: linear-gradient(150deg, #1436D8 0%, #2F63FF 100%);
 	color: rgba(255, 255, 255, .8);
 }
+
 /* For scenes whose content reaches the screen's edge — the rails, and the
    service scene's image column. Their type re-applies the padding itself. */
-.vxn-re .vxr-scene--flush { padding-inline: 0; }
-.vxn-re .vxr-pad { padding-inline: var(--vxr-edge); }
+.vxn-re .vxr-scene--flush {
+	padding-inline: 0;
+}
+
+.vxn-re .vxr-pad {
+	padding-inline: var(--vxr-edge);
+}
 
 /* The body of a scene: everything under the heading, taking the room that is
    left. `min-height: 0` is what allows a child to be smaller than its content
@@ -269,6 +320,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	gap: clamp(20px, 4vw, 72px);
 	margin-bottom: clamp(24px, 5.4vh, 76px);
 }
+
 .vxn-re .vxr-scene__foot {
 	flex: none;
 	display: flex;
@@ -289,26 +341,35 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    every width, and in vh as well so it cannot eat a short viewport. */
 .vxn-re .vxr-kicker {
 	margin: 0;
-	font-family: "DM Sans", system-ui, sans-serif;
-	font-weight: 300;
-	font-size: clamp(1.7rem, min(5vw, 7vh), 4.6rem);
+	font-family: "Playfair Display", serif;
+	font-style: italic;
+	font-weight: 400;
+	font-size: clamp(2.2rem, min(6vw, 8.5vh), 5.5rem);
 	line-height: 1.0;
 	letter-spacing: .012em;
 	text-transform: uppercase;
 	color: var(--vxr-ink);
 	text-wrap: balance;
 }
+
 .vxn-re .vxr-scene--ink .vxr-kicker,
-.vxn-re .vxr-scene--blue .vxr-kicker { color: #fff; }
+.vxn-re .vxr-scene--blue .vxr-kicker {
+	color: #fff;
+}
 
 /* On a rail scene the kicker is a label over the goods, not the argument — so it
    is set down a register and the room goes to the photographs instead. */
 .vxn-re .vxr-props .vxr-kicker,
 .vxn-re .vxr-says .vxr-kicker,
 .vxn-re .vxr-faq .vxr-kicker,
-.vxn-re .vxr-cloud .vxr-kicker { font-size: clamp(1.4rem, min(3.4vw, 4.6vh), 2.9rem); }
+.vxn-re .vxr-cloud .vxr-kicker {
+	font-size: clamp(1.8rem, min(4vw, 5.5vh), 3.5rem);
+}
+
 .vxn-re .vxr-props .vxr-scene__head,
-.vxn-re .vxr-says .vxr-scene__head { margin-bottom: clamp(12px, 1.8vh, 22px); }
+.vxn-re .vxr-says .vxr-scene__head {
+	margin-bottom: clamp(12px, 1.8vh, 22px);
+}
 
 /* The line — large, light, tightly tracked, sentence case. This makes the
    argument. One emphasis per line, in the accent; three is a heading nobody
@@ -316,38 +377,79 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 .vxn-re .vxr-line {
 	margin: 0;
 	max-width: 18ch;
-	font-family: "DM Sans", system-ui, sans-serif;
-	font-weight: 300;
-	font-size: clamp(1.7rem, min(3.7vw, 5.6vh), 3.5rem);
+	font-family: "Playfair Display", serif;
+	font-style: italic;
+	font-weight: 400;
+	font-size: clamp(2rem, min(4.5vw, 6.8vh), 4.2rem);
 	line-height: 1.12;
 	letter-spacing: -.028em;
 	color: var(--vxr-ink);
 	text-wrap: balance;
 }
-.vxn-re .vxr-line em { font-style: normal; color: var(--vxr-blue-2); }
-.vxn-re .vxr-line--wide { max-width: 24ch; }
-.vxn-re .vxr-line--mid { max-width: 22ch; margin-inline: auto; text-align: center; }
+
+.vxn-re .vxr-line em {
+	font-style: normal;
+	color: var(--vxr-blue-2);
+}
+
+.vxn-re .vxr-line--wide {
+	max-width: 24ch;
+}
+
+.vxn-re .vxr-line--mid {
+	max-width: 22ch;
+	margin-inline: auto;
+	text-align: center;
+}
+
 .vxn-re .vxr-scene--ink .vxr-line,
-.vxn-re .vxr-scene--blue .vxr-line { color: #fff; }
+.vxn-re .vxr-scene--blue .vxr-line {
+	color: #fff;
+}
+
 .vxn-re .vxr-scene--ink .vxr-line em,
-.vxn-re .vxr-scene--blue .vxr-line em { color: rgba(255, 255, 255, .58); }
+.vxn-re .vxr-scene--blue .vxr-line em {
+	color: rgba(255, 255, 255, .58);
+}
 
 /* Body copy. Small, and there is never much of it. */
 .vxn-re .vxr-copy {
 	margin: 0;
-	max-width: 42ch;
-	font-size: clamp(13px, .95vw, 15px);
+	max-width: 45ch;
+	font-size: clamp(15px, 1.1vw, 18px);
 	line-height: 1.85;
 	color: var(--muted);
 	text-wrap: pretty;
 }
-.vxn-re .vxr-copy + .vxr-copy { margin-top: 1em; }
-.vxn-re .vxr-copy--mid { margin-inline: auto; text-align: center; }
-.vxn-re .vxr-copy b { display: block; margin-bottom: .7em; font-weight: 600; color: var(--vxr-ink); }
-.vxn-re .vxr-scene--ink .vxr-copy { color: rgba(255, 255, 255, .68); }
-.vxn-re .vxr-scene--blue .vxr-copy { color: rgba(255, 255, 255, .82); }
+
+.vxn-re .vxr-copy+.vxr-copy {
+	margin-top: 1em;
+}
+
+.vxn-re .vxr-copy--mid {
+	margin-inline: auto;
+	text-align: center;
+}
+
+.vxn-re .vxr-copy b {
+	display: block;
+	margin-bottom: .7em;
+	font-weight: 600;
+	color: var(--vxr-ink);
+}
+
+.vxn-re .vxr-scene--ink .vxr-copy {
+	color: rgba(255, 255, 255, .68);
+}
+
+.vxn-re .vxr-scene--blue .vxr-copy {
+	color: rgba(255, 255, 255, .82);
+}
+
 .vxn-re .vxr-scene--ink .vxr-copy b,
-.vxn-re .vxr-scene--blue .vxr-copy b { color: #fff; }
+.vxn-re .vxr-scene--blue .vxr-copy b {
+	color: #fff;
+}
 
 /* The small tracked label. Used for eyebrows, list items and specs — anywhere
    a word needs to be quiet and legible at 11px. */
@@ -360,8 +462,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-transform: uppercase;
 	color: var(--vxr-blue);
 }
+
 .vxn-re .vxr-scene--ink .vxr-tag,
-.vxn-re .vxr-scene--blue .vxr-tag { color: rgba(255, 255, 255, .62); }
+.vxn-re .vxr-scene--blue .vxr-tag {
+	color: rgba(255, 255, 255, .62);
+}
 
 /* The chip — kept from the panel system for the scenes that still label
    themselves twice (a kicker plus a category). */
@@ -378,9 +483,16 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-transform: uppercase;
 	color: var(--vxr-blue);
 }
+
 .vxn-re .vxr-scene--ink .vxr-chip,
-.vxn-re .vxr-scene--blue .vxr-chip { border-color: rgba(255, 255, 255, .34); color: rgba(255, 255, 255, .88); }
-.vxn-re .vxr-chip--mid { margin-inline: auto; }
+.vxn-re .vxr-scene--blue .vxr-chip {
+	border-color: rgba(255, 255, 255, .34);
+	color: rgba(255, 255, 255, .88);
+}
+
+.vxn-re .vxr-chip--mid {
+	margin-inline: auto;
+}
 
 /* --- The actions ---------------------------------------------------------- */
 
@@ -405,12 +517,37 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	font-family: inherit;
 	transition: background-color .35s var(--ease), transform .35s var(--ease);
 }
-.vxn-re .vxr-btn:hover { background: var(--vxr-blue); transform: translateY(-2px); }
-.vxn-re .vxr-btn svg { width: 15px; height: 15px; transition: transform .35s var(--ease); }
-.vxn-re .vxr-btn:hover svg { transform: translateX(4px); }
-.vxn-re .vxr-btn i { font-style: normal; opacity: .5; letter-spacing: .06em; }
-.vxn-re .vxr-btn--light { background: #fff; color: var(--vxr-ink); }
-.vxn-re .vxr-btn--light:hover { background: var(--vxr-blue); color: #fff; }
+
+.vxn-re .vxr-btn:hover {
+	background: var(--vxr-blue);
+	transform: translateY(-2px);
+}
+
+.vxn-re .vxr-btn svg {
+	width: 15px;
+	height: 15px;
+	transition: transform .35s var(--ease);
+}
+
+.vxn-re .vxr-btn:hover svg {
+	transform: translateX(4px);
+}
+
+.vxn-re .vxr-btn i {
+	font-style: normal;
+	opacity: .5;
+	letter-spacing: .06em;
+}
+
+.vxn-re .vxr-btn--light {
+	background: #fff;
+	color: var(--vxr-ink);
+}
+
+.vxn-re .vxr-btn--light:hover {
+	background: var(--vxr-blue);
+	color: #fff;
+}
 
 /* The pill, with the arrow in its own disc — kept from the panel system for the
    two scenes that sit on blue. */
@@ -428,8 +565,13 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	white-space: nowrap;
 	transition: transform .3s var(--ease), box-shadow .3s ease;
 }
-.vxn-re .vxr-pill:hover { transform: translateY(-2px); box-shadow: 0 16px 30px -16px rgba(10, 23, 48, .5); }
-.vxn-re .vxr-pill > span {
+
+.vxn-re .vxr-pill:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 16px 30px -16px rgba(10, 23, 48, .5);
+}
+
+.vxn-re .vxr-pill>span {
 	display: grid;
 	place-items: center;
 	width: 34px;
@@ -439,15 +581,40 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: var(--vxr-blue);
 	transition: background-color .3s var(--ease), color .3s var(--ease);
 }
-.vxn-re .vxr-pill:hover > span { background: var(--vxr-blue); color: #fff; }
-.vxn-re .vxr-pill svg { width: 15px; height: 15px; }
-.vxn-re .vxr-pill--blue { background: var(--vxr-blue); color: #fff; }
-.vxn-re .vxr-pill--blue > span { background: rgba(255, 255, 255, .18); color: #fff; }
-.vxn-re .vxr-pill--blue:hover > span { background: #fff; color: var(--vxr-blue); }
+
+.vxn-re .vxr-pill:hover>span {
+	background: var(--vxr-blue);
+	color: #fff;
+}
+
+.vxn-re .vxr-pill svg {
+	width: 15px;
+	height: 15px;
+}
+
+.vxn-re .vxr-pill--blue {
+	background: var(--vxr-blue);
+	color: #fff;
+}
+
+.vxn-re .vxr-pill--blue>span {
+	background: rgba(255, 255, 255, .18);
+	color: #fff;
+}
+
+.vxn-re .vxr-pill--blue:hover>span {
+	background: #fff;
+	color: var(--vxr-blue);
+}
 
 /* --- The rail's arrows ---------------------------------------------------- */
 
-.vxn-re .vxr-arrows { display: flex; gap: 10px; flex: none; }
+.vxn-re .vxr-arrows {
+	display: flex;
+	gap: 10px;
+	flex: none;
+}
+
 .vxn-re .vxr-arrow {
 	display: grid;
 	place-items: center;
@@ -460,16 +627,41 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	cursor: pointer;
 	transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
 }
-.vxn-re .vxr-arrow:hover { background: var(--vxr-night); border-color: var(--vxr-night); color: #fff; }
-.vxn-re .vxr-arrow svg { width: 17px; height: 17px; }
-.vxn-re .vxr-arrow--back svg { transform: rotate(180deg); }
+
+.vxn-re .vxr-arrow:hover {
+	background: var(--vxr-night);
+	border-color: var(--vxr-night);
+	color: #fff;
+}
+
+.vxn-re .vxr-arrow svg {
+	width: 17px;
+	height: 17px;
+}
+
+.vxn-re .vxr-arrow--back svg {
+	transform: rotate(180deg);
+}
+
 /* Nothing left to scroll to. Kept visible and inert rather than removed, so the
    pair does not jump about as the rail moves. */
-.vxn-re .vxr-arrow[disabled] { opacity: .28; pointer-events: none; }
+.vxn-re .vxr-arrow[disabled] {
+	opacity: .28;
+	pointer-events: none;
+}
+
 .vxn-re .vxr-scene--ink .vxr-arrow,
-.vxn-re .vxr-scene--blue .vxr-arrow { border-color: rgba(255, 255, 255, .34); color: #fff; }
+.vxn-re .vxr-scene--blue .vxr-arrow {
+	border-color: rgba(255, 255, 255, .34);
+	color: #fff;
+}
+
 .vxn-re .vxr-scene--ink .vxr-arrow:hover,
-.vxn-re .vxr-scene--blue .vxr-arrow:hover { background: #fff; color: var(--vxr-ink); border-color: #fff; }
+.vxn-re .vxr-scene--blue .vxr-arrow:hover {
+	background: #fff;
+	color: var(--vxr-ink);
+	border-color: #fff;
+}
 
 /* --- The rail ------------------------------------------------------------
    Rule 2: what will not fit down the screen goes across it. The rail takes the
@@ -500,10 +692,19 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	-ms-overflow-style: none;
 	overscroll-behavior-x: contain;
 }
-.vxn-re .vxr-rail::-webkit-scrollbar { display: none; }
-.vxn-re .vxr-rail > * { scroll-snap-align: start; }
+
+.vxn-re .vxr-rail::-webkit-scrollbar {
+	display: none;
+}
+
+.vxn-re .vxr-rail>* {
+	scroll-snap-align: start;
+}
+
 @media (prefers-reduced-motion: reduce) {
-	.vxn-re .vxr-rail { scroll-behavior: auto; }
+	.vxn-re .vxr-rail {
+		scroll-behavior: auto;
+	}
 }
 
 
@@ -520,7 +721,9 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    the page. Every other kicker sits at the top left.
    ========================================================================== */
 
-.vxn-re .vxr-ways { background: transparent; }
+.vxn-re .vxr-ways {
+	background: transparent;
+}
 
 .vxn-re .vxr-ways__mark {
 	position: absolute;
@@ -532,8 +735,14 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 		linear-gradient(to right, transparent calc(50% - .5px), rgba(14, 33, 102, .3) calc(50% - .5px), rgba(14, 33, 102, .3) calc(50% + .5px), transparent calc(50% + .5px)),
 		linear-gradient(to bottom, transparent calc(50% - .5px), rgba(14, 33, 102, .3) calc(50% - .5px), rgba(14, 33, 102, .3) calc(50% + .5px), transparent calc(50% + .5px));
 }
-.vxn-re .vxr-ways__mark--l { left: clamp(14px, 2vw, 30px); }
-.vxn-re .vxr-ways__mark--r { right: clamp(14px, 2vw, 30px); }
+
+.vxn-re .vxr-ways__mark--l {
+	left: clamp(14px, 2vw, 30px);
+}
+
+.vxn-re .vxr-ways__mark--r {
+	right: clamp(14px, 2vw, 30px);
+}
 
 /* The screen: the section's own title at rest, the name and description of
    whichever card is hovered otherwise. Its height is held so the row below
@@ -546,11 +755,13 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	margin: 0 auto clamp(20px, 3.6vh, 52px);
 	text-align: center;
 }
+
 .vxn-re .vxr-ways__h {
 	margin: 0;
 	min-height: 2.05em;
 	max-width: 16ch;
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Playfair Display", serif;
+	font-style: italic;
 	font-weight: 300;
 	font-size: clamp(1.8rem, min(4.8vw, 7vh), 4.2rem);
 	line-height: 1.03;
@@ -560,22 +771,33 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-wrap: balance;
 	animation: vxr-ways-in .5s var(--ease) both;
 }
+
 .vxn-re .vxr-ways__p {
 	margin: clamp(12px, 1.8vh, 24px) 0 0;
 	min-height: 3.4em;
-	max-width: 52ch;
+	max-width: 45ch;
 	font-size: clamp(13px, 1.05vw, 16px);
 	line-height: 1.64;
 	color: var(--muted);
 	text-wrap: pretty;
 	animation: vxr-ways-in .5s var(--ease) .04s both;
 }
+
 @keyframes vxr-ways-in {
-	from { opacity: 0; transform: translateY(12px); }
-	to { opacity: 1; transform: none; }
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
 }
 
-.vxn-re .vxr-ways__all { margin-top: clamp(14px, 2.2vh, 28px); }
+.vxn-re .vxr-ways__all {
+	margin-top: clamp(14px, 2.2vh, 28px);
+}
 
 /* Three columns, bottom-aligned, the middle one taller. `align-items: end` is
    what drops the outer two rather than a margin — so the three bottoms line up
@@ -627,7 +849,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	transform: translateY(8px);
 	transition: opacity .35s var(--ease), transform .45s var(--ease);
 }
-.vxn-re .vxr-way[data-on="true"] .vxr-way__tag { opacity: 1; transform: none; }
+
+.vxn-re .vxr-way[data-on="true"] .vxr-way__tag {
+	opacity: 1;
+	transform: none;
+}
 
 .vxn-re .vxr-way__frame {
 	display: block;
@@ -635,12 +861,22 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	background: var(--vxr-ground);
 	transition: transform .55s var(--ease), box-shadow .55s ease;
 }
+
 /* The step the reference makes: the middle card is full height, the outer two
    are held back. */
-.vxn-re .vxr-way__frame { align-self: end; }
-.vxn-re .vxr-way--buy .vxr-way__frame { height: 100%; }
+.vxn-re .vxr-way__frame {
+	align-self: end;
+}
+
+.vxn-re .vxr-way--buy .vxr-way__frame {
+	height: 100%;
+}
+
 .vxn-re .vxr-way--sell .vxr-way__frame,
-.vxn-re .vxr-way--rent .vxr-way__frame { height: 84%; }
+.vxn-re .vxr-way--rent .vxr-way__frame {
+	height: 84%;
+}
+
 .vxn-re .vxr-way__frame img {
 	display: block;
 	width: 100%;
@@ -651,8 +887,16 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	filter: saturate(.88);
 	transition: transform .9s var(--ease), filter .55s ease;
 }
-.vxn-re .vxr-way[data-on="true"] .vxr-way__frame { transform: translateY(-10px); box-shadow: 0 40px 70px -40px rgba(14, 33, 102, .45); }
-.vxn-re .vxr-way[data-on="true"] .vxr-way__frame img { transform: scale(1.06); filter: saturate(1.04); }
+
+.vxn-re .vxr-way[data-on="true"] .vxr-way__frame {
+	transform: translateY(-10px);
+	box-shadow: 0 40px 70px -40px rgba(14, 33, 102, .45);
+}
+
+.vxn-re .vxr-way[data-on="true"] .vxr-way__frame img {
+	transform: scale(1.06);
+	filter: saturate(1.04);
+}
 
 
 /* ==========================================================================
@@ -677,14 +921,20 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    offset, so they compose instead of fighting for the same property.
    ========================================================================== */
 
-.vxn-re .vxr-living { padding-inline: 0; }
+.vxn-re .vxr-living {
+	padding-inline: 0;
+}
+
 .vxn-re .vxr-living .vxr-scene__head {
 	padding-inline: var(--vxr-edge);
 	margin-bottom: clamp(12px, 2vh, 24px);
 }
+
 /* One line, and small: this section is photographs, and every pixel the heading
    takes comes straight off them. */
-.vxn-re .vxr-living .vxr-kicker { font-size: clamp(1.3rem, min(2.8vw, 3.8vh), 2.3rem); }
+.vxn-re .vxr-living .vxr-kicker {
+	font-size: clamp(1.3rem, min(2.8vw, 3.8vh), 2.3rem);
+}
 
 .vxn-re .vxr-living__rail {
 	flex: 1;
@@ -698,7 +948,10 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	   page — see the note on `data-lenis-prevent` in sections/panels.tsx. */
 	overscroll-behavior-x: contain;
 }
-.vxn-re .vxr-living__rail::-webkit-scrollbar { display: none; }
+
+.vxn-re .vxr-living__rail::-webkit-scrollbar {
+	display: none;
+}
 
 /* The track carries the drift so the rail's own scrollLeft stays untouched.
    `align-items: end` puts every frame on the floor of the stage; the step is
@@ -728,19 +981,34 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	overflow: hidden;
 	background: var(--vxr-sand);
 }
+
 .vxn-re .vxr-frame img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 	transition: transform 1.2s var(--ease);
 }
-.vxn-re .vxr-frame:hover img { transform: scale(1.04); }
+
+.vxn-re .vxr-frame:hover img {
+	transform: scale(1.04);
+}
 
 /* The staircase: every frame sits one step higher than the one to its left,
    resetting every third so the rhythm repeats along a rail of any length. */
-.vxn-re .vxr-frame:nth-child(3n + 1) { margin-bottom: 0; width: clamp(240px, 34vw, 660px); }
-.vxn-re .vxr-frame:nth-child(3n + 2) { margin-bottom: 8.5vh; width: clamp(280px, 41vw, 800px); }
-.vxn-re .vxr-frame:nth-child(3n + 3) { margin-bottom: 17vh; width: clamp(220px, 29vw, 560px); }
+.vxn-re .vxr-frame:nth-child(3n + 1) {
+	margin-bottom: 0;
+	width: clamp(240px, 34vw, 660px);
+}
+
+.vxn-re .vxr-frame:nth-child(3n + 2) {
+	margin-bottom: 8.5vh;
+	width: clamp(280px, 41vw, 800px);
+}
+
+.vxn-re .vxr-frame:nth-child(3n + 3) {
+	margin-bottom: 17vh;
+	width: clamp(220px, 29vw, 560px);
+}
 
 /* --- The controls --------------------------------------------------------
    The reference stacks them at the bottom right: the pair of circular arrows on
@@ -756,7 +1024,13 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	padding-inline: var(--vxr-edge);
 	margin-top: clamp(12px, 2vh, 26px);
 }
-.vxn-re .vxr-living__act { display: flex; align-items: stretch; gap: 10px; }
+
+.vxn-re .vxr-living__act {
+	display: flex;
+	align-items: stretch;
+	gap: 10px;
+}
+
 /* White with a hairline, as the reference has it — the navy rectangle would be
    the loudest thing on a screen that is meant to be photographs. */
 .vxn-re .vxr-living__act .vxr-btn {
@@ -764,7 +1038,13 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	background: transparent;
 	color: var(--vxr-ink);
 }
-.vxn-re .vxr-living__act .vxr-btn:hover { background: var(--vxr-ink); border-color: var(--vxr-ink); color: #fff; }
+
+.vxn-re .vxr-living__act .vxr-btn:hover {
+	background: var(--vxr-ink);
+	border-color: var(--vxr-ink);
+	color: #fff;
+}
+
 /* The square beside it. It is a link to the full set, not an ornament. */
 .vxn-re .vxr-living__all {
 	display: grid;
@@ -775,15 +1055,33 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: #fff;
 	transition: background-color .3s var(--ease);
 }
-.vxn-re .vxr-living__all:hover { background: var(--vxr-blue); }
-.vxn-re .vxr-living__all svg { width: 16px; height: 16px; }
+
+.vxn-re .vxr-living__all:hover {
+	background: var(--vxr-blue);
+}
+
+.vxn-re .vxr-living__all svg {
+	width: 16px;
+	height: 16px;
+}
 
 @media (max-width: 1000px) {
+
 	.vxn-re .vxr-frame:nth-child(3n + 1),
 	.vxn-re .vxr-frame:nth-child(3n + 2),
-	.vxn-re .vxr-frame:nth-child(3n + 3) { margin-bottom: 0; width: clamp(240px, 78vw, 520px); }
-	.vxn-re .vxr-frame { height: 100%; }
-	.vxn-re .vxr-living__track { transform: none; padding-left: var(--vxr-edge); }
+	.vxn-re .vxr-frame:nth-child(3n + 3) {
+		margin-bottom: 0;
+		width: clamp(240px, 78vw, 520px);
+	}
+
+	.vxn-re .vxr-frame {
+		height: 100%;
+	}
+
+	.vxn-re .vxr-living__track {
+		transform: none;
+		padding-left: var(--vxr-edge);
+	}
 }
 
 
@@ -808,7 +1106,10 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    as a statement. It stays the only serif here: two would make it a style.
    ========================================================================== */
 
-.vxn-re .vxr-rest { padding: 0; background: transparent; }
+.vxn-re .vxr-rest {
+	padding: 0;
+	background: transparent;
+}
 
 /* Cut off by the top of the screen, and full bleed. The crop matters more than
    the height: it has to read as a window, not as a banner. */
@@ -820,6 +1121,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	overflow: hidden;
 	background: var(--vxr-sand);
 }
+
 .vxn-re .vxr-rest__band img {
 	width: 100%;
 	height: 100%;
@@ -849,6 +1151,8 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 }
 
 .vxn-re .vxr-rest__h {
+	font-family: "Playfair Display", serif;
+	font-style: italic;
 	margin: 0;
 	max-width: 15ch;
 	/* ONE FAMILY ON THE PAGE. This was set in Forum, the brand's serif, for one
@@ -856,7 +1160,8 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	   seam where a design stops being its own. The distinction here comes from
 	   scale and from the space around it, which is where it should have come from
 	   in the first place. */
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Playfair Display", serif;
+	font-style: italic;
 	font-weight: 200;
 	/* Four times the body size. That ratio is the whole effect. */
 	font-size: clamp(2.2rem, min(6vw, 9.4vh), 5.8rem);
@@ -865,11 +1170,15 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: var(--vxr-ink);
 	text-wrap: balance;
 }
-.vxn-re .vxr-rest__h em { font-style: normal; color: var(--vxr-blue-2); }
+
+.vxn-re .vxr-rest__h em {
+	font-style: normal;
+	color: var(--vxr-blue-2);
+}
 
 .vxn-re .vxr-rest__p {
 	margin: 0;
-	max-width: 44ch;
+	max-width: 45ch;
 	font-size: clamp(13px, .95vw, 15px);
 	line-height: 1.9;
 	color: var(--muted);
@@ -877,7 +1186,9 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 }
 
 @media (max-width: 1000px) {
-	.vxn-re .vxr-rest__band { height: clamp(180px, 26vh, 300px); }
+	.vxn-re .vxr-rest__band {
+		height: clamp(180px, 26vh, 300px);
+	}
 }
 
 
@@ -890,13 +1201,17 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    ceiling. Nothing else on the screen.
    ========================================================================== */
 
-.vxn-re .vxr-about { background: transparent; }
+.vxn-re .vxr-about {
+	background: transparent;
+}
+
 .vxn-re .vxr-about .vxr-scene__body {
 	display: grid;
 	grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
 	align-items: stretch;
 	gap: clamp(28px, 6.5vw, 140px);
 }
+
 /* Two rows. The argument centres itself in the first; the figures sit on the
    floor of the column with everything between them left empty. Stacking all
    four blocks in one centred column is what made this scene read as dense. */
@@ -905,10 +1220,22 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	grid-template-rows: minmax(0, 1fr) auto;
 	height: 100%;
 }
-.vxn-re .vxr-about__lead { align-self: center; }
-.vxn-re .vxr-about__say .vxr-line { max-width: 15ch; }
-.vxn-re .vxr-about__say .vxr-copy { margin-top: clamp(18px, 3vh, 34px); }
-.vxn-re .vxr-about__act { margin-top: clamp(22px, 4vh, 48px); }
+
+.vxn-re .vxr-about__lead {
+	align-self: center;
+}
+
+.vxn-re .vxr-about__say .vxr-line {
+	max-width: 15ch;
+}
+
+.vxn-re .vxr-about__say .vxr-copy {
+	margin-top: clamp(18px, 3vh, 34px);
+}
+
+.vxn-re .vxr-about__act {
+	margin-top: clamp(22px, 4vh, 48px);
+}
 
 /* The figures. A row of three, hairline-separated, at the foot of the column —
    the evidence under the claim, not a band of its own. */
@@ -921,15 +1248,17 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	padding-top: clamp(18px, 3vh, 34px);
 	border-top: 1px solid rgba(14, 33, 102, .16);
 }
+
 .vxn-re .vxr-fig__v {
 	margin: 0;
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Helvetica", system-ui, sans-serif;
 	font-weight: 300;
 	font-size: clamp(1.5rem, 2.4vw, 2.4rem);
 	line-height: 1;
 	letter-spacing: -.03em;
 	color: var(--vxr-blue);
 }
+
 .vxn-re .vxr-fig__k {
 	margin: 8px 0 0;
 	font-size: clamp(10px, .78vw, 11.5px);
@@ -952,7 +1281,12 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	overflow: hidden;
 	background: var(--vxr-sand);
 }
-.vxn-re .vxr-about .vxr-about__shot img { width: 100%; height: 100%; object-fit: cover; }
+
+.vxn-re .vxr-about .vxr-about__shot img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
 
 
 /* ==========================================================================
@@ -969,7 +1303,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    column into the section's own navigation.
    ========================================================================== */
 
-.vxn-re .vxr-serve { padding-right: 0; background: transparent; }
+.vxn-re .vxr-serve {
+	padding-right: 0;
+	background: transparent;
+}
+
 .vxn-re .vxr-serve .vxr-scene__body {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, .82fr);
@@ -983,6 +1321,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	min-height: 0;
 	padding-bottom: clamp(4px, 1vh, 14px);
 }
+
 /* The list of names, immediately under the kicker, as the reference has it. */
 .vxn-re .vxr-serve__list {
 	list-style: none;
@@ -991,6 +1330,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	display: grid;
 	gap: clamp(8px, 1.3vh, 15px);
 }
+
 .vxn-re .vxr-serve__link {
 	display: inline-flex;
 	align-items: center;
@@ -1009,6 +1349,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	cursor: pointer;
 	transition: color .3s var(--ease);
 }
+
 /* The rule that grows out of the word — the whole hover, and enough of one. */
 .vxn-re .vxr-serve__link::after {
 	content: "";
@@ -1017,15 +1358,31 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	background: var(--vxr-blue);
 	transition: width .45s var(--ease);
 }
-.vxn-re .vxr-serve__link[data-on="true"] { color: var(--vxr-blue); }
-.vxn-re .vxr-serve__link[data-on="true"]::after { width: clamp(24px, 3vw, 54px); }
+
+.vxn-re .vxr-serve__link[data-on="true"] {
+	color: var(--vxr-blue);
+}
+
+.vxn-re .vxr-serve__link[data-on="true"]::after {
+	width: clamp(24px, 3vw, 54px);
+}
 
 /* The drop. This is the reference's composition: the argument is at the FOOT of
    the column, a long way under the list, and the emptiness between them is the
    point. */
-.vxn-re .vxr-serve__gap { flex: 1; min-height: clamp(20px, 6vh, 90px); }
-.vxn-re .vxr-serve__say { max-width: 44ch; }
-.vxn-re .vxr-serve__act { margin-top: clamp(18px, 2.8vh, 34px); align-self: flex-start; }
+.vxn-re .vxr-serve__gap {
+	flex: 1;
+	min-height: clamp(20px, 6vh, 90px);
+}
+
+.vxn-re .vxr-serve__say {
+	max-width: 44ch;
+}
+
+.vxn-re .vxr-serve__act {
+	margin-top: clamp(18px, 2.8vh, 34px);
+	align-self: flex-start;
+}
 
 /* The column of photographs. Full height, bleeding off the right edge. */
 .vxn-re .vxr-serve__stack {
@@ -1036,6 +1393,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	overflow: hidden;
 	background: var(--vxr-sand);
 }
+
 .vxn-re .vxr-serve__shot {
 	position: absolute;
 	inset: 0;
@@ -1043,8 +1401,18 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	transition: opacity .7s var(--ease), transform 1.1s var(--ease);
 	transform: scale(1.06);
 }
-.vxn-re .vxr-serve__shot[data-on="true"] { opacity: 1; transform: none; }
-.vxn-re .vxr-serve__shot img { width: 100%; height: 100%; object-fit: cover; }
+
+.vxn-re .vxr-serve__shot[data-on="true"] {
+	opacity: 1;
+	transform: none;
+}
+
+.vxn-re .vxr-serve__shot img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
 /* The name of whatever is showing, over the foot of the column. */
 .vxn-re .vxr-serve__cap {
 	position: absolute;
@@ -1056,13 +1424,15 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: #fff;
 	pointer-events: none;
 }
+
 .vxn-re .vxr-serve__cap b {
 	display: block;
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Helvetica", system-ui, sans-serif;
 	font-weight: 400;
 	font-size: clamp(1rem, 1.5vw, 1.5rem);
 	letter-spacing: -.02em;
 }
+
 .vxn-re .vxr-serve__cap span {
 	display: block;
 	margin-top: 6px;
@@ -1086,12 +1456,40 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    a search panel of their own.
    ========================================================================== */
 
-.vxn-re .vxr-props { background: transparent; }
-.vxn-re .vxr-props .vxr-scene__head { padding-inline: var(--vxr-edge); }
-.vxn-re .vxr-props .vxr-scene__foot { padding-inline: var(--vxr-edge); margin-top: clamp(8px, 1.2vh, 14px); }
-.vxn-re .vxr-props__meta { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-.vxn-re .vxr-props__count { margin: 0; font-size: 12.5px; color: var(--muted); }
-.vxn-re .vxr-props__note { margin: 0; max-width: 82ch; font-size: 10.5px; line-height: 1.6; color: var(--muted); opacity: .82; }
+.vxn-re .vxr-props {
+	background: transparent;
+}
+
+.vxn-re .vxr-props .vxr-scene__head {
+	padding-inline: var(--vxr-edge);
+}
+
+.vxn-re .vxr-props .vxr-scene__foot {
+	padding-inline: var(--vxr-edge);
+	margin-top: clamp(8px, 1.2vh, 14px);
+}
+
+.vxn-re .vxr-props__meta {
+	display: flex;
+	align-items: baseline;
+	gap: 14px;
+	flex-wrap: wrap;
+}
+
+.vxn-re .vxr-props__count {
+	margin: 0;
+	font-size: 12.5px;
+	color: var(--muted);
+}
+
+.vxn-re .vxr-props__note {
+	margin: 0;
+	max-width: 82ch;
+	font-size: 20px;
+	line-height: 1.6;
+	color: blue;
+	opacity: .82;
+}
 
 /* One card. The large one is the rail's first child and takes the whole height;
    the rest are the reference's smaller card — picture, then the facts under it
@@ -1103,7 +1501,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	width: clamp(230px, 22vw, 330px);
 	text-decoration: none;
 }
-.vxn-re .vxr-prop--lead { width: clamp(300px, 32vw, 520px); }
+
+.vxn-re .vxr-prop--lead {
+	width: clamp(300px, 32vw, 520px);
+}
+
 .vxn-re .vxr-prop__media {
 	position: relative;
 	flex: 1;
@@ -1111,12 +1513,25 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	overflow: hidden;
 	background: var(--vxr-sand);
 }
+
 /* The smaller cards stop short of the floor so their facts have a place to sit —
    the reference's exact arrangement, and what makes the first card read as the
    subject. */
-.vxn-re .vxr-prop:not(.vxr-prop--lead) .vxr-prop__media { flex: 0 0 74%; }
-.vxn-re .vxr-prop__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease); }
-.vxn-re .vxr-prop:hover .vxr-prop__media img { transform: scale(1.05); }
+.vxn-re .vxr-prop:not(.vxr-prop--lead) .vxr-prop__media {
+	flex: 0 0 74%;
+}
+
+.vxn-re .vxr-prop__media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .9s var(--ease);
+}
+
+.vxn-re .vxr-prop:hover .vxr-prop__media img {
+	transform: scale(1.05);
+}
+
 .vxn-re .vxr-prop__flag {
 	position: absolute;
 	top: 12px;
@@ -1141,16 +1556,23 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	font-size: clamp(10.5px, .8vw, 12px);
 	color: var(--muted);
 }
+
 .vxn-re .vxr-prop__price {
 	font-weight: 600;
 	font-size: clamp(12px, .95vw, 14px);
 	letter-spacing: .02em;
 	color: var(--vxr-ink);
 }
-.vxn-re .vxr-prop__price i { font-style: normal; font-weight: 500; color: var(--vxr-blue); }
+
+.vxn-re .vxr-prop__price i {
+	font-style: normal;
+	font-weight: 500;
+	color: var(--vxr-blue);
+}
+
 .vxn-re .vxr-prop__title {
 	margin: 7px 0 0;
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Helvetica", system-ui, sans-serif;
 	font-weight: 400;
 	font-size: clamp(15px, 1.25vw, 20px);
 	line-height: 1.24;
@@ -1158,9 +1580,20 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: var(--vxr-ink);
 	transition: color .3s var(--ease);
 }
-.vxn-re .vxr-prop--lead .vxr-prop__title { font-size: clamp(17px, 1.6vw, 26px); }
-.vxn-re .vxr-prop:hover .vxr-prop__title { color: var(--vxr-blue); }
-.vxn-re .vxr-prop__where { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+
+.vxn-re .vxr-prop--lead .vxr-prop__title {
+	font-size: clamp(17px, 1.6vw, 26px);
+}
+
+.vxn-re .vxr-prop:hover .vxr-prop__title {
+	color: var(--vxr-blue);
+}
+
+.vxn-re .vxr-prop__where {
+	margin: 4px 0 0;
+	font-size: 12px;
+	color: var(--muted);
+}
 
 /* Nothing matched. A real state: it says what is on, and offers both ways out. */
 .vxn-re .vxr-props__empty {
@@ -1183,10 +1616,18 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    same size in a row is a grid, and a grid of places is a directory.
    ========================================================================== */
 
-.vxn-re .vxr-places { background: transparent; }
+.vxn-re .vxr-places {
+	background: transparent;
+}
+
 .vxn-re .vxr-places .vxr-scene__head,
-.vxn-re .vxr-places .vxr-scene__foot { padding-inline: var(--vxr-edge); }
-.vxn-re .vxr-places__rail { align-items: stretch; }
+.vxn-re .vxr-places .vxr-scene__foot {
+	padding-inline: var(--vxr-edge);
+}
+
+.vxn-re .vxr-places__rail {
+	align-items: stretch;
+}
 
 .vxn-re .vxr-place {
 	position: relative;
@@ -1197,20 +1638,42 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	height: 100%;
 	text-decoration: none;
 }
+
 /* The step. Every third tile is short and dropped, every second is tall — so the
    rail has a rhythm rather than a ruler. */
-.vxn-re .vxr-place:nth-child(3n + 1) .vxr-place__media { height: 78%; }
-.vxn-re .vxr-place:nth-child(3n + 2) .vxr-place__media { height: 100%; }
-.vxn-re .vxr-place:nth-child(3n + 3) .vxr-place__media { height: 62%; }
-.vxn-re .vxr-place:nth-child(3n + 3) { width: clamp(190px, 20vw, 320px); }
+.vxn-re .vxr-place:nth-child(3n + 1) .vxr-place__media {
+	height: 78%;
+}
+
+.vxn-re .vxr-place:nth-child(3n + 2) .vxr-place__media {
+	height: 100%;
+}
+
+.vxn-re .vxr-place:nth-child(3n + 3) .vxr-place__media {
+	height: 62%;
+}
+
+.vxn-re .vxr-place:nth-child(3n + 3) {
+	width: clamp(190px, 20vw, 320px);
+}
 
 .vxn-re .vxr-place__media {
 	position: relative;
 	overflow: hidden;
 	background: var(--vxr-ground);
 }
-.vxn-re .vxr-place__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
-.vxn-re .vxr-place:hover .vxr-place__media img { transform: scale(1.06); }
+
+.vxn-re .vxr-place__media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 1s var(--ease);
+}
+
+.vxn-re .vxr-place:hover .vxr-place__media img {
+	transform: scale(1.06);
+}
+
 /* The name over the foot of the picture, which is where it belongs on a
    photograph that is the whole tile. */
 .vxn-re .vxr-place__body {
@@ -1222,13 +1685,15 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	background: linear-gradient(to top, rgba(10, 23, 48, .8), rgba(10, 23, 48, 0));
 	color: #fff;
 }
+
 .vxn-re .vxr-place__name {
 	display: block;
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Helvetica", system-ui, sans-serif;
 	font-weight: 400;
 	font-size: clamp(15px, 1.35vw, 22px);
 	letter-spacing: -.02em;
 }
+
 .vxn-re .vxr-place__stock {
 	display: block;
 	margin-top: 5px;
@@ -1238,6 +1703,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-transform: uppercase;
 	color: rgba(255, 255, 255, .66);
 }
+
 .vxn-re .vxr-place__blurb {
 	display: block;
 	margin-top: 8px;
@@ -1249,7 +1715,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	transform: translateY(6px);
 	transition: opacity .4s var(--ease), transform .4s var(--ease);
 }
-.vxn-re .vxr-place:hover .vxr-place__blurb { opacity: 1; transform: none; }
+
+.vxn-re .vxr-place:hover .vxr-place__blurb {
+	opacity: 1;
+	transform: none;
+}
 
 
 /* ==========================================================================
@@ -1261,7 +1731,10 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    its link at the far right.
    ========================================================================== */
 
-.vxn-re .vxr-launch { background: transparent; }
+.vxn-re .vxr-launch {
+	background: transparent;
+}
+
 .vxn-re .vxr-launch .vxr-scene__body {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1272,16 +1745,42 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 
 /* The two pictures, offset — the reference's exact arrangement: a tall one at
    the left, a smaller one dropped and overlapped at the right. */
-.vxn-re .vxr-launch__pics { position: relative; height: 100%; min-height: 0; }
+.vxn-re .vxr-launch__pics {
+	position: relative;
+	height: 100%;
+	min-height: 0;
+}
+
 .vxn-re .vxr-launch__pic {
 	position: absolute;
 	overflow: hidden;
 	background: var(--vxr-sand);
 }
-.vxn-re .vxr-launch__pic img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
-.vxn-re .vxr-launch__pic:hover img { transform: scale(1.05); }
-.vxn-re .vxr-launch__pic--a { left: 0; bottom: 0; width: 62%; height: 92%; }
-.vxn-re .vxr-launch__pic--b { right: 0; bottom: 0; width: 50%; height: 62%; }
+
+.vxn-re .vxr-launch__pic img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 1.2s var(--ease);
+}
+
+.vxn-re .vxr-launch__pic:hover img {
+	transform: scale(1.05);
+}
+
+.vxn-re .vxr-launch__pic--a {
+	left: 0;
+	bottom: 0;
+	width: 62%;
+	height: 92%;
+}
+
+.vxn-re .vxr-launch__pic--b {
+	right: 0;
+	bottom: 0;
+	width: 50%;
+	height: 62%;
+}
 
 /* The rows. */
 .vxn-re .vxr-launch__rows {
@@ -1291,6 +1790,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	min-height: 0;
 	overflow: hidden;
 }
+
 .vxn-re .vxr-launch__row {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) auto;
@@ -1300,7 +1800,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	border-top: 1px solid rgba(14, 33, 102, .14);
 	text-decoration: none;
 }
-.vxn-re .vxr-launch__row:last-child { border-bottom: 1px solid rgba(14, 33, 102, .14); }
+
+.vxn-re .vxr-launch__row:last-child {
+	border-bottom: 1px solid rgba(14, 33, 102, .14);
+}
+
 .vxn-re .vxr-launch__k {
 	display: block;
 	font-size: 10px;
@@ -1309,10 +1813,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-transform: uppercase;
 	color: var(--muted);
 }
+
 .vxn-re .vxr-launch__n {
 	display: block;
 	margin-top: 8px;
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Helvetica", system-ui, sans-serif;
 	font-weight: 400;
 	font-size: clamp(15px, 1.4vw, 22px);
 	line-height: 1.2;
@@ -1320,7 +1825,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: var(--vxr-ink);
 	transition: color .3s var(--ease);
 }
-.vxn-re .vxr-launch__row:hover .vxr-launch__n { color: var(--vxr-blue); }
+
+.vxn-re .vxr-launch__row:hover .vxr-launch__n {
+	color: var(--vxr-blue);
+}
+
 .vxn-re .vxr-launch__go {
 	display: inline-flex;
 	align-items: center;
@@ -1332,9 +1841,20 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: var(--muted);
 	transition: color .3s var(--ease);
 }
-.vxn-re .vxr-launch__row:hover .vxr-launch__go { color: var(--vxr-blue); }
-.vxn-re .vxr-launch__go svg { width: 13px; height: 13px; transition: transform .3s var(--ease); }
-.vxn-re .vxr-launch__row:hover .vxr-launch__go svg { transform: translate(2px, -2px); }
+
+.vxn-re .vxr-launch__row:hover .vxr-launch__go {
+	color: var(--vxr-blue);
+}
+
+.vxn-re .vxr-launch__go svg {
+	width: 13px;
+	height: 13px;
+	transition: transform .3s var(--ease);
+}
+
+.vxn-re .vxr-launch__row:hover .vxr-launch__go svg {
+	transform: translate(2px, -2px);
+}
 
 
 /* ==========================================================================
@@ -1348,16 +1868,31 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    as the businesslike moment it is.
    ========================================================================== */
 
-.vxn-re .vxr-sell { background: transparent; }
+.vxn-re .vxr-sell {
+	background: transparent;
+}
+
 .vxn-re .vxr-sell .vxr-scene__body {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 	gap: clamp(28px, 7vw, 140px);
 	min-height: 0;
 }
-.vxn-re .vxr-sell__say { display: flex; flex-direction: column; justify-content: center; }
-.vxn-re .vxr-sell__say .vxr-copy { margin-top: clamp(18px, 3vh, 34px); }
-.vxn-re .vxr-sell__act { margin-top: clamp(22px, 4vh, 48px); align-self: flex-start; }
+
+.vxn-re .vxr-sell__say {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.vxn-re .vxr-sell__say .vxr-copy {
+	margin-top: clamp(18px, 3vh, 34px);
+}
+
+.vxn-re .vxr-sell__act {
+	margin-top: clamp(22px, 4vh, 48px);
+	align-self: flex-start;
+}
 
 /* The four promises, hairline-ruled down the right column with a great deal of
    air between them — a list you can read at a glance, not a specification. */
@@ -1369,13 +1904,18 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	margin: 0;
 	padding: 0;
 }
+
 .vxn-re .vxr-sell__items li {
 	display: grid;
 	gap: 8px;
 	padding: clamp(14px, 2.6vh, 30px) 0;
 	border-top: 1px solid rgba(14, 33, 102, .16);
 }
-.vxn-re .vxr-sell__items li:last-child { border-bottom: 1px solid rgba(14, 33, 102, .16); }
+
+.vxn-re .vxr-sell__items li:last-child {
+	border-bottom: 1px solid rgba(14, 33, 102, .16);
+}
+
 .vxn-re .vxr-sell__items b {
 	font-size: clamp(11px, .82vw, 12.5px);
 	font-weight: 600;
@@ -1383,6 +1923,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-transform: uppercase;
 	color: var(--vxr-ink);
 }
+
 .vxn-re .vxr-sell__items span {
 	max-width: 44ch;
 	font-size: clamp(12px, .88vw, 13.5px);
@@ -1399,10 +1940,18 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    said it about.
    ========================================================================== */
 
-.vxn-re .vxr-says { background: transparent; }
+.vxn-re .vxr-says {
+	background: transparent;
+}
+
 .vxn-re .vxr-says .vxr-scene__head,
-.vxn-re .vxr-says .vxr-scene__foot { padding-inline: var(--vxr-edge); }
-.vxn-re .vxr-says__rail { align-items: stretch; }
+.vxn-re .vxr-says .vxr-scene__foot {
+	padding-inline: var(--vxr-edge);
+}
+
+.vxn-re .vxr-says__rail {
+	align-items: stretch;
+}
 
 .vxn-re .vxr-said {
 	display: flex;
@@ -1414,6 +1963,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	padding: clamp(20px, 2.2vw, 34px);
 	background: #fff;
 }
+
 .vxn-re .vxr-said blockquote {
 	flex: 1;
 	min-height: 0;
@@ -1423,11 +1973,28 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	line-height: 1.62;
 	color: var(--body);
 }
-.vxn-re .vxr-said figcaption { display: flex; flex-direction: column; gap: 3px; }
-.vxn-re .vxr-said figcaption b { font-size: 13.5px; font-weight: 600; color: var(--vxr-ink); }
-.vxn-re .vxr-said figcaption span { font-size: 11.5px; color: var(--muted); }
+
+.vxn-re .vxr-said figcaption {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.vxn-re .vxr-said figcaption b {
+	font-size: 13.5px;
+	font-weight: 600;
+	color: var(--vxr-ink);
+}
+
+.vxn-re .vxr-said figcaption span {
+	font-size: 11.5px;
+	color: var(--muted);
+}
+
 .vxn-re .vxr-said .vxn-re-stars svg,
-.vxn-re .vxr-said svg { color: #E8A33D; }
+.vxn-re .vxr-said svg {
+	color: #E8A33D;
+}
 
 /* The developer strip: the floor of the reviews screen. */
 .vxn-re .vxr-devs {
@@ -1436,6 +2003,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	padding: clamp(18px, 3vh, 34px) var(--vxr-edge) 0;
 	border-top: 1px solid rgba(14, 33, 102, .16);
 }
+
 .vxn-re .vxr-devs__t {
 	margin: 0 0 clamp(10px, 1.6vh, 18px);
 	font-size: 10px;
@@ -1444,6 +2012,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-transform: uppercase;
 	color: var(--muted);
 }
+
 /* THEY LOOP, and they are legible.
 
    Ten logos at 26px and half opacity were a grey smear at the bottom of the
@@ -1459,6 +2028,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	-webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 	mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
+
 .vxn-re .vxr-devs__track {
 	display: flex;
 	align-items: center;
@@ -1467,11 +2037,21 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	padding-right: clamp(30px, 4.5vw, 84px);
 	animation: vxr-devs-run 38s linear infinite;
 }
-.vxn-re .vxr-devs__row:hover .vxr-devs__track { animation-play-state: paused; }
-@keyframes vxr-devs-run {
-	from { transform: translate3d(0, 0, 0); }
-	to { transform: translate3d(-50%, 0, 0); }
+
+.vxn-re .vxr-devs__row:hover .vxr-devs__track {
+	animation-play-state: paused;
 }
+
+@keyframes vxr-devs-run {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+
+	to {
+		transform: translate3d(-50%, 0, 0);
+	}
+}
+
 .vxn-re .vxr-devs__track img {
 	height: clamp(28px, 3.2vw, 52px);
 	width: auto;
@@ -1479,13 +2059,29 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	opacity: .78;
 	transition: opacity .3s ease;
 }
-.vxn-re .vxr-devs__track img:hover { opacity: 1; }
-.vxn-re .vxr-devs__track span { flex: none; font-size: clamp(13px, 1.1vw, 17px); font-weight: 500; color: var(--vxr-ink); white-space: nowrap; }
+
+.vxn-re .vxr-devs__track img:hover {
+	opacity: 1;
+}
+
+.vxn-re .vxr-devs__track span {
+	flex: none;
+	font-size: clamp(13px, 1.1vw, 17px);
+	font-weight: 500;
+	color: var(--vxr-ink);
+	white-space: nowrap;
+}
 
 /* A row that moves on its own is exactly the kind of motion the flag is for. */
 @media (prefers-reduced-motion: reduce) {
-	.vxn-re .vxr-devs__track { animation: none; }
-	.vxn-re .vxr-devs__row { overflow-x: auto; scrollbar-width: none; }
+	.vxn-re .vxr-devs__track {
+		animation: none;
+	}
+
+	.vxn-re .vxr-devs__row {
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
 }
 
 
@@ -1498,7 +2094,10 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    cropped is a form that cannot be sent.
    ========================================================================== */
 
-.vxn-re .vxr-ask { background: linear-gradient(150deg, #1436D8 0%, #2F63FF 100%); }
+.vxn-re .vxr-ask {
+	background: linear-gradient(150deg, #1436D8 0%, #2F63FF 100%);
+}
+
 .vxn-re .vxr-ask .vxr-scene__body {
 	display: grid;
 	grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
@@ -1506,7 +2105,14 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	gap: clamp(26px, 6vw, 130px);
 	min-height: 0;
 }
-.vxn-re .vxr-ask__say { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+
+.vxn-re .vxr-ask__say {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100%;
+}
+
 .vxn-re .vxr-ask__why {
 	list-style: none;
 	display: grid;
@@ -1516,6 +2122,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	padding: clamp(22px, 3.4vh, 38px) 0 0;
 	border-top: 1px solid rgba(255, 255, 255, .26);
 }
+
 .vxn-re .vxr-ask__why li {
 	position: relative;
 	padding-left: 20px;
@@ -1523,6 +2130,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	line-height: 1.45;
 	color: rgba(255, 255, 255, .88);
 }
+
 .vxn-re .vxr-ask__why li::before {
 	content: "";
 	position: absolute;
@@ -1532,6 +2140,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	height: 1px;
 	background: rgba(255, 255, 255, .7);
 }
+
 /* The form IS the card — the wrapper only supplies the scroll. Wrapping the
    component in a second white box gave a card inside a card, and the component's
    own type is white because it was built to sit directly on the blue. */
@@ -1566,16 +2175,28 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	-webkit-backdrop-filter: none;
 	backdrop-filter: none;
 }
+
 .vxn-re .vxr-ask .vxn-re-form__title {
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Helvetica", system-ui, sans-serif;
 	font-weight: 400;
 	font-size: clamp(1.1rem, 1.6vw, 1.6rem);
 	letter-spacing: -.025em;
 	color: var(--vxr-ink);
 }
-.vxn-re .vxr-ask .vxn-re-form__note { color: var(--muted); margin-bottom: clamp(14px, 2vh, 22px); }
-.vxn-re .vxr-ask .vxn-re-form__field { margin-bottom: clamp(16px, 2.4vh, 26px); }
-.vxn-re .vxr-ask .vxn-re-form__row { gap: clamp(16px, 2vw, 30px); }
+
+.vxn-re .vxr-ask .vxn-re-form__note {
+	color: var(--muted);
+	margin-bottom: clamp(14px, 2vh, 22px);
+}
+
+.vxn-re .vxr-ask .vxn-re-form__field {
+	margin-bottom: clamp(16px, 2.4vh, 26px);
+}
+
+.vxn-re .vxr-ask .vxn-re-form__row {
+	gap: clamp(16px, 2vw, 30px);
+}
+
 .vxn-re .vxr-ask .vxn-re-form__field span {
 	margin-bottom: 9px;
 	font-size: 9.5px;
@@ -1585,6 +2206,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-transform: uppercase;
 	color: var(--muted);
 }
+
 /* Hairline-ruled rather than boxed, so the form matches the search row at the
    other end of the page. */
 .vxn-re .vxr-ask .vxn-re-form input,
@@ -1599,10 +2221,21 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	backdrop-filter: none;
 	color: var(--vxr-ink);
 }
-.vxn-re .vxr-ask .vxn-re-form input::placeholder { color: rgba(14, 33, 102, .38); }
+
+.vxn-re .vxr-ask .vxn-re-form input::placeholder {
+	color: rgba(14, 33, 102, .38);
+}
+
 .vxn-re .vxr-ask .vxn-re-form input:focus,
-.vxn-re .vxr-ask .vxn-re-form select:focus { outline: 2px solid var(--vxr-blue); outline-offset: 2px; }
-.vxn-re .vxr-ask .vxn-re-form__legal { color: var(--muted); }
+.vxn-re .vxr-ask .vxn-re-form select:focus {
+	outline: 2px solid var(--vxr-blue);
+	outline-offset: 2px;
+}
+
+.vxn-re .vxr-ask .vxn-re-form__legal {
+	color: var(--muted);
+}
+
 .vxn-re .vxr-ask .vxn-re-form .vxn-re__btn {
 	justify-content: center;
 	border: 0;
@@ -1616,12 +2249,17 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	letter-spacing: .16em;
 	text-transform: uppercase;
 }
-.vxn-re .vxr-ask .vxn-re-form .vxn-re__btn:hover { background: var(--vxr-blue); }
+
+.vxn-re .vxr-ask .vxn-re-form .vxn-re__btn:hover {
+	background: var(--vxr-blue);
+}
+
 .vxn-re .vxr-ask .vxn-re-form__status[data-state="sent"] {
 	color: #0B4A2F;
 	background: #E6F4EC;
 	border: 1px solid #B9DFC9;
 }
+
 .vxn-re .vxr-ask .vxn-re-form__status[data-state="error"] {
 	color: #7A1A16;
 	background: #FBE9E8;
@@ -1636,16 +2274,32 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    so it scrolls inside its own column rather than pushing the screen open.
    ========================================================================== */
 
-.vxn-re .vxr-faq { background: transparent; }
+.vxn-re .vxr-faq {
+	background: transparent;
+}
+
 .vxn-re .vxr-faq .vxr-scene__body {
 	display: grid;
 	grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
 	gap: clamp(28px, 7vw, 150px);
 	min-height: 0;
 }
-.vxn-re .vxr-faq__say { display: flex; flex-direction: column; justify-content: center; }
-.vxn-re .vxr-faq__say .vxr-copy { margin-top: clamp(18px, 2.6vh, 32px); }
-.vxn-re .vxr-faq__act { margin-top: clamp(18px, 2.8vh, 34px); align-self: flex-start; }
+
+.vxn-re .vxr-faq__say {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.vxn-re .vxr-faq__say .vxr-copy {
+	margin-top: clamp(18px, 2.6vh, 32px);
+}
+
+.vxn-re .vxr-faq__act {
+	margin-top: clamp(18px, 2.8vh, 34px);
+	align-self: flex-start;
+}
+
 .vxn-re .vxr-faq__list {
 	max-width: none;
 	margin: 0;
@@ -1667,10 +2321,23 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    rather than being a footnote under the FAQ.
    ========================================================================== */
 
-.vxn-re .vxr-cloud { background: transparent; }
-.vxn-re .vxr-cloud .vxr-scene__body { min-height: 0; overflow-y: auto; scrollbar-width: thin; }
-.vxn-re .vxr-cloud .vxn-re-pop__cols { gap: clamp(24px, 4vw, 72px) !important; }
-.vxn-re .vxr-cloud .vxn-re-pop__col li + li { margin-top: 9px; }
+.vxn-re .vxr-cloud {
+	background: transparent;
+}
+
+.vxn-re .vxr-cloud .vxr-scene__body {
+	min-height: 0;
+	overflow-y: auto;
+	scrollbar-width: thin;
+}
+
+.vxn-re .vxr-cloud .vxn-re-pop__cols {
+	gap: clamp(24px, 4vw, 72px) !important;
+}
+
+.vxn-re .vxr-cloud .vxn-re-pop__col li+li {
+	margin-top: 9px;
+}
 
 
 /* ==========================================================================
@@ -1688,6 +2355,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 		min-height: 100svh;
 		padding-bottom: clamp(48px, 9vh, 90px);
 	}
+
 	.vxn-re .vxr-about .vxr-scene__body,
 	.vxn-re .vxr-serve .vxr-scene__body,
 	.vxn-re .vxr-launch .vxr-scene__body,
@@ -1696,24 +2364,57 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 		grid-template-columns: minmax(0, 1fr);
 		gap: clamp(28px, 6vh, 56px);
 	}
+
 	.vxn-re .vxr-about .vxr-about__shot,
 	.vxn-re .vxr-serve__stack {
 		height: clamp(300px, 52vh, 460px);
 		margin: 0 calc(var(--vxr-edge) * -1);
 	}
-	.vxn-re .vxr-serve { padding-right: var(--vxr-edge); }
-	.vxn-re .vxr-serve__gap { display: none; }
-	.vxn-re .vxr-launch__pics { height: clamp(280px, 46vh, 420px); }
-	.vxn-re .vxr-ask__form { max-height: none; overflow: visible; }
-	.vxn-re .vxr-faq__list { overflow: visible; }
-	.vxn-re .vxr-rail { min-height: clamp(340px, 56vh, 520px); }
-	.vxn-re .vxr-sell .vxr-scene__body { grid-template-columns: minmax(0, 1fr); gap: clamp(24px, 5vh, 48px); }
+
+	.vxn-re .vxr-serve {
+		padding-right: var(--vxr-edge);
+	}
+
+	.vxn-re .vxr-serve__gap {
+		display: none;
+	}
+
+	.vxn-re .vxr-launch__pics {
+		height: clamp(280px, 46vh, 420px);
+	}
+
+	.vxn-re .vxr-ask__form {
+		max-height: none;
+		overflow: visible;
+	}
+
+	.vxn-re .vxr-faq__list {
+		overflow: visible;
+	}
+
+	.vxn-re .vxr-rail {
+		min-height: clamp(340px, 56vh, 520px);
+	}
+
+	.vxn-re .vxr-sell .vxr-scene__body {
+		grid-template-columns: minmax(0, 1fr);
+		gap: clamp(24px, 5vh, 48px);
+	}
+
 	/* The pinned hero is a large-screen effect. On a phone the collapse costs a
 	   screen's worth of scrolling to say something the first screen already
 	   said, so the hero simply scrolls. */
-	.vxn-re .vxr-mast { position: relative; }
-	.vxn-re .vxr-mast__in { transform: none; }
-	.vxn-re .vxr-mast__wash::after { opacity: 0; }
+	.vxn-re .vxr-mast {
+		position: relative;
+	}
+
+	.vxn-re .vxr-mast__in {
+		transform: none;
+	}
+
+	.vxn-re .vxr-mast__wash::after {
+		opacity: 0;
+	}
 }
 
 @media (max-width: 760px) {
@@ -1723,26 +2424,63 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 		align-items: stretch;
 		gap: 14px;
 	}
-	.vxn-re .vxr-way { grid-template-rows: auto auto; height: auto; }
+
+	.vxn-re .vxr-way {
+		grid-template-rows: auto auto;
+		height: auto;
+	}
+
 	.vxn-re .vxr-way--buy .vxr-way__frame,
 	.vxn-re .vxr-way--sell .vxr-way__frame,
-	.vxn-re .vxr-way--rent .vxr-way__frame { height: auto; aspect-ratio: 4 / 3; }
+	.vxn-re .vxr-way--rent .vxr-way__frame {
+		height: auto;
+		aspect-ratio: 4 / 3;
+	}
+
 	.vxn-re .vxr-ways__h,
-	.vxn-re .vxr-ways__p { min-height: 0; }
-	.vxn-re .vxr-ways__mark { display: none; }
-	.vxn-re .vxr-figs { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-	.vxn-re .vxr-ask__why { grid-template-columns: minmax(0, 1fr); }
-	.vxn-re .vxr-launch__pic--a { width: 66%; height: 84%; }
-	.vxn-re .vxr-launch__pic--b { width: 44%; height: 52%; }
+	.vxn-re .vxr-ways__p {
+		min-height: 0;
+	}
+
+	.vxn-re .vxr-ways__mark {
+		display: none;
+	}
+
+	.vxn-re .vxr-figs {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 16px;
+	}
+
+	.vxn-re .vxr-ask__why {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.vxn-re .vxr-launch__pic--a {
+		width: 66%;
+		height: 84%;
+	}
+
+	.vxn-re .vxr-launch__pic--b {
+		width: 44%;
+		height: 52%;
+	}
+
 	.vxn-re .vxr-scene__head,
-	.vxn-re .vxr-scene__foot { flex-wrap: wrap; align-items: flex-start; }
+	.vxn-re .vxr-scene__foot {
+		flex-wrap: wrap;
+		align-items: flex-start;
+	}
 }
 
 /* Without a pointer there is nothing to hover, so everything that is revealed on
    hover is simply on. */
 @media (hover: none) {
+
 	.vxn-re .vxr-way__tag,
-	.vxn-re .vxr-place__blurb { opacity: 1; transform: none; }
+	.vxn-re .vxr-place__blurb {
+		opacity: 1;
+		transform: none;
+	}
 }
 
 /* ==========================================================================
@@ -1758,9 +2496,20 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 /* Not sticky, and no collapse — only the pillar page pins. A service page has to
    get to the substance, and a screen that must be scrolled past twice before it
    moves is a screen in the way. */
-.vxn-re .vxr-mast--page { position: relative; height: 92svh; min-height: 540px; }
-.vxn-re .vxr-mast--page .vxr-mast__in { transform: none; }
-.vxn-re .vxr-mast--page .vxr-mast__wash::after { opacity: 0; }
+.vxn-re .vxr-mast--page {
+	position: relative;
+	height: 92svh;
+	min-height: 540px;
+}
+
+.vxn-re .vxr-mast--page .vxr-mast__in {
+	transform: none;
+}
+
+.vxn-re .vxr-mast--page .vxr-mast__wash::after {
+	opacity: 0;
+}
+
 .vxn-re .vxr-mast__kick {
 	display: block;
 	margin-bottom: clamp(14px, 2vh, 22px);
@@ -1773,7 +2522,10 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 
 /* The statement scene without its band: the page's own argument, alone on a
    screen, with the three figures under it as evidence. */
-.vxn-re .vxr-rest--plain .vxr-rest__say { padding-top: var(--vxr-top); }
+.vxn-re .vxr-rest--plain .vxr-rest__say {
+	padding-top: var(--vxr-top);
+}
+
 .vxn-re .vxr-figs--mid {
 	width: min(100%, 760px);
 	margin-inline: auto;
@@ -1782,18 +2534,29 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 
 /* The process rows: two columns, the step at the left and what happens in it at
    the right, on the same hairlines the off-plan list uses. */
-.vxn-re .vxr-launch__rows--full { justify-content: center; }
-.vxn-re .vxr-launch--steps .vxr-scene__body { display: block; }
+.vxn-re .vxr-launch__rows--full {
+	justify-content: center;
+}
+
+.vxn-re .vxr-launch--steps .vxr-scene__body {
+	display: block;
+}
+
 .vxn-re .vxr-launch--steps .vxr-launch__row {
 	grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
 	align-items: start;
 	gap: clamp(20px, 5vw, 90px);
 }
-.vxn-re .vxr-step__body { max-width: 70ch; }
+
+.vxn-re .vxr-step__body {
+	max-width: 45ch;
+}
 
 /* The services split reused for "what is included": every name is on, because
    there is one photograph behind them rather than one each. */
-.vxn-re .vxr-serve__list .vxr-serve__link[data-on="true"] { cursor: default; }
+.vxn-re .vxr-serve__list .vxr-serve__link[data-on="true"] {
+	cursor: default;
+}
 
 
 /* ==========================================================================
@@ -1808,21 +2571,26 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    ========================================================================== */
 
 /* --- The search ----------------------------------------------------------
-   Fourth pass. The first was a white card costing a third of a screen; the
-   second was a single hairline row that was small rather than minimal; the third
-   made it legible but kept three habits that were wrong on a page like this one:
+   Fifth pass, and the first one where the filter is actually a BOX.
 
-     - A BOX-SHADOW doing the work of a rule. The active intent was underlined
-       with `box-shadow: inset 0 -2px`, which is a shadow pretending to be a
-       border. On a page with no shadows anywhere else, it was the only one.
-     - ACCENT BLUE ON EVERY PART. The underline, the four chevrons and the reset
-       were all brand blue at once, which made a filter row the most colourful
-       thing on a screen full of photographs.
-     - NO ROOM. Sixteen pixels between a label and its value, and fields packed
-       edge to edge, on a page whose whole argument is space.
+   Every version before this was a row of type with rules above and below it:
+   minimal, but it never read as a control you could put your hands on, and the
+   fields had nothing but a hairline between them and the page. So:
 
-   So: no shadows at all, one accent (the active intent, in ink), grey chevrons,
-   and roughly double the padding everywhere.
+     - THE CATEGORIES ARE TILES. Buy / Rent / Off-Plan were underlined words;
+       they are bordered tiles now, and the active one is filled navy. A person
+       scanning the page sees three things to press instead of three labels.
+     - THE FILTERS ARE A CARD. One white box with a hairline border on the warm
+       ground, and REAL HORIZONTAL PADDING inside it — `--box-x`, up to 52px, so
+       the first label is not sitting on the border and the last field is not
+       running into the button.
+     - THE ACTION IS THE BOX'S RIGHT EDGE. The submit is pulled out to the card's
+       top, right and bottom by exactly the padding it sits in, so it fills that
+       end of the box as a solid navy block rather than floating inside it.
+
+   NO SHADOWS, anywhere, on any part of it. There is not one elsewhere on this
+   page, and the earlier `box-shadow: inset` underline was a shadow pretending to
+   be a border. Depth here is one hairline and one filled block.
    -------------------------------------------------------------------------- */
 
 .vxn-re .vxr-props__filters {
@@ -1842,117 +2610,133 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	box-shadow: none !important;
 }
 
-/* --- Row one: the intent -------------------------------------------------- */
+/* --- The category tiles --------------------------------------------------- */
 
 .vxn-re .vxr-props .vxn-re-search__tabs {
 	display: flex;
-	gap: clamp(22px, 3.2vw, 56px);
-	margin: 0 0 clamp(18px, 3vh, 36px) !important;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0 0 clamp(12px, 1.8vh, 20px) !important;
 	padding: 0 !important;
 	border: 0 !important;
 	background: transparent !important;
 }
+
 .vxn-re .vxr-props .vxn-re-search__tab {
-	position: relative;
-	padding: 0 0 10px !important;
-	border: 0 !important;
+	padding: clamp(11px, 1.5vh, 15px) clamp(20px, 2.2vw, 34px) !important;
+	border: 1px solid rgba(14, 33, 102, .18) !important;
 	border-radius: 0 !important;
 	background: transparent !important;
 	color: var(--muted) !important;
-	font-family: "DM Sans", system-ui, sans-serif;
-	font-size: clamp(15px, 1.5vw, 21px) !important;
-	font-weight: 400 !important;
-	letter-spacing: -.015em !important;
-	text-transform: none;
-	/* No shadow. There is not one anywhere else on this page. */
+	font-family: inherit;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	letter-spacing: .16em !important;
+	text-transform: uppercase;
 	box-shadow: none !important;
-	transition: color .3s var(--ease);
+	transition: border-color .3s var(--ease), color .3s var(--ease), background-color .3s var(--ease);
 }
-.vxn-re .vxr-props .vxn-re-search__tab::after {
-	content: "";
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	height: 1px;
-	background: var(--vxr-ink);
-	transform: scaleX(0);
-	transform-origin: left;
-	transition: transform .4s var(--ease);
-}
-.vxn-re .vxr-props .vxn-re-search__tab:hover { color: var(--vxr-ink) !important; }
-.vxn-re .vxr-props .vxn-re-search__tab[aria-selected="true"] { color: var(--vxr-ink) !important; }
-.vxn-re .vxr-props .vxn-re-search__tab[aria-selected="true"]::after { transform: scaleX(1); }
 
-/* On a page that IS an intent, the tabs are already answered by the URL and by
-   the heading above them - leaving them would let a visitor put the Rent page
+.vxn-re .vxr-props .vxn-re-search__tab:hover {
+	border-color: var(--vxr-ink) !important;
+	color: var(--vxr-ink) !important;
+}
+
+.vxn-re .vxr-props .vxn-re-search__tab[aria-selected="true"] {
+	border-color: var(--vxr-ink) !important;
+	background: var(--vxr-ink) !important;
+	color: #fff !important;
+}
+
+/* On a page that IS an intent, the tiles are already answered by the URL and by
+   the heading above them — leaving them would let a visitor put the Rent page
    into Buy mode and read a heading that disagrees with the results. */
-.vxn-re .vxr-props.vxr-props--locked .vxn-re-search__tabs { display: none; }
+.vxn-re .vxr-props.vxr-props--locked .vxn-re-search__tabs {
+	display: none;
+}
 
-/* --- Row two: the filters ------------------------------------------------- */
+/* --- The box -------------------------------------------------------------- */
 
 .vxn-re .vxr-props .vxn-re-search__row {
+	/* Declared here so the submit can pull itself out to the edges by exactly
+	   the padding it is sitting in — one number, two places, never out of step. */
+	--box-y: clamp(18px, 2.6vh, 30px);
+	--box-x: clamp(20px, 3vw, 52px);
+
 	display: flex;
-	align-items: flex-end;
+	align-items: stretch;
 	flex-wrap: wrap;
 	gap: 0 !important;
 	margin: 0 !important;
-	padding: clamp(22px, 3.4vh, 40px) 0 clamp(22px, 3.4vh, 40px) !important;
-	border: 0 !important;
-	border-top: 1px solid rgba(14, 33, 102, .13) !important;
-	border-bottom: 1px solid rgba(14, 33, 102, .13) !important;
+	padding: var(--box-y) var(--box-x) !important;
+	border: 1px solid rgba(14, 33, 102, .16) !important;
 	border-radius: 0 !important;
-	background: transparent !important;
+	background: #fff !important;
+	box-shadow: none !important;
 }
+
 .vxn-re .vxr-props .vxn-re-search__field {
 	position: relative;
-	flex: 1 1 170px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex: 1 1 160px;
 	min-width: 0;
-	padding: 0 clamp(22px, 3.2vw, 60px) !important;
+	padding: 0 clamp(18px, 2.4vw, 40px) !important;
 	border: 0 !important;
 	background: transparent !important;
 	cursor: pointer;
 }
-.vxn-re .vxr-props .vxn-re-search__field:first-child { padding-left: 0 !important; }
-.vxn-re .vxr-props .vxn-re-search__field + .vxn-re-search__field {
+
+.vxn-re .vxr-props .vxn-re-search__field:first-child {
+	padding-left: 0 !important;
+}
+
+.vxn-re .vxr-props .vxn-re-search__field+.vxn-re-search__field {
 	border-left: 1px solid rgba(14, 33, 102, .13) !important;
 }
+
 /* Grey, not blue. It is an affordance, not an accent. */
 .vxn-re .vxr-props .vxn-re-search__field::after {
 	content: "";
 	position: absolute;
-	right: clamp(22px, 3.2vw, 60px);
-	bottom: .62em;
+	right: clamp(18px, 2.4vw, 40px);
+	bottom: .5em;
 	width: 7px;
 	height: 7px;
-	border-right: 1.5px solid rgba(14, 33, 102, .45);
-	border-bottom: 1.5px solid rgba(14, 33, 102, .45);
+	border-right: 1.5px solid rgba(14, 33, 102, .42);
+	border-bottom: 1.5px solid rgba(14, 33, 102, .42);
 	transform: rotate(45deg);
 	pointer-events: none;
 	transition: transform .3s var(--ease), border-color .3s var(--ease);
 }
+
 .vxn-re .vxr-props .vxn-re-search__field:hover::after {
 	border-color: var(--vxr-ink);
 	transform: rotate(45deg) translate(2px, 2px);
 }
-.vxn-re .vxr-props .vxn-re-search__field:last-of-type::after { right: 0; }
 
-.vxn-re .vxr-props .vxn-re-search__field > span {
+.vxn-re .vxr-props .vxn-re-search__field:last-of-type::after {
+	right: 0;
+}
+
+.vxn-re .vxr-props .vxn-re-search__field>span {
 	display: block;
-	margin: 0 0 clamp(10px, 1.6vh, 16px) !important;
+	margin: 0 0 clamp(8px, 1.2vh, 13px) !important;
 	font-size: 9.5px !important;
 	font-weight: 600 !important;
 	letter-spacing: .22em !important;
 	text-transform: uppercase;
 	color: var(--muted) !important;
 }
+
 .vxn-re .vxr-props .vxn-re-search__field select {
 	width: 100%;
-	padding: 0 24px 0 0 !important;
+	padding: 0 22px 0 0 !important;
 	border: 0 !important;
 	background: transparent !important;
-	font-family: "DM Sans", system-ui, sans-serif;
-	font-size: clamp(14px, 1.15vw, 17px) !important;
+	font-family: "Helvetica", system-ui, sans-serif;
+	font-size: clamp(14px, 1.1vw, 16.5px) !important;
 	font-weight: 400 !important;
 	letter-spacing: -.015em;
 	color: var(--vxr-ink) !important;
@@ -1962,16 +2746,19 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	box-shadow: none !important;
 }
 
+/* The right end of the box, filled. The negative margins are the box's own
+   padding, so it reaches the border on three sides exactly. */
 .vxn-re .vxr-props .vxn-re-search__go {
 	flex: none;
-	align-self: flex-end;
+	align-self: stretch;
 	display: inline-flex !important;
 	align-items: center;
-	gap: 12px !important;
+	justify-content: center;
+	gap: 11px !important;
 	width: auto !important;
 	height: auto !important;
-	margin-inline-start: clamp(22px, 3.2vw, 60px);
-	padding: 17px 30px !important;
+	margin: calc(var(--box-y) * -1) calc(var(--box-x) * -1) calc(var(--box-y) * -1) clamp(18px, 2.4vw, 40px) !important;
+	padding: 0 clamp(24px, 2.8vw, 48px) !important;
 	border: 0 !important;
 	border-radius: 0 !important;
 	background: var(--vxr-night) !important;
@@ -1984,27 +2771,39 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	box-shadow: none !important;
 	transition: background-color .3s var(--ease);
 }
+
 .vxn-re .vxr-props .vxn-re-search__go:hover {
 	background: var(--vxr-blue) !important;
 	color: #fff !important;
 	transform: none !important;
 	box-shadow: none !important;
 }
-.vxn-re .vxr-props .vxn-re-search__go::before { display: none; }
-.vxn-re .vxr-props .vxn-re-search__go svg { width: 15px; height: 15px; }
+
+.vxn-re .vxr-props .vxn-re-search__go::before {
+	display: none;
+}
+
+.vxn-re .vxr-props .vxn-re-search__go svg {
+	width: 15px;
+	height: 15px;
+}
 
 /* --- The foot ------------------------------------------------------------- */
 
 .vxn-re .vxr-props .vxn-re-search__foot {
 	display: flex;
 	justify-content: flex-end;
-	margin: clamp(12px, 1.8vh, 18px) 0 0 !important;
+	margin: clamp(10px, 1.4vh, 15px) 0 0 !important;
 	padding: 0 !important;
 	border: 0 !important;
 }
+
 /* The hint said what the filters do; the scene's own count line says what they
    did, which is the more useful of the two. */
-.vxn-re .vxr-props .vxn-re-search__hint { display: none; }
+.vxn-re .vxr-props .vxn-re-search__hint {
+	display: none;
+}
+
 .vxn-re .vxr-props .vxn-re-search__reset {
 	color: var(--muted) !important;
 	font-size: 10px !important;
@@ -2014,17 +2813,37 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	box-shadow: none !important;
 	transition: color .3s var(--ease);
 }
-.vxn-re .vxr-props .vxn-re-search__reset:hover { color: var(--vxr-ink) !important; }
 
-@media (max-width: 900px) {
+.vxn-re .vxr-props .vxn-re-search__reset:hover {
+	color: var(--vxr-ink) !important;
+}
+
+@media (max-width: 1000px) {
+	.vxn-re .vxr-props .vxn-re-search__row {
+		flex-wrap: wrap;
+	}
+
 	.vxn-re .vxr-props .vxn-re-search__field {
 		flex-basis: 45%;
-		padding: 0 0 18px !important;
+		padding: 0 0 clamp(14px, 2vh, 20px) !important;
 	}
-	.vxn-re .vxr-props .vxn-re-search__field + .vxn-re-search__field { border-left: 0 !important; }
+
+	.vxn-re .vxr-props .vxn-re-search__field+.vxn-re-search__field {
+		border-left: 0 !important;
+	}
+
 	.vxn-re .vxr-props .vxn-re-search__field::after,
-	.vxn-re .vxr-props .vxn-re-search__field:last-of-type::after { right: 0; bottom: 1.5em; }
-	.vxn-re .vxr-props .vxn-re-search__go { margin-inline-start: 0; }
+	.vxn-re .vxr-props .vxn-re-search__field:last-of-type::after {
+		right: 0;
+		bottom: 2.1em;
+	}
+
+	/* Full width along the bottom of the box rather than up its side. */
+	.vxn-re .vxr-props .vxn-re-search__go {
+		flex-basis: 100%;
+		margin: clamp(6px, 1vh, 12px) calc(var(--box-x) * -1) calc(var(--box-y) * -1) calc(var(--box-x) * -1) !important;
+		padding: 17px 24px !important;
+	}
 }
 
 /* --- The accordion -------------------------------------------------------- */
@@ -2035,7 +2854,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	border-radius: 0;
 	background: transparent;
 }
-.vxn-re .vxr-faq__list .vxn-re-faq:last-child { border-bottom: 1px solid var(--line); }
+
+.vxn-re .vxr-faq__list .vxn-re-faq:last-child {
+	border-bottom: 1px solid var(--line);
+}
+
 /* THE CEILING IS GONE. The base sheet animates the panel with
    `max-height: 0 → 420px`, which is the old way and carries a bug: an answer
    taller than the guess is silently cut off, and because the panel also has
@@ -2049,12 +2872,16 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	max-height: none !important;
 	transition: grid-template-rows .42s var(--ease);
 }
-.vxn-re .vxr-faq__list .vxn-re-faq[data-open="true"] .vxn-re-faq__body { grid-template-rows: 1fr; }
+
+.vxn-re .vxr-faq__list .vxn-re-faq[data-open="true"] .vxn-re-faq__body {
+	grid-template-rows: 1fr;
+}
+
 /* Padding rather than margin: a margin sits outside the box `overflow: hidden`
    clips, so it would keep the collapsed row a few pixels tall. And no side
    inset — the rows are hairline-ruled now, not carded, so the question and the
    answer align with the rule. */
-.vxn-re .vxr-faq__list .vxn-re-faq__body > p {
+.vxn-re .vxr-faq__list .vxn-re-faq__body>p {
 	min-height: 0;
 	overflow: hidden;
 	margin: 0;
@@ -2065,22 +2892,44 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 
 .vxn-re .vxr-faq__list .vxn-re-faq__btn {
 	padding: clamp(18px, 2vw, 24px) 0;
-	font-family: "DM Sans", system-ui, sans-serif;
+	font-family: "Helvetica", system-ui, sans-serif;
 	font-size: clamp(15px, 1.2vw, 17.5px);
 	font-weight: 500;
 	letter-spacing: -.015em;
 	color: var(--vxr-ink);
 }
-.vxn-re .vxr-faq__list .vxn-re-faq__btn:hover { color: var(--vxr-blue); }
-.vxn-re .vxr-faq__list .vxn-re-faq[data-open="true"] { box-shadow: none; border-color: var(--line); }
-.vxn-re .vxr-faq__list .vxn-re-faq__sign { color: var(--vxr-blue); }
+
+.vxn-re .vxr-faq__list .vxn-re-faq__btn:hover {
+	color: var(--vxr-blue);
+}
+
+.vxn-re .vxr-faq__list .vxn-re-faq[data-open="true"] {
+	box-shadow: none;
+	border-color: var(--line);
+}
+
+.vxn-re .vxr-faq__list .vxn-re-faq__sign {
+	color: var(--vxr-blue);
+}
 
 /* --- The link cloud ------------------------------------------------------- */
 
-.vxn-re .vxr-cloud .vxn-re__sec { padding: 0; }
-.vxn-re .vxr-cloud .vxn-re__wrap { max-width: none; padding: 0; }
-.vxn-re .vxr-cloud .vxn-re-pop__col a { color: var(--body); }
-.vxn-re .vxr-cloud .vxn-re-pop__col a:hover { color: var(--vxr-blue); }
+.vxn-re .vxr-cloud .vxn-re__sec {
+	padding: 0;
+}
+
+.vxn-re .vxr-cloud .vxn-re__wrap {
+	max-width: none;
+	padding: 0;
+}
+
+.vxn-re .vxr-cloud .vxn-re-pop__col a {
+	color: var(--body);
+}
+
+.vxn-re .vxr-cloud .vxn-re-pop__col a:hover {
+	color: var(--vxr-blue);
+}
 
 
 /* ==========================================================================
@@ -2104,9 +2953,15 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	backdrop-filter: none;
 	box-shadow: none;
 }
-.vxn-re .vxn-re-nav__inner { gap: clamp(14px, 1.8vw, 30px); }
 
-.vxn-re .vxn-re-nav__brand img { height: 26px; }
+.vxn-re .vxn-re-nav__inner {
+	gap: clamp(14px, 1.8vw, 30px);
+}
+
+.vxn-re .vxn-re-nav__brand img {
+	height: 26px;
+}
+
 .vxn-re .vxn-re-nav__lockup {
 	padding-inline-start: 12px;
 	border-inline-start: 1px solid var(--line);
@@ -2117,7 +2972,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 
 /* --- Services, the one dropdown ------------------------------------------- */
 
-.vxn-re .vxn-re-nav__drop { position: relative; flex: 0 0 auto; }
+.vxn-re .vxn-re-nav__drop {
+	position: relative;
+	flex: 0 0 auto;
+}
+
 .vxn-re .vxn-re-nav__droptop {
 	appearance: none;
 	cursor: pointer;
@@ -2137,7 +2996,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: var(--body) !important;
 	transition: color .2s ease;
 }
-.vxn-re .vxn-re-nav__droptop:hover { color: var(--vxr-blue) !important; }
+
+.vxn-re .vxn-re-nav__droptop:hover {
+	color: var(--vxr-blue) !important;
+}
+
 /* The caret, drawn rather than iconised: two borders and a rotation. */
 .vxn-re .vxn-re-nav__droptop i {
 	width: 6px;
@@ -2147,7 +3010,10 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	transform: translateY(-2px) rotate(45deg);
 	transition: transform .3s var(--ease);
 }
-.vxn-re .vxn-re-nav__droptop[aria-expanded="true"] i { transform: translateY(1px) rotate(-135deg); }
+
+.vxn-re .vxn-re-nav__droptop[aria-expanded="true"] i {
+	transform: translateY(1px) rotate(-135deg);
+}
 
 .vxn-re .vxn-re-nav__drops {
 	position: absolute;
@@ -2162,7 +3028,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	background: #fff;
 	box-shadow: 0 30px 70px -30px rgba(14, 33, 102, .45), 0 0 0 1px var(--line);
 }
-.vxn-re .vxn-re-nav__drops[hidden] { display: none; }
+
+.vxn-re .vxn-re-nav__drops[hidden] {
+	display: none;
+}
+
 .vxn-re .vxn-re-nav__drops a {
 	display: block;
 	padding: 11px 14px;
@@ -2171,7 +3041,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	text-decoration: none;
 	transition: background-color .2s ease;
 }
-.vxn-re .vxn-re-nav__drops a:hover { background: var(--vxr-ground); }
+
+.vxn-re .vxn-re-nav__drops a:hover {
+	background: var(--vxr-ground);
+}
+
 .vxn-re .vxn-re-nav__drops b {
 	display: block;
 	font-size: 14px;
@@ -2179,15 +3053,35 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	letter-spacing: -.015em;
 	color: var(--vxr-ink);
 }
-.vxn-re .vxn-re-nav__drops small { display: block; margin-top: 3px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+
+.vxn-re .vxn-re-nav__drops small {
+	display: block;
+	margin-top: 3px;
+	font-size: 12px;
+	line-height: 1.45;
+	color: var(--muted);
+}
 
 /* --- The links ------------------------------------------------------------ */
 
-.vxn-re .vxn-re-nav__menu { gap: clamp(16px, 2vw, 32px); }
-.vxn-re .vxn-re-nav__menu a { font-weight: 500; letter-spacing: .02em; color: var(--body); }
-.vxn-re .vxn-re-nav__menu a:hover { color: var(--vxr-blue); }
+.vxn-re .vxn-re-nav__menu {
+	gap: clamp(16px, 2vw, 32px);
+}
 
-.vxn-re .vxn-re-nav__side { gap: clamp(12px, 1.6vw, 24px); }
+.vxn-re .vxn-re-nav__menu a {
+	font-weight: 500;
+	letter-spacing: .02em;
+	color: var(--body);
+}
+
+.vxn-re .vxn-re-nav__menu a:hover {
+	color: var(--vxr-blue);
+}
+
+.vxn-re .vxn-re-nav__side {
+	gap: clamp(12px, 1.6vw, 24px);
+}
+
 .vxn-re .vxn-re-nav__quiet {
 	font-size: 13px;
 	font-weight: 500;
@@ -2196,7 +3090,10 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	white-space: nowrap;
 	transition: color .2s ease;
 }
-.vxn-re .vxn-re-nav__quiet:hover { color: var(--vxr-blue); }
+
+.vxn-re .vxn-re-nav__quiet:hover {
+	color: var(--vxr-blue);
+}
 
 .vxn-re .vxn-re-nav__find {
 	appearance: none;
@@ -2214,18 +3111,32 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: var(--vxr-ink) !important;
 	transition: background-color .25s ease, color .25s ease;
 }
-.vxn-re .vxn-re-nav__find:hover { background: var(--vxr-ground) !important; color: var(--vxr-blue) !important; }
-.vxn-re .vxn-re-nav__find svg { width: 17px; height: 17px; }
 
-.vxn-re .vxn-re-nav__cta { font-size: 12px; }
+.vxn-re .vxn-re-nav__find:hover {
+	background: var(--vxr-ground) !important;
+	color: var(--vxr-blue) !important;
+}
+
+.vxn-re .vxn-re-nav__find svg {
+	width: 17px;
+	height: 17px;
+}
+
+.vxn-re .vxn-re-nav__cta {
+	font-size: 12px;
+}
 
 /* The telephone that used to sit here is in the footer and on the contact
    panel; the bar carries one action, as the reference's does. */
 
 @media (max-width: 1180px) {
+
 	.vxn-re .vxn-re-nav__drop,
-	.vxn-re .vxn-re-nav__quiet { display: none; }
+	.vxn-re .vxn-re-nav__quiet {
+		display: none;
+	}
 }
+
 /* --- The bar and the pinned hero ------------------------------------------
    The hero is `position: sticky` now (see THE PIN at the top of this file), so
    it cannot be pushed down by the bar with a padding — a padded sticky element
@@ -2234,7 +3145,9 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
    bar sits ON the photograph's top edge rather than above it.
    -------------------------------------------------------------------------- */
 
-.vxn-re .vxr-mast__copy { top: calc(var(--nav-h) + clamp(20px, 5vh, 70px)); }
+.vxn-re .vxr-mast__copy {
+	top: calc(var(--nav-h) + clamp(20px, 5vh, 70px));
+}
 
 
 /* ==========================================================================
@@ -2267,7 +3180,11 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	color: rgba(255, 255, 255, .78);
 	overflow: hidden;
 }
-.vxn-re .vxn-re-foot .vxn-re__wrap { max-width: none; padding: 0 var(--vxr-edge); }
+
+.vxn-re .vxn-re-foot .vxn-re__wrap {
+	max-width: none;
+	padding: 0 var(--vxr-edge);
+}
 
 /* --- The newsletter ------------------------------------------------------- */
 
@@ -2279,17 +3196,25 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	padding: clamp(32px, 4.4vh, 64px) 0 clamp(24px, 3.2vh, 40px);
 	border-bottom: 1px solid rgba(255, 255, 255, .2);
 }
+
 .vxn-re .vxn-re-foot__news h2 {
 	margin: 0;
 	max-width: 18ch;
-	font-family: "DM Sans", system-ui, sans-serif !important;
+	font-family: "Helvetica", system-ui, sans-serif !important;
 	font-weight: 400 !important;
 	font-size: clamp(1.7rem, 2.9vw, 2.9rem) !important;
 	line-height: 1.1 !important;
 	letter-spacing: -.03em;
 	color: #fff;
 }
-.vxn-re .vxn-re-foot__news p { margin: 14px 0 0; max-width: 46ch; font-size: 14px; line-height: 1.62; color: rgba(255, 255, 255, .76); }
+
+.vxn-re .vxn-re-foot__news p {
+	margin: 14px 0 0;
+	max-width: 46ch;
+	font-size: 14px;
+	line-height: 1.62;
+	color: rgba(255, 255, 255, .76);
+}
 
 /* One field on a rule, as everywhere else on the site that asks for an email. */
 .vxn-re .vxn-re-foot__form {
@@ -2299,6 +3224,7 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	padding-bottom: 12px;
 	border-bottom: 1.5px solid rgba(255, 255, 255, .55);
 }
+
 .vxn-re .vxn-re-foot__form input {
 	flex: 1 1 auto;
 	min-width: 0;
@@ -2306,13 +3232,23 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	border: 0 !important;
 	border-radius: 0 !important;
 	background: transparent !important;
-	font-family: "DM Sans", system-ui, sans-serif !important;
+	font-family: "Helvetica", system-ui, sans-serif !important;
 	font-size: clamp(15px, 1.3vw, 18px) !important;
 	color: #fff !important;
 }
-.vxn-re .vxn-re-foot__form input::placeholder { color: rgba(255, 255, 255, .5); }
-.vxn-re .vxn-re-foot__form input:focus { outline: none; }
-.vxn-re .vxn-re-foot__form:focus-within { border-bottom-color: #fff; }
+
+.vxn-re .vxn-re-foot__form input::placeholder {
+	color: rgba(255, 255, 255, .5);
+}
+
+.vxn-re .vxn-re-foot__form input:focus {
+	outline: none;
+}
+
+.vxn-re .vxn-re-foot__form:focus-within {
+	border-bottom-color: #fff;
+}
+
 .vxn-re .vxn-re-foot__form .vxn-re__btn {
 	flex: 0 0 auto;
 	padding: 12px 22px !important;
@@ -2323,7 +3259,10 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	font-size: 12.5px !important;
 	letter-spacing: .08em !important;
 }
-.vxn-re .vxn-re-foot__form .vxn-re__btn::before { display: none; }
+
+.vxn-re .vxn-re-foot__form .vxn-re__btn::before {
+	display: none;
+}
 
 /* --- The columns ---------------------------------------------------------- */
 
@@ -2333,23 +3272,64 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	gap: clamp(26px, 4vw, 56px);
 	padding: clamp(38px, 4.6vw, 64px) 0;
 }
-.vxn-re .vxn-re-foot__brand img { height: 28px; margin-bottom: 18px; }
-.vxn-re .vxn-re-foot__brand p { font-size: 14px; line-height: 1.66; max-width: 38ch; color: rgba(255, 255, 255, .78); }
-.vxn-re .vxn-re-foot__contact { gap: 14px; margin-top: 26px; }
-.vxn-re .vxn-re-foot__contact span { color: rgba(255, 255, 255, .58); letter-spacing: .16em; }
-.vxn-re .vxn-re-foot__contact a { color: #fff; }
-.vxn-re .vxn-re-foot__col h4 { margin-bottom: 18px; font-size: 10.5px; letter-spacing: .18em; color: rgba(255, 255, 255, .58); }
-.vxn-re .vxn-re-foot__col ul { gap: 0; }
+
+.vxn-re .vxn-re-foot__brand img {
+	height: 28px;
+	margin-bottom: 18px;
+}
+
+.vxn-re .vxn-re-foot__brand p {
+	font-size: 14px;
+	line-height: 1.66;
+	max-width: 38ch;
+	color: rgba(255, 255, 255, .78);
+}
+
+.vxn-re .vxn-re-foot__contact {
+	gap: 14px;
+	margin-top: 26px;
+}
+
+.vxn-re .vxn-re-foot__contact span {
+	color: rgba(255, 255, 255, .58);
+	letter-spacing: .16em;
+}
+
+.vxn-re .vxn-re-foot__contact a {
+	color: #fff;
+}
+
+.vxn-re .vxn-re-foot__col h4 {
+	margin-bottom: 18px;
+	font-size: 10.5px;
+	letter-spacing: .18em;
+	color: rgba(255, 255, 255, .58);
+}
+
+.vxn-re .vxn-re-foot__col ul {
+	gap: 0;
+}
+
 /* Hairlines, like every other list on the page. */
-.vxn-re .vxn-re-foot__col li { border-top: 1px solid rgba(255, 255, 255, .14); }
-.vxn-re .vxn-re-foot__col li:last-child { border-bottom: 1px solid rgba(255, 255, 255, .14); }
+.vxn-re .vxn-re-foot__col li {
+	border-top: 1px solid rgba(255, 255, 255, .14);
+}
+
+.vxn-re .vxn-re-foot__col li:last-child {
+	border-bottom: 1px solid rgba(255, 255, 255, .14);
+}
+
 .vxn-re .vxn-re-foot__col a {
 	display: block;
 	padding: 11px 0;
 	font-size: 13.5px;
 	color: rgba(255, 255, 255, .8);
 }
-.vxn-re .vxn-re-foot__col a:hover { color: #fff; padding-inline-start: 8px; }
+
+.vxn-re .vxn-re-foot__col a:hover {
+	color: #fff;
+	padding-inline-start: 8px;
+}
 
 /* --- The legal line ------------------------------------------------------- */
 
@@ -2359,21 +3339,38 @@ html.vxr-lenis, html.vxr-lenis body { height: auto; }
 	font-size: 12px;
 	color: rgba(255, 255, 255, .66);
 }
-.vxn-re .vxn-re-foot__bottom p { max-width: 76ch; line-height: 1.6; }
+
+.vxn-re .vxn-re-foot__bottom p {
+	max-width: 76ch;
+	line-height: 1.6;
+}
+
 .vxn-re .vxn-re-foot__social a {
 	width: 36px;
 	height: 36px;
 	border-color: rgba(255, 255, 255, .28);
 	color: rgba(255, 255, 255, .85);
 }
-.vxn-re .vxn-re-foot__social a:hover { background: #fff; border-color: #fff; color: var(--vxr-blue); }
+
+.vxn-re .vxn-re-foot__social a:hover {
+	background: #fff;
+	border-color: #fff;
+	color: var(--vxr-blue);
+}
 
 @media (max-width: 1000px) {
-	.vxn-re .vxn-re-foot__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.vxn-re .vxn-re-foot__cols {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
+
 @media (max-width: 760px) {
-	.vxn-re .vxn-re-foot__news { grid-template-columns: minmax(0, 1fr); align-items: start; }
-	.vxn-re .vxn-re-foot__cols { grid-template-columns: minmax(0, 1fr); }
+	.vxn-re .vxn-re-foot__news {
+		grid-template-columns: minmax(0, 1fr);
+		align-items: start;
+	}
+
+	.vxn-re .vxn-re-foot__cols {
+		grid-template-columns: minmax(0, 1fr);
+	}
 }
-
-
