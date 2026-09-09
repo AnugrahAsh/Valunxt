@@ -103,14 +103,37 @@ export default function Ways({ region }: { region: Locale }) {
       <i className="vxr-ways__mark vxr-ways__mark--r" aria-hidden="true" />
 
       <div className="vxr-ways__head">
-        {/* Keyed on what is showing, so React replaces the node and the entry
-            animation plays again on every change rather than only the first. */}
-        <h2 className="vxr-ways__h" id="vxr-ways-h" >
-          {shown.title}
-        </h2>
-        <p className="vxr-ways__p" key={at ? `${at.key}-p` : 'head-p'}>
-          {shown.body}
-        </p>
+        {/* Render all possible texts overlapping in a grid so the container 
+            always reserves enough height for the tallest one. This prevents 
+            layout shifts when the text changes on hover. */}
+        <div style={{ display: 'grid', width: '100%' }}>
+          {[{ key: 'head', ...HEAD }, ...WAYS].map((item) => {
+            const isShown = (at ? at.key : 'head') === item.key;
+            return (
+              <div
+                key={item.key}
+                style={{
+                  gridArea: '1 / 1',
+                  opacity: isShown ? 1 : 0,
+                  pointerEvents: isShown ? 'auto' : 'none',
+                  visibility: isShown ? 'visible' : 'hidden',
+                  transition: 'opacity 0.4s ease, visibility 0.4s ease',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+                aria-hidden={!isShown}
+              >
+                <h2 className="vxr-ways__h" id={isShown ? 'vxr-ways-h' : undefined}>
+                  {item.title}
+                </h2>
+                <p className="vxr-ways__p">
+                  {item.body}
+                </p>
+              </div>
+            );
+          })}
+        </div>
         <a className="vxr-btn vxr-ways__all" href={rurl(region, '/real-estate/#listings')}>
           All our properties <i>({LISTINGS.length})</i>
           <ArrowRight />
