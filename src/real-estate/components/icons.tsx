@@ -121,6 +121,8 @@ const SOCIAL_PATHS: Record<string, string> = {
   facebook:
     '<path d="M14.5 8.5h2M14.5 21V9.8a2.3 2.3 0 0 1 2.3-2.3h.7M11 12.8h5"/>',
   x: '<path d="M4.5 4.5 19 19.5M19 4.5 4.5 19.5"/>',
+  youtube:
+    '<rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10 9.5 5 2.5-5 2.5v-5Z"/>',
 };
 
 export function SocialIcon({ network, className }: { network: string; className?: string }) {
